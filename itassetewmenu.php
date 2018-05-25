@@ -1,0 +1,88 @@
+<!-- Begin Main Menu -->
+<?php $RootMenu = new cMenu(EW_MENUBAR_ID) ?>
+<?php
+
+// Generate all menu items
+$RootMenu->IsRoot = TRUE;
+$RootMenu->AddMenuItem(2, "mi_assetmaster", $Language->MenuPhrase("2", "MenuText"), "itassetassetmasterlist.php", -1, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}assetmaster'), FALSE);
+$RootMenu->AddMenuItem(88, "mi_adcview", $Language->MenuPhrase("88", "MenuText"), "itassetadcviewlist.php", -1, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}adcview'), FALSE);
+$RootMenu->AddMenuItem(4, "mi_aaeview", $Language->MenuPhrase("4", "MenuText"), "itassetaaeviewlist.php", -1, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}aaeview'), FALSE);
+$RootMenu->AddMenuItem(6, "mi_airodview", $Language->MenuPhrase("6", "MenuText"), "itassetairodviewlist.php", -1, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}airodview'), FALSE);
+$RootMenu->AddMenuItem(9, "mi_atpview", $Language->MenuPhrase("9", "MenuText"), "itassetatpviewlist.php", -1, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}atpview'), FALSE);
+$RootMenu->AddMenuItem(89, "mi_inayahview", $Language->MenuPhrase("89", "MenuText"), "itassetinayahviewlist.php", -1, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}inayahview'), FALSE);
+$RootMenu->AddMenuItem(54, "mi_nadiview", $Language->MenuPhrase("54", "MenuText"), "itassetnadiviewlist.php", -1, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}nadiview'), FALSE);
+$RootMenu->AddMenuItem(176, "mi_SMEAview", $Language->MenuPhrase("176", "MenuText"), "itassetsmeaviewlist.php", -1, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}SMEAview'), FALSE);
+$RootMenu->AddMenuItem(184, "mi_SMEOView", $Language->MenuPhrase("184", "MenuText"), "itassetsmeoviewlist.php", -1, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}SMEOView'), FALSE);
+$RootMenu->AddMenuItem(8, "mci_AIROD_Report", $Language->MenuPhrase("8", "MenuText"), "", -1, "", IsLoggedIn(), FALSE, TRUE);
+$RootMenu->AddMenuItem(7, "mi_AIROD_All_Inventory_Report", $Language->MenuPhrase("7", "MenuText"), "itassetairod_all_inventory_reportreport.php", 8, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}AIROD All Inventory Report'), FALSE);
+$RootMenu->AddMenuItem(32, "mi_Airod_Desktop", $Language->MenuPhrase("32", "MenuText"), "itassetairod_desktopreport.php", 8, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}Airod Desktop'), FALSE);
+$RootMenu->AddMenuItem(46, "mi_Airod_Laptop_Report", $Language->MenuPhrase("46", "MenuText"), "itassetairod_laptop_reportreport.php", 8, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}Airod Laptop Report'), FALSE);
+$RootMenu->AddMenuItem(47, "mi_Airod_Printer_Report", $Language->MenuPhrase("47", "MenuText"), "itassetairod_printer_reportreport.php", 8, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}Airod Printer Report'), FALSE);
+$RootMenu->AddMenuItem(57, "mi_Airod_Projector", $Language->MenuPhrase("57", "MenuText"), "itassetairod_projectorreport.php", 8, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}Airod Projector'), FALSE);
+$RootMenu->AddMenuItem(48, "mi_Airod_Server_Report", $Language->MenuPhrase("48", "MenuText"), "itassetairod_server_reportreport.php", 8, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}Airod Server Report'), FALSE);
+$RootMenu->AddMenuItem(49, "mi_Airod_Switch_Report", $Language->MenuPhrase("49", "MenuText"), "itassetairod_switch_reportreport.php", 8, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}Airod Switch Report'), FALSE);
+$RootMenu->AddMenuItem(41, "mci_AAE_Report", $Language->MenuPhrase("41", "MenuText"), "", -1, "", IsLoggedIn(), FALSE, TRUE);
+$RootMenu->AddMenuItem(5, "mi_AAE_All_Inventory_Report", $Language->MenuPhrase("5", "MenuText"), "itassetaae_all_inventory_reportreport.php", 41, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}AAE All Inventory Report'), FALSE);
+$RootMenu->AddMenuItem(50, "mi_AAE_Desktop_Report", $Language->MenuPhrase("50", "MenuText"), "itassetaae_desktop_reportreport.php", 41, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}AAE Desktop Report'), FALSE);
+$RootMenu->AddMenuItem(51, "mi_AAE_Laptop_Report", $Language->MenuPhrase("51", "MenuText"), "itassetaae_laptop_reportreport.php", 41, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}AAE Laptop Report'), FALSE);
+$RootMenu->AddMenuItem(52, "mi_AAE_Printer_Report", $Language->MenuPhrase("52", "MenuText"), "itassetaae_printer_reportreport.php", 41, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}AAE Printer Report'), FALSE);
+$RootMenu->AddMenuItem(82, "mi_AAE_Projector_Report", $Language->MenuPhrase("82", "MenuText"), "itassetaae_projector_reportreport.php", 41, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}AAE Projector Report'), FALSE);
+$RootMenu->AddMenuItem(53, "mi_AAE_Server_Report", $Language->MenuPhrase("53", "MenuText"), "itassetaae_server_reportreport.php", 41, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}AAE Server Report'), FALSE);
+$RootMenu->AddMenuItem(79, "mi_AAE_Storage_Report", $Language->MenuPhrase("79", "MenuText"), "itassetaae_storage_reportreport.php", 41, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}AAE Storage Report'), FALSE);
+$RootMenu->AddMenuItem(80, "mi_AAE_Switch_Report", $Language->MenuPhrase("80", "MenuText"), "itassetaae_switch_reportreport.php", 41, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}AAE Switch Report'), FALSE);
+$RootMenu->AddMenuItem(174, "mci_ADC_Report", $Language->MenuPhrase("174", "MenuText"), "", -1, "", IsLoggedIn(), FALSE, TRUE);
+$RootMenu->AddMenuItem(114, "mi_ADC_Inventory_Report", $Language->MenuPhrase("114", "MenuText"), "itassetadc_inventory_reportreport.php", 174, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}ADC Inventory Report'), FALSE);
+$RootMenu->AddMenuItem(110, "mi_ADC_Desktop_Report", $Language->MenuPhrase("110", "MenuText"), "itassetadc_desktop_reportreport.php", 174, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}ADC Desktop Report'), FALSE);
+$RootMenu->AddMenuItem(111, "mi_ADC_Laptop_Report", $Language->MenuPhrase("111", "MenuText"), "itassetadc_laptop_reportreport.php", 174, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}ADC Laptop Report'), FALSE);
+$RootMenu->AddMenuItem(112, "mi_ADC_Printer_Report", $Language->MenuPhrase("112", "MenuText"), "itassetadc_printer_reportreport.php", 174, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}ADC Printer Report'), FALSE);
+$RootMenu->AddMenuItem(113, "mi_ADC_Server_Report", $Language->MenuPhrase("113", "MenuText"), "itassetadc_server_reportreport.php", 174, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}ADC Server Report'), FALSE);
+$RootMenu->AddMenuItem(42, "mci_ATP_Report", $Language->MenuPhrase("42", "MenuText"), "", -1, "", IsLoggedIn(), FALSE, TRUE);
+$RootMenu->AddMenuItem(30, "mi_ATP_All_Inventory_Report", $Language->MenuPhrase("30", "MenuText"), "itassetatp_all_inventory_reportreport.php", 42, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}ATP All Inventory Report'), FALSE);
+$RootMenu->AddMenuItem(84, "mi_ATP_Desktop_Report", $Language->MenuPhrase("84", "MenuText"), "itassetatp_desktop_reportreport.php", 42, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}ATP Desktop Report'), FALSE);
+$RootMenu->AddMenuItem(83, "mi_ATP_Laptop_Report", $Language->MenuPhrase("83", "MenuText"), "itassetatp_laptop_reportreport.php", 42, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}ATP Laptop Report'), FALSE);
+$RootMenu->AddMenuItem(85, "mi_ATP_Printer_Report", $Language->MenuPhrase("85", "MenuText"), "itassetatp_printer_reportreport.php", 42, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}ATP Printer Report'), FALSE);
+$RootMenu->AddMenuItem(86, "mi_ATP_Server_Report", $Language->MenuPhrase("86", "MenuText"), "itassetatp_server_reportreport.php", 42, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}ATP Server Report'), FALSE);
+$RootMenu->AddMenuItem(87, "mi_ATP_Switch_Report", $Language->MenuPhrase("87", "MenuText"), "itassetatp_switch_reportreport.php", 42, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}ATP Switch Report'), FALSE);
+$RootMenu->AddMenuItem(45, "mci_AeroLogica_Report", $Language->MenuPhrase("45", "MenuText"), "", -1, "", IsLoggedIn(), FALSE, TRUE);
+$RootMenu->AddMenuItem(31, "mi_AERO_All_Inventory_Report", $Language->MenuPhrase("31", "MenuText"), "itassetaero_all_inventory_reportreport.php", 45, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}AERO All Inventory Report'), FALSE);
+$RootMenu->AddMenuItem(175, "mci_INAYAH_Report", $Language->MenuPhrase("175", "MenuText"), "", -1, "", IsLoggedIn(), FALSE, TRUE);
+$RootMenu->AddMenuItem(104, "mi_Inayah_Inventory_Report", $Language->MenuPhrase("104", "MenuText"), "itassetinayah_inventory_reportreport.php", 175, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}Inayah Inventory Report'), FALSE);
+$RootMenu->AddMenuItem(105, "mi_Inayah_Desktop_Report", $Language->MenuPhrase("105", "MenuText"), "itassetinayah_desktop_reportreport.php", 175, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}Inayah Desktop Report'), FALSE);
+$RootMenu->AddMenuItem(106, "mi_Inayah_Laptop_Report", $Language->MenuPhrase("106", "MenuText"), "itassetinayah_laptop_reportreport.php", 175, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}Inayah Laptop Report'), FALSE);
+$RootMenu->AddMenuItem(107, "mi_Inayah_Printer_Report", $Language->MenuPhrase("107", "MenuText"), "itassetinayah_printer_reportreport.php", 175, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}Inayah Printer Report'), FALSE);
+$RootMenu->AddMenuItem(108, "mi_Inayah_Server_Report", $Language->MenuPhrase("108", "MenuText"), "itassetinayah_server_reportreport.php", 175, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}Inayah Server Report'), FALSE);
+$RootMenu->AddMenuItem(109, "mi_Inayah_Switch_Report", $Language->MenuPhrase("109", "MenuText"), "itassetinayah_switch_reportreport.php", 175, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}Inayah Switch Report'), FALSE);
+$RootMenu->AddMenuItem(66, "mci_NADI_Report", $Language->MenuPhrase("66", "MenuText"), "", -1, "", IsLoggedIn(), FALSE, TRUE);
+$RootMenu->AddMenuItem(56, "mi_Nadi_Inventory_Report", $Language->MenuPhrase("56", "MenuText"), "itassetnadi_inventory_reportreport.php", 66, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}Nadi Inventory Report'), FALSE);
+$RootMenu->AddMenuItem(68, "mi_Nadi_Desktop_Report", $Language->MenuPhrase("68", "MenuText"), "itassetnadi_desktop_reportreport.php", 66, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}Nadi Desktop Report'), FALSE);
+$RootMenu->AddMenuItem(71, "mi_Nadi_Laptop_Report", $Language->MenuPhrase("71", "MenuText"), "itassetnadi_laptop_reportreport.php", 66, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}Nadi Laptop Report'), FALSE);
+$RootMenu->AddMenuItem(72, "mi_Nadi_Printer_Report", $Language->MenuPhrase("72", "MenuText"), "itassetnadi_printer_reportreport.php", 66, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}Nadi Printer Report'), FALSE);
+$RootMenu->AddMenuItem(59, "mi_Nadi_Projector_Report", $Language->MenuPhrase("59", "MenuText"), "itassetnadi_projector_reportreport.php", 66, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}Nadi Projector Report'), FALSE);
+$RootMenu->AddMenuItem(78, "mi_Nadi_Server_Report", $Language->MenuPhrase("78", "MenuText"), "itassetnadi_server_reportreport.php", 66, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}Nadi Server Report'), FALSE);
+$RootMenu->AddMenuItem(76, "mi_Nadi_Storage_Report", $Language->MenuPhrase("76", "MenuText"), "itassetnadi_storage_reportreport.php", 66, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}Nadi Storage Report'), FALSE);
+$RootMenu->AddMenuItem(75, "mi_Nadi_Switch_Report", $Language->MenuPhrase("75", "MenuText"), "itassetnadi_switch_reportreport.php", 66, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}Nadi Switch Report'), FALSE);
+$RootMenu->AddMenuItem(209, "mci_SMEA_Report", $Language->MenuPhrase("209", "MenuText"), "", -1, "", IsLoggedIn(), FALSE, TRUE);
+$RootMenu->AddMenuItem(192, "mi_SMEA_Inventory_Report", $Language->MenuPhrase("192", "MenuText"), "itassetsmea_inventory_reportreport.php", 209, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}SMEA Inventory Report'), FALSE);
+$RootMenu->AddMenuItem(193, "mi_SMEA_Desktop_Report", $Language->MenuPhrase("193", "MenuText"), "itassetsmea_desktop_reportreport.php", 209, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}SMEA Desktop Report'), FALSE);
+$RootMenu->AddMenuItem(194, "mi_SMEA_Laptop_Report", $Language->MenuPhrase("194", "MenuText"), "itassetsmea_laptop_reportreport.php", 209, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}SMEA Laptop Report'), FALSE);
+$RootMenu->AddMenuItem(195, "mi_SMEA_Printer_Report", $Language->MenuPhrase("195", "MenuText"), "itassetsmea_printer_reportreport.php", 209, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}SMEA Printer Report'), FALSE);
+$RootMenu->AddMenuItem(196, "mi_SMEA_Server_Report", $Language->MenuPhrase("196", "MenuText"), "itassetsmea_server_reportreport.php", 209, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}SMEA Server Report'), FALSE);
+$RootMenu->AddMenuItem(197, "mi_SMEA_Switch_Report", $Language->MenuPhrase("197", "MenuText"), "itassetsmea_switch_reportreport.php", 209, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}SMEA Switch Report'), FALSE);
+$RootMenu->AddMenuItem(198, "mi_SMEA_Storage_Report", $Language->MenuPhrase("198", "MenuText"), "itassetsmea_storage_reportreport.php", 209, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}SMEA Storage Report'), FALSE);
+$RootMenu->AddMenuItem(199, "mi_SMEA_Projector_Report", $Language->MenuPhrase("199", "MenuText"), "itassetsmea_projector_reportreport.php", 209, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}SMEA Projector Report'), FALSE);
+$RootMenu->AddMenuItem(208, "mci_SMEO_Report", $Language->MenuPhrase("208", "MenuText"), "", -1, "", IsLoggedIn(), FALSE, TRUE);
+$RootMenu->AddMenuItem(200, "mi_SMEO_Inventory_Report", $Language->MenuPhrase("200", "MenuText"), "itassetsmeo_inventory_reportreport.php", 208, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}SMEO Inventory Report'), FALSE);
+$RootMenu->AddMenuItem(201, "mi_SMEO_Desktop_Report", $Language->MenuPhrase("201", "MenuText"), "itassetsmeo_desktop_reportreport.php", 208, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}SMEO Desktop Report'), FALSE);
+$RootMenu->AddMenuItem(202, "mi_SMEO_Laptop_Report", $Language->MenuPhrase("202", "MenuText"), "itassetsmeo_laptop_reportreport.php", 208, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}SMEO Laptop Report'), FALSE);
+$RootMenu->AddMenuItem(204, "mi_SMEO_Printer_Report", $Language->MenuPhrase("204", "MenuText"), "itassetsmeo_printer_reportreport.php", 208, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}SMEO Printer Report'), FALSE);
+$RootMenu->AddMenuItem(203, "mi_SMEO_Server_Report", $Language->MenuPhrase("203", "MenuText"), "itassetsmeo_server_reportreport.php", 208, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}SMEO Server Report'), FALSE);
+$RootMenu->AddMenuItem(205, "mi_SMEO_Switch_Report", $Language->MenuPhrase("205", "MenuText"), "itassetsmeo_switch_reportreport.php", 208, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}SMEO Switch Report'), FALSE);
+$RootMenu->AddMenuItem(206, "mi_SMEO_Storage_Report", $Language->MenuPhrase("206", "MenuText"), "itassetsmeo_storage_reportreport.php", 208, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}SMEO Storage Report'), FALSE);
+$RootMenu->AddMenuItem(207, "mi_SMEO_Projector_Report", $Language->MenuPhrase("207", "MenuText"), "itassetsmeo_projector_reportreport.php", 208, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}SMEO Projector Report'), FALSE);
+$RootMenu->AddMenuItem(3, "mi_user", $Language->MenuPhrase("3", "MenuText"), "itassetuserlist.php", -1, "", AllowListMenu('{6E5D033C-DA34-4C1B-AC0C-D8B1ECCFD39C}user'), FALSE);
+$RootMenu->AddMenuItem(-2, "mi_changepwd", $Language->Phrase("ChangePwd"), "itassetchangepwd.php", -1, "", IsLoggedIn() && !IsSysAdmin());
+$RootMenu->AddMenuItem(-1, "mi_logout", $Language->Phrase("Logout"), "itassetlogout.php", -1, "", IsLoggedIn());
+$RootMenu->AddMenuItem(-1, "mi_login", $Language->Phrase("Login"), "itassetlogin.php", -1, "", !IsLoggedIn() && substr(@$_SERVER["URL"], -1 * strlen("itassetlogin.php")) <> "itassetlogin.php");
+$RootMenu->Render();
+?>
+<!-- End Main Menu -->
