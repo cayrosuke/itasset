@@ -30,6 +30,9 @@ class cAAE_Projector_Report extends cTableBase {
 	var $remarks;
 	var $officelicense;
 	var $datereceived;
+	var $serialcode;
+	var $latestupdate;
+
 
 	//
 	// Table class constructor
@@ -121,6 +124,16 @@ class cAAE_Projector_Report extends cTableBase {
 		$this->datereceived = new cField('AAE_Projector_Report', 'AAE Projector Report', 'x_datereceived', 'datereceived', '`datereceived`', 'DATE_FORMAT(`datereceived`, \'%d-%m-%Y\')', 133, 7, FALSE, '`datereceived`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
 		$this->datereceived->FldDefaultErrMsg = str_replace("%s", "-", $Language->Phrase("IncorrectDateDMY"));
 		$this->fields['datereceived'] = &$this->datereceived;
+
+		// serialcode
+		$this->serialcode = new cField('AAE_Projector_Report', 'AAE Projector Report', 'x_serialcode', 'serialcode', '`serialcode`', '`serialcode`', 200, -1, FALSE, '`serialcode`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->fields['serialcode'] = &$this->serialcode;
+
+		// latestupdate
+		$this->latestupdate = new cField('AAE_Projector_Report', 'AAE Projector Report', 'x_latestupdate', 'latestupdate', '`latestupdate`', 'DATE_FORMAT(`latestupdate`, \'%d-%m-%Y\')', 133, 7, FALSE, '`latestupdate`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->latestupdate->FldDefaultErrMsg = str_replace("%s", "-", $Language->Phrase("IncorrectDateDMY"));
+		$this->fields['latestupdate'] = &$this->latestupdate;
+
 	}
 
 	// Report detail level SQL
@@ -386,14 +399,14 @@ class cAAE_Projector_Report extends cTableBase {
 	// Row Rendering event
 	function Row_Rendering() {
 
-		// Enter your code here	
+		// Enter your code here
 	}
 
 	// Row Rendered event
 	function Row_Rendered() {
 
 		// To view properties of field class, use:
-		//var_dump($this-><FieldName>); 
+		//var_dump($this-><FieldName>);
 
 	}
 
@@ -683,7 +696,7 @@ class cAAE_Projector_Report_report extends cAAE_Projector_Report {
 		$this->ExportOptions->TagClassName = "ewExportOption";
 	}
 
-	// 
+	//
 	//  Page_Init
 	//
 	function Page_Init() {
@@ -848,6 +861,8 @@ class cAAE_Projector_Report_report extends cAAE_Projector_Report {
 		// remarks
 		// officelicense
 		// datereceived
+		// serialcode
+		// latestupdate
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
@@ -895,10 +910,23 @@ class cAAE_Projector_Report_report extends cAAE_Projector_Report {
 		$this->remarks->ViewValue = $this->remarks->CurrentValue;
 		$this->remarks->ViewCustomAttributes = "";
 
+		// officelicense
+		$this->officelicense->ViewValue = $this->officelicense->CurrentValue;
+		$this->officelicense->ViewCustomAttributes = "";
+
 		// datereceived
 		$this->datereceived->ViewValue = $this->datereceived->CurrentValue;
 		$this->datereceived->ViewValue = ew_FormatDateTime($this->datereceived->ViewValue, 7);
 		$this->datereceived->ViewCustomAttributes = "";
+
+		// serialcode
+		$this->serialcode->ViewValue = $this->serialcode->CurrentValue;
+		$this->serialcode->ViewCustomAttributes = "";
+
+		// latestupdate
+		$this->latestupdate->ViewValue = $this->latestupdate->CurrentValue;
+		$this->latestupdate->ViewValue = ew_FormatDateTime($this->latestupdate->ViewValue, 7);
+		$this->latestupdate->ViewCustomAttributes = "";
 
 			// assettag
 			$this->assettag->LinkCustomAttributes = "";
@@ -950,10 +978,25 @@ class cAAE_Projector_Report_report extends cAAE_Projector_Report {
 			$this->remarks->HrefValue = "";
 			$this->remarks->TooltipValue = "";
 
+			// officelicense
+			$this->officelicense->LinkCustomAttributes = "";
+			$this->officelicense->HrefValue = "";
+			$this->officelicense->TooltipValue = "";
+
 			// datereceived
 			$this->datereceived->LinkCustomAttributes = "";
 			$this->datereceived->HrefValue = "";
 			$this->datereceived->TooltipValue = "";
+
+			// serialcode
+			$this->serialcode->LinkCustomAttributes = "";
+			$this->serialcode->HrefValue = "";
+			$this->serialcode->TooltipValue = "";
+
+			// latestupdate
+			$this->latestupdate->LinkCustomAttributes = "";
+			$this->latestupdate->HrefValue = "";
+			$this->latestupdate->TooltipValue = "";
 		}
 
 		// Call Row Rendered event
@@ -1194,7 +1237,10 @@ $AAE_Projector_Report_report->RecordExists = !$AAE_Projector_Report_report->Reco
 		<td class="ewGroupHeader"><?php echo $AAE_Projector_Report->model->FldCaption() ?></td>
 		<td class="ewGroupHeader"><?php echo $AAE_Projector_Report->location->FldCaption() ?></td>
 		<td class="ewGroupHeader"><?php echo $AAE_Projector_Report->remarks->FldCaption() ?></td>
+		<td class="ewGroupHeader"><?php echo $AAE_Projector_Report->officelicense->FldCaption() ?></td>
 		<td class="ewGroupHeader"><?php echo $AAE_Projector_Report->datereceived->FldCaption() ?></td>
+		<td class="ewGroupHeader"><?php echo $AAE_Projector_Report->serialcode->FldCaption() ?></td>
+		<td class="ewGroupHeader"><?php echo $AAE_Projector_Report->latestupdate->FldCaption() ?></td>
 	</tr>
 <?php
 	}
@@ -1210,7 +1256,10 @@ $AAE_Projector_Report_report->RecordExists = !$AAE_Projector_Report_report->Reco
 		$AAE_Projector_Report->model->setDbValue($AAE_Projector_Report_report->DetailRecordset->fields('model'));
 		$AAE_Projector_Report->location->setDbValue($AAE_Projector_Report_report->DetailRecordset->fields('location'));
 		$AAE_Projector_Report->remarks->setDbValue($AAE_Projector_Report_report->DetailRecordset->fields('remarks'));
+		$AAE_Projector_Report->officelicense->setDbValue($AAE_Projector_Report_report->DetailRecordset->fields('officelicense'));
 		$AAE_Projector_Report->datereceived->setDbValue($AAE_Projector_Report_report->DetailRecordset->fields('datereceived'));
+		$AAE_Projector_Report->serialcode->setDbValue($AAE_Projector_Report_report->DetailRecordset->fields('serialcode'));
+		$AAE_Projector_Report->latestupdate->setDbValue($AAE_Projector_Report_report->DetailRecordset->fields('latestupdate'));
 
 		// Render for view
 		$AAE_Projector_Report->RowType = EW_ROWTYPE_VIEW;
@@ -1258,9 +1307,21 @@ $AAE_Projector_Report_report->RecordExists = !$AAE_Projector_Report_report->Reco
 <span<?php echo $AAE_Projector_Report->remarks->ViewAttributes() ?>>
 <?php echo $AAE_Projector_Report->remarks->ViewValue ?></span>
 </td>
-		<td<?php echo $AAE_Projector_Report->datereceived->CellAttributes() ?>>
+		<td<?php echo $AAE_Projector_Report->officelicense->CellAttributes() ?>>
+<span<?php echo $AAE_Projector_Report->officelicense->ViewAttributes() ?>>
+<?php echo $AAE_Projector_Report->officelicense->ViewValue ?></span>
+</td>
+<td<?php echo $AAE_Projector_Report->datereceived->CellAttributes() ?>>
 <span<?php echo $AAE_Projector_Report->datereceived->ViewAttributes() ?>>
 <?php echo $AAE_Projector_Report->datereceived->ViewValue ?></span>
+</td>
+<td<?php echo $AAE_Projector_Report->serialcode->CellAttributes() ?>>
+<span<?php echo $AAE_Projector_Report->serialcode->ViewAttributes() ?>>
+<?php echo $AAE_Projector_Report->serialcode->ViewValue ?></span>
+</td>
+<td<?php echo $AAE_Projector_Report->latestupdate->CellAttributes() ?>>
+<span<?php echo $AAE_Projector_Report->latestupdate->ViewAttributes() ?>>
+<?php echo $AAE_Projector_Report->latestupdate->ViewValue ?></span>
 </td>
 	</tr>
 <?php

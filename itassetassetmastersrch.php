@@ -252,7 +252,7 @@ class cassetmaster_search extends cassetmaster {
 		}
 	}
 
-	// 
+	//
 	//  Page_Init
 	//
 	function Page_Init() {
@@ -413,6 +413,8 @@ class cassetmaster_search extends cassetmaster {
 		$this->BuildSearchUrl($sSrchUrl, $this->operatingsystem); // operatingsystem
 		$this->BuildSearchUrl($sSrchUrl, $this->officelicense); // officelicense
 		$this->BuildSearchUrl($sSrchUrl, $this->datereceived); // datereceived
+		$this->BuildSearchUrl($sSrchUrl, $this->serialcode); // serialcode
+		$this->BuildSearchUrl($sSrchUrl, $this->latestupdate); // latestupdate
 		if ($sSrchUrl <> "") $sSrchUrl .= "&";
 		$sSrchUrl .= "cmd=search";
 		return $sSrchUrl;
@@ -537,6 +539,18 @@ class cassetmaster_search extends cassetmaster {
 		$this->datereceived->AdvancedSearch->SearchCondition = $objForm->GetValue("v_datereceived");
 		$this->datereceived->AdvancedSearch->SearchValue2 = ew_StripSlashes($objForm->GetValue("y_datereceived"));
 		$this->datereceived->AdvancedSearch->SearchOperator2 = $objForm->GetValue("w_datereceived");
+
+		// serialcode
+		$this->serialcode->AdvancedSearch->SearchValue = ew_StripSlashes($objForm->GetValue("x_serialcode"));
+		$this->serialcode->AdvancedSearch->SearchOperator = $objForm->GetValue("z_serialcode");
+
+		// latestupdate
+		$this->latestupdate->AdvancedSearch->SearchValue = ew_StripSlashes($objForm->GetValue("x_latestupdate"));
+		$this->latestupdate->AdvancedSearch->SearchOperator = $objForm->GetValue("z_latestupdate");
+		$this->latestupdate->AdvancedSearch->SearchCondition = $objForm->GetValue("v_latestupdate");
+		$this->latestupdate->AdvancedSearch->SearchValue2 = ew_StripSlashes($objForm->GetValue("y_latestupdate"));
+		$this->latestupdate->AdvancedSearch->SearchOperator2 = $objForm->GetValue("w_latestupdate");
+	}
 	}
 
 	// Render row values based on field settings
@@ -565,6 +579,8 @@ class cassetmaster_search extends cassetmaster {
 		// remarks
 		// officelicense
 		// datereceived
+		// serialcode
+		// latestupdate
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
@@ -632,6 +648,15 @@ class cassetmaster_search extends cassetmaster {
 		$this->datereceived->ViewValue = $this->datereceived->CurrentValue;
 		$this->datereceived->ViewValue = ew_FormatDateTime($this->datereceived->ViewValue, 7);
 		$this->datereceived->ViewCustomAttributes = "";
+
+		// serialcode
+		$this->serialcode->ViewValue = $this->serialcode->CurrentValue;
+		$this->serialcode->ViewCustomAttributes = "";
+
+		// latestupdate
+		$this->latestupdate->ViewValue = $this->latestupdate->CurrentValue;
+		$this->latestupdate->ViewValue = ew_FormatDateTime($this->latestupdate->ViewValue, 7);
+		$this->latestupdate->ViewCustomAttributes = "";
 
 			// assettag
 			$this->assettag->LinkCustomAttributes = "";
@@ -702,6 +727,16 @@ class cassetmaster_search extends cassetmaster {
 			$this->datereceived->LinkCustomAttributes = "";
 			$this->datereceived->HrefValue = "";
 			$this->datereceived->TooltipValue = "";
+
+			// serialcode
+			$this->serialcode->LinkCustomAttributes = "";
+			$this->serialcode->HrefValue = "";
+			$this->serialcode->TooltipValue = "";
+
+			// latestupdate
+			$this->latestupdate->LinkCustomAttributes = "";
+			$this->latestupdate->HrefValue = "";
+			$this->latestupdate->TooltipValue = "";
 		} elseif ($this->RowType == EW_ROWTYPE_SEARCH) { // Search row
 
 			// assettag
@@ -789,6 +824,22 @@ class cassetmaster_search extends cassetmaster {
 			$this->datereceived->EditCustomAttributes = "";
 			$this->datereceived->EditValue2 = ew_HtmlEncode(ew_FormatDateTime(ew_UnFormatDateTime($this->datereceived->AdvancedSearch->SearchValue2, 7), 7));
 			$this->datereceived->PlaceHolder = ew_RemoveHtml($this->datereceived->FldCaption());
+
+			// serialcode
+			$this->serialcode->EditAttrs["class"] = "form-control";
+			$this->serialcode->EditCustomAttributes = "";
+			$this->serialcode->EditValue = ew_HtmlEncode($this->serialcode->AdvancedSearch->SearchValue);
+			$this->serialcode->PlaceHolder = ew_RemoveHtml($this->serialcode->FldCaption());
+
+			// latestupdate
+			$this->latestupdate->EditAttrs["class"] = "form-control";
+			$this->latestupdate->EditCustomAttributes = "";
+			$this->latestupdate->EditValue = ew_HtmlEncode(ew_FormatDateTime(ew_UnFormatDateTime($this->latestupdate->AdvancedSearch->SearchValue, 7), 7));
+			$this->latestupdate->PlaceHolder = ew_RemoveHtml($this->latestupdate->FldCaption());
+			$this->latestupdate->EditAttrs["class"] = "form-control";
+			$this->latestupdate->EditCustomAttributes = "";
+			$this->latestupdate->EditValue2 = ew_HtmlEncode(ew_FormatDateTime(ew_UnFormatDateTime($this->latestupdate->AdvancedSearch->SearchValue2, 7), 7));
+			$this->latestupdate->PlaceHolder = ew_RemoveHtml($this->latestupdate->FldCaption());
 		}
 		if ($this->RowType == EW_ROWTYPE_ADD ||
 			$this->RowType == EW_ROWTYPE_EDIT ||
@@ -846,6 +897,8 @@ class cassetmaster_search extends cassetmaster {
 		$this->operatingsystem->AdvancedSearch->Load();
 		$this->officelicense->AdvancedSearch->Load();
 		$this->datereceived->AdvancedSearch->Load();
+		$this->serialcode->AdvancedSearch->Load();
+		$this->latestupdate->AdvancedSearch->Load();
 	}
 
 	// Set up Breadcrumb
@@ -956,10 +1009,10 @@ var CurrentForm = fassetmastersearch = new ew_Form("fassetmastersearch", "search
 <?php } ?>
 
 // Form_CustomValidate event
-fassetmastersearch.Form_CustomValidate = 
+fassetmastersearch.Form_CustomValidate =
  function(fobj) { // DO NOT CHANGE THIS LINE!
 
- 	// Your custom validation code here, return false if invalid. 
+ 	// Your custom validation code here, return false if invalid.
  	return true;
  }
 
@@ -967,7 +1020,7 @@ fassetmastersearch.Form_CustomValidate =
 <?php if (EW_CLIENT_VALIDATE) { ?>
 fassetmastersearch.ValidateRequired = true;
 <?php } else { ?>
-fassetmastersearch.ValidateRequired = false; 
+fassetmastersearch.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
@@ -1021,7 +1074,7 @@ $assetmaster_search->ShowMessage();
 <div>
 <?php if ($assetmaster->assettag->Visible) { // assettag ?>
 	<div id="r_assettag" class="form-group">
-		<label for="x_assettag" class="<?php echo $assetmaster_search->SearchLabelClass ?>"><span id="elh_assetmaster_assettag"><?php echo $assetmaster->assettag->FldCaption() ?></span>	
+		<label for="x_assettag" class="<?php echo $assetmaster_search->SearchLabelClass ?>"><span id="elh_assetmaster_assettag"><?php echo $assetmaster->assettag->FldCaption() ?></span>
 		<p class="form-control-static ewSearchOperator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_assettag" id="z_assettag" value="="></p>
 		</label>
 		<div class="<?php echo $assetmaster_search->SearchRightColumnClass ?>"><div<?php echo $assetmaster->assettag->CellAttributes() ?>>
@@ -1033,7 +1086,7 @@ $assetmaster_search->ShowMessage();
 <?php } ?>
 <?php if ($assetmaster->servicetag->Visible) { // servicetag ?>
 	<div id="r_servicetag" class="form-group">
-		<label for="x_servicetag" class="<?php echo $assetmaster_search->SearchLabelClass ?>"><span id="elh_assetmaster_servicetag"><?php echo $assetmaster->servicetag->FldCaption() ?></span>	
+		<label for="x_servicetag" class="<?php echo $assetmaster_search->SearchLabelClass ?>"><span id="elh_assetmaster_servicetag"><?php echo $assetmaster->servicetag->FldCaption() ?></span>
 		<p class="form-control-static ewSearchOperator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_servicetag" id="z_servicetag" value="="></p>
 		</label>
 		<div class="<?php echo $assetmaster_search->SearchRightColumnClass ?>"><div<?php echo $assetmaster->servicetag->CellAttributes() ?>>
@@ -1045,7 +1098,7 @@ $assetmaster_search->ShowMessage();
 <?php } ?>
 <?php if ($assetmaster->ipaddress->Visible) { // ipaddress ?>
 	<div id="r_ipaddress" class="form-group">
-		<label for="x_ipaddress" class="<?php echo $assetmaster_search->SearchLabelClass ?>"><span id="elh_assetmaster_ipaddress"><?php echo $assetmaster->ipaddress->FldCaption() ?></span>	
+		<label for="x_ipaddress" class="<?php echo $assetmaster_search->SearchLabelClass ?>"><span id="elh_assetmaster_ipaddress"><?php echo $assetmaster->ipaddress->FldCaption() ?></span>
 		<p class="form-control-static ewSearchOperator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_ipaddress" id="z_ipaddress" value="="></p>
 		</label>
 		<div class="<?php echo $assetmaster_search->SearchRightColumnClass ?>"><div<?php echo $assetmaster->ipaddress->CellAttributes() ?>>
@@ -1057,7 +1110,7 @@ $assetmaster_search->ShowMessage();
 <?php } ?>
 <?php if ($assetmaster->employeeno->Visible) { // employeeno ?>
 	<div id="r_employeeno" class="form-group">
-		<label for="x_employeeno" class="<?php echo $assetmaster_search->SearchLabelClass ?>"><span id="elh_assetmaster_employeeno"><?php echo $assetmaster->employeeno->FldCaption() ?></span>	
+		<label for="x_employeeno" class="<?php echo $assetmaster_search->SearchLabelClass ?>"><span id="elh_assetmaster_employeeno"><?php echo $assetmaster->employeeno->FldCaption() ?></span>
 		<p class="form-control-static ewSearchOperator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_employeeno" id="z_employeeno" value="="></p>
 		</label>
 		<div class="<?php echo $assetmaster_search->SearchRightColumnClass ?>"><div<?php echo $assetmaster->employeeno->CellAttributes() ?>>
@@ -1069,7 +1122,7 @@ $assetmaster_search->ShowMessage();
 <?php } ?>
 <?php if ($assetmaster->employeename->Visible) { // employeename ?>
 	<div id="r_employeename" class="form-group">
-		<label for="x_employeename" class="<?php echo $assetmaster_search->SearchLabelClass ?>"><span id="elh_assetmaster_employeename"><?php echo $assetmaster->employeename->FldCaption() ?></span>	
+		<label for="x_employeename" class="<?php echo $assetmaster_search->SearchLabelClass ?>"><span id="elh_assetmaster_employeename"><?php echo $assetmaster->employeename->FldCaption() ?></span>
 		<p class="form-control-static ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_employeename" id="z_employeename" value="LIKE"></p>
 		</label>
 		<div class="<?php echo $assetmaster_search->SearchRightColumnClass ?>"><div<?php echo $assetmaster->employeename->CellAttributes() ?>>
@@ -1081,7 +1134,7 @@ $assetmaster_search->ShowMessage();
 <?php } ?>
 <?php if ($assetmaster->company->Visible) { // company ?>
 	<div id="r_company" class="form-group">
-		<label for="x_company" class="<?php echo $assetmaster_search->SearchLabelClass ?>"><span id="elh_assetmaster_company"><?php echo $assetmaster->company->FldCaption() ?></span>	
+		<label for="x_company" class="<?php echo $assetmaster_search->SearchLabelClass ?>"><span id="elh_assetmaster_company"><?php echo $assetmaster->company->FldCaption() ?></span>
 		<p class="form-control-static ewSearchOperator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_company" id="z_company" value="="></p>
 		</label>
 		<div class="<?php echo $assetmaster_search->SearchRightColumnClass ?>"><div<?php echo $assetmaster->company->CellAttributes() ?>>
@@ -1094,7 +1147,7 @@ if (is_array($assetmaster->company->EditValue)) {
 	$emptywrk = TRUE;
 	for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
 		$selwrk = ew_SameStr($assetmaster->company->AdvancedSearch->SearchValue, $arwrk[$rowcntwrk][0]) ? " selected" : "";
-		if ($selwrk <> "") $emptywrk = FALSE;		
+		if ($selwrk <> "") $emptywrk = FALSE;
 ?>
 <option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
 <?php echo $assetmaster->company->DisplayValue($arwrk[$rowcntwrk]) ?>
@@ -1115,7 +1168,7 @@ if (is_array($assetmaster->company->EditValue)) {
 <?php } ?>
 <?php if ($assetmaster->department->Visible) { // department ?>
 	<div id="r_department" class="form-group">
-		<label for="x_department" class="<?php echo $assetmaster_search->SearchLabelClass ?>"><span id="elh_assetmaster_department"><?php echo $assetmaster->department->FldCaption() ?></span>	
+		<label for="x_department" class="<?php echo $assetmaster_search->SearchLabelClass ?>"><span id="elh_assetmaster_department"><?php echo $assetmaster->department->FldCaption() ?></span>
 		<p class="form-control-static ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_department" id="z_department" value="LIKE"></p>
 		</label>
 		<div class="<?php echo $assetmaster_search->SearchRightColumnClass ?>"><div<?php echo $assetmaster->department->CellAttributes() ?>>
@@ -1127,7 +1180,7 @@ if (is_array($assetmaster->company->EditValue)) {
 <?php } ?>
 <?php if ($assetmaster->type->Visible) { // type ?>
 	<div id="r_type" class="form-group">
-		<label for="x_type" class="<?php echo $assetmaster_search->SearchLabelClass ?>"><span id="elh_assetmaster_type"><?php echo $assetmaster->type->FldCaption() ?></span>	
+		<label for="x_type" class="<?php echo $assetmaster_search->SearchLabelClass ?>"><span id="elh_assetmaster_type"><?php echo $assetmaster->type->FldCaption() ?></span>
 		<p class="form-control-static ewSearchOperator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_type" id="z_type" value="="></p>
 		</label>
 		<div class="<?php echo $assetmaster_search->SearchRightColumnClass ?>"><div<?php echo $assetmaster->type->CellAttributes() ?>>
@@ -1140,7 +1193,7 @@ if (is_array($assetmaster->type->EditValue)) {
 	$emptywrk = TRUE;
 	for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
 		$selwrk = ew_SameStr($assetmaster->type->AdvancedSearch->SearchValue, $arwrk[$rowcntwrk][0]) ? " selected" : "";
-		if ($selwrk <> "") $emptywrk = FALSE;		
+		if ($selwrk <> "") $emptywrk = FALSE;
 ?>
 <option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
 <?php echo $assetmaster->type->DisplayValue($arwrk[$rowcntwrk]) ?>
@@ -1161,7 +1214,7 @@ if (is_array($assetmaster->type->EditValue)) {
 <?php } ?>
 <?php if ($assetmaster->model->Visible) { // model ?>
 	<div id="r_model" class="form-group">
-		<label for="x_model" class="<?php echo $assetmaster_search->SearchLabelClass ?>"><span id="elh_assetmaster_model"><?php echo $assetmaster->model->FldCaption() ?></span>	
+		<label for="x_model" class="<?php echo $assetmaster_search->SearchLabelClass ?>"><span id="elh_assetmaster_model"><?php echo $assetmaster->model->FldCaption() ?></span>
 		<p class="form-control-static ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_model" id="z_model" value="LIKE"></p>
 		</label>
 		<div class="<?php echo $assetmaster_search->SearchRightColumnClass ?>"><div<?php echo $assetmaster->model->CellAttributes() ?>>
@@ -1173,7 +1226,7 @@ if (is_array($assetmaster->type->EditValue)) {
 <?php } ?>
 <?php if ($assetmaster->location->Visible) { // location ?>
 	<div id="r_location" class="form-group">
-		<label for="x_location" class="<?php echo $assetmaster_search->SearchLabelClass ?>"><span id="elh_assetmaster_location"><?php echo $assetmaster->location->FldCaption() ?></span>	
+		<label for="x_location" class="<?php echo $assetmaster_search->SearchLabelClass ?>"><span id="elh_assetmaster_location"><?php echo $assetmaster->location->FldCaption() ?></span>
 		<p class="form-control-static ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_location" id="z_location" value="LIKE"></p>
 		</label>
 		<div class="<?php echo $assetmaster_search->SearchRightColumnClass ?>"><div<?php echo $assetmaster->location->CellAttributes() ?>>
@@ -1185,7 +1238,7 @@ if (is_array($assetmaster->type->EditValue)) {
 <?php } ?>
 <?php if ($assetmaster->alternateIP->Visible) { // alternateIP ?>
 	<div id="r_alternateIP" class="form-group">
-		<label for="x_alternateIP" class="<?php echo $assetmaster_search->SearchLabelClass ?>"><span id="elh_assetmaster_alternateIP"><?php echo $assetmaster->alternateIP->FldCaption() ?></span>	
+		<label for="x_alternateIP" class="<?php echo $assetmaster_search->SearchLabelClass ?>"><span id="elh_assetmaster_alternateIP"><?php echo $assetmaster->alternateIP->FldCaption() ?></span>
 		<p class="form-control-static ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_alternateIP" id="z_alternateIP" value="LIKE"></p>
 		</label>
 		<div class="<?php echo $assetmaster_search->SearchRightColumnClass ?>"><div<?php echo $assetmaster->alternateIP->CellAttributes() ?>>
@@ -1197,7 +1250,7 @@ if (is_array($assetmaster->type->EditValue)) {
 <?php } ?>
 <?php if ($assetmaster->operatingsystem->Visible) { // operatingsystem ?>
 	<div id="r_operatingsystem" class="form-group">
-		<label for="x_operatingsystem" class="<?php echo $assetmaster_search->SearchLabelClass ?>"><span id="elh_assetmaster_operatingsystem"><?php echo $assetmaster->operatingsystem->FldCaption() ?></span>	
+		<label for="x_operatingsystem" class="<?php echo $assetmaster_search->SearchLabelClass ?>"><span id="elh_assetmaster_operatingsystem"><?php echo $assetmaster->operatingsystem->FldCaption() ?></span>
 		<p class="form-control-static ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_operatingsystem" id="z_operatingsystem" value="LIKE"></p>
 		</label>
 		<div class="<?php echo $assetmaster_search->SearchRightColumnClass ?>"><div<?php echo $assetmaster->operatingsystem->CellAttributes() ?>>
@@ -1209,7 +1262,7 @@ if (is_array($assetmaster->type->EditValue)) {
 <?php } ?>
 <?php if ($assetmaster->officelicense->Visible) { // officelicense ?>
 	<div id="r_officelicense" class="form-group">
-		<label for="x_officelicense" class="<?php echo $assetmaster_search->SearchLabelClass ?>"><span id="elh_assetmaster_officelicense"><?php echo $assetmaster->officelicense->FldCaption() ?></span>	
+		<label for="x_officelicense" class="<?php echo $assetmaster_search->SearchLabelClass ?>"><span id="elh_assetmaster_officelicense"><?php echo $assetmaster->officelicense->FldCaption() ?></span>
 		<p class="form-control-static ewSearchOperator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_officelicense" id="z_officelicense" value="="></p>
 		</label>
 		<div class="<?php echo $assetmaster_search->SearchRightColumnClass ?>"><div<?php echo $assetmaster->officelicense->CellAttributes() ?>>
@@ -1221,7 +1274,7 @@ if (is_array($assetmaster->type->EditValue)) {
 <?php } ?>
 <?php if ($assetmaster->datereceived->Visible) { // datereceived ?>
 	<div id="r_datereceived" class="form-group">
-		<label for="x_datereceived" class="<?php echo $assetmaster_search->SearchLabelClass ?>"><span id="elh_assetmaster_datereceived"><?php echo $assetmaster->datereceived->FldCaption() ?></span>	
+		<label for="x_datereceived" class="<?php echo $assetmaster_search->SearchLabelClass ?>"><span id="elh_assetmaster_datereceived"><?php echo $assetmaster->datereceived->FldCaption() ?></span>
 		<p class="form-control-static ewSearchOperator"><?php echo $Language->Phrase("BETWEEN") ?><input type="hidden" name="z_datereceived" id="z_datereceived" value="BETWEEN"></p>
 		</label>
 		<div class="<?php echo $assetmaster_search->SearchRightColumnClass ?>"><div<?php echo $assetmaster->datereceived->CellAttributes() ?>>
@@ -1239,6 +1292,44 @@ ew_CreateCalendar("fassetmastersearch", "x_datereceived", "%d-%m-%Y");
 <?php if (!$assetmaster->datereceived->ReadOnly && !$assetmaster->datereceived->Disabled && !isset($assetmaster->datereceived->EditAttrs["readonly"]) && !isset($assetmaster->datereceived->EditAttrs["disabled"])) { ?>
 <script type="text/javascript">
 ew_CreateCalendar("fassetmastersearch", "y_datereceived", "%d-%m-%Y");
+</script>
+<?php } ?>
+</span>
+		</div></div>
+	</div>
+<?php } ?>
+<?php if ($assetmaster->serialnumber->Visible) { // serialnumber ?>
+	<div id="r_serialnumber" class="form-group">
+		<label for="x_serialnumber" class="<?php echo $assetmaster_search->SearchLabelClass ?>"><span id="elh_assetmaster_serialnumber"><?php echo $assetmaster->serialnumber->FldCaption() ?></span>
+				<p class="form-control-static ewSearchOperator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_serialnumber" id="z_serialnumber" value="="></p>
+			</label>
+			<div class="<?php echo $assetmaster_search->SearchRightColumnClass ?>"><div<?php echo $assetmaster->serialnumber->CellAttributes() ?>>
+				<span id="el_assetmaster_serialnumber">
+<input type="text" data-table="assetmaster" data-field="x_serialnumber" name="x_serialnumber" id="x_serialnumber" size="30" maxlength="60" placeholder="<?php echo ew_HtmlEncode($assetmaster->serialnumber->getPlaceHolder()) ?>" value="<?php echo $assetmaster->serialnumber->EditValue ?>"<?php echo $assetmaster->serialnumber->EditAttributes() ?>>
+</span>
+		</div></div>
+	</div>
+<?php } ?>
+<?php if ($assetmaster->latestupdate->Visible) { // latestupdate ?>
+	<div id="r_latestupdate" class="form-group">
+		<label for="x_latestupdate" class="<?php echo $assetmaster_search->SearchLabelClass ?>"><span id="elh_assetmaster_latestupdate"><?php echo $assetmaster->latestupdate->FldCaption() ?></span>
+			<p class="form-control-static ewSearchOperator"><?php echo $Language->Phrase("BETWEEN") ?><input type="hidden" name="z_latestupdate" id="z_latestupdate" value="BETWEEN"></p>
+		</label>
+		<div class="<?php echo $assetmaster_search->SearchRightColumnClass ?>"><div<?php echo $assetmaster->latestupdate->CellAttributes() ?>>
+			<span id="el_assetmaster_latestupdate">
+				<input type="text" data-table="assetmaster" data-field="x_latestupdate" data-format="7" name="x_latestupdate" id="x_latestupdate" placeholder="<?php echo ew_HtmlEncode($assetmaster->latestupdate->getPlaceHolder()) ?>" value="<?php echo $assetmaster->latestupdate->EditValue ?>"<?php echo $assetmaster->latestupdate->EditAttributes() ?>>
+	<?php if (!$assetmaster->latestupdate->ReadOnly && !$assetmaster->latestupdate->Disabled && !isset($assetmaster->latestupdate->EditAttrs["readonly"]) && !isset($assetmaster->latestupdate->EditAttrs["disabled"])) { ?>
+<script type="text/javascript">
+ew_CreateCalendar("fassetmastersearch", "x_latestupdate", "%d-%m-%Y");
+</script>
+<?php } ?>
+</span>
+	<span class="ewSearchCond btw1_latestupdate">&nbsp;<?php echo $Language->Phrase("AND") ?>&nbsp;</span>
+	<span id="e2_assetmaster_latestupdate" class="btw1_latestupdate">
+<input type="text" data-table="assetmaster" data-field="x_latestupdate" data-format="7" name="y_latestupdate" id="y_latestupdate" placeholder="<?php echo ew_HtmlEncode($assetmaster->latestupdate->getPlaceHolder()) ?>" value="<?php echo $assetmaster->latestupdate->EditValue2 ?>"<?php echo $assetmaster->latestupdate->EditAttributes() ?>>
+<?php if (!$assetmaster->latestupdate->ReadOnly && !$assetmaster->latestupdate->Disabled && !isset($assetmaster->latestupdate->EditAttrs["readonly"]) && !isset($assetmaster->latestupdate->EditAttrs["disabled"])) { ?>
+<script type="text/javascript">
+ew_CreateCalendar("fassetmastersearch", "y_latestupdate", "%d-%m-%Y");
 </script>
 <?php } ?>
 </span>

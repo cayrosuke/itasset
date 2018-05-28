@@ -335,7 +335,7 @@ class cinayahview_list extends cinayahview {
 		$this->ListActions = new cListActions();
 	}
 
-	// 
+	//
 	//  Page_Init
 	//
 	function Page_Init() {
@@ -527,7 +527,7 @@ class cinayahview_list extends cinayahview {
 	var $ColCnt = 0;
 	var $DbMasterFilter = ""; // Master filter
 	var $DbDetailFilter = ""; // Detail filter
-	var $MasterRecordExists;	
+	var $MasterRecordExists;
 	var $MultiSelectKey;
 	var $Command;
 	var $RestoreSearch = FALSE;
@@ -756,6 +756,8 @@ class cinayahview_list extends cinayahview {
 		$sFilterList = ew_Concat($sFilterList, $this->operatingsystem->AdvancedSearch->ToJSON(), ","); // Field operatingsystem
 		$sFilterList = ew_Concat($sFilterList, $this->remarks->AdvancedSearch->ToJSON(), ","); // Field remarks
 		$sFilterList = ew_Concat($sFilterList, $this->datereceived->AdvancedSearch->ToJSON(), ","); // Field datereceived
+		$sFilterList = ew_Concat($sFilterList, $this->serialcode->AdvancedSearch->ToJSON(), ","); // Field serialcode
+		$sFilterList = ew_Concat($sFilterList, $this->latestupdate->AdvancedSearch->ToJSON(), ","); // Field latestupdate
 		if ($this->BasicSearch->Keyword <> "") {
 			$sWrk = "\"" . EW_TABLE_BASIC_SEARCH . "\":\"" . ew_JsEncode2($this->BasicSearch->Keyword) . "\",\"" . EW_TABLE_BASIC_SEARCH_TYPE . "\":\"" . ew_JsEncode2($this->BasicSearch->Type) . "\"";
 			$sFilterList = ew_Concat($sFilterList, $sWrk, ",");
@@ -903,6 +905,24 @@ class cinayahview_list extends cinayahview {
 		$this->datereceived->AdvancedSearch->Save();
 		$this->BasicSearch->setKeyword(@$filter[EW_TABLE_BASIC_SEARCH]);
 		$this->BasicSearch->setType(@$filter[EW_TABLE_BASIC_SEARCH_TYPE]);
+
+		// Field serialcode
+		$this->serialcode->AdvancedSearch->SearchValue = @$filter["x_serialcode"];
+		$this->serialcode->AdvancedSearch->SearchOperator = @$filter["z_serialcode"];
+		$this->serialcode->AdvancedSearch->SearchCondition = @$filter["v_serialcode"];
+		$this->serialcode->AdvancedSearch->SearchValue2 = @$filter["y_serialcode"];
+		$this->serialcode->AdvancedSearch->SearchOperator2 = @$filter["w_serialcode"];
+		$this->serialcode->AdvancedSearch->Save();
+
+		// Field latestupdate
+		$this->latestupdate->AdvancedSearch->SearchValue = @$filter["x_latestupdate"];
+		$this->latestupdate->AdvancedSearch->SearchOperator = @$filter["z_latestupdate"];
+		$this->latestupdate->AdvancedSearch->SearchCondition = @$filter["v_latestupdate"];
+		$this->latestupdate->AdvancedSearch->SearchValue2 = @$filter["y_latestupdate"];
+		$this->latestupdate->AdvancedSearch->SearchOperator2 = @$filter["w_latestupdate"];
+		$this->latestupdate->AdvancedSearch->Save();
+		$this->BasicSearch->setKeyword(@$filter[EW_TABLE_BASIC_SEARCH]);
+		$this->BasicSearch->setType(@$filter[EW_TABLE_BASIC_SEARCH_TYPE]);
 	}
 
 	// Return basic search SQL
@@ -922,6 +942,7 @@ class cinayahview_list extends cinayahview {
 		$this->BuildBasicSearchSQL($sWhere, $this->officelicense, $arKeywords, $type);
 		$this->BuildBasicSearchSQL($sWhere, $this->operatingsystem, $arKeywords, $type);
 		$this->BuildBasicSearchSQL($sWhere, $this->remarks, $arKeywords, $type);
+		$this->BuildBasicSearchSQL($sWhere, $this->serialcode, $arKeywords, $type);
 		return $sWhere;
 	}
 
@@ -1101,6 +1122,8 @@ class cinayahview_list extends cinayahview {
 			$this->UpdateSort($this->officelicense); // officelicense
 			$this->UpdateSort($this->operatingsystem); // operatingsystem
 			$this->UpdateSort($this->datereceived); // datereceived
+			$this->UpdateSort($this->serialcode); // serialcode
+				$this->UpdateSort($this->latestupdate); // latestupdate
 			$this->setStartRecordNumber(1); // Reset start position
 		}
 	}
@@ -1148,6 +1171,8 @@ class cinayahview_list extends cinayahview {
 				$this->officelicense->setSort("");
 				$this->operatingsystem->setSort("");
 				$this->datereceived->setSort("");
+				$this->serialcode->setSort("");
+				$this->latestupdate->setSort("");
 			}
 
 			// Reset start position
@@ -1545,6 +1570,8 @@ class cinayahview_list extends cinayahview {
 		$this->operatingsystem->setDbValue($rs->fields('operatingsystem'));
 		$this->remarks->setDbValue($rs->fields('remarks'));
 		$this->datereceived->setDbValue($rs->fields('datereceived'));
+		$this->serialcode->setDbValue($rs->fields('serialcode'));
+		$this->latestupdate->setDbValue($rs->fields('latestupdate'));
 	}
 
 	// Load DbValue from recordset
@@ -1567,6 +1594,8 @@ class cinayahview_list extends cinayahview {
 		$this->operatingsystem->DbValue = $row['operatingsystem'];
 		$this->remarks->DbValue = $row['remarks'];
 		$this->datereceived->DbValue = $row['datereceived'];
+			$this->serialcode->DbValue = $row['serialcode'];
+			$this->latestupdate->DbValue = $row['latestupdate'];
 	}
 
 	// Load old record
@@ -1620,6 +1649,8 @@ class cinayahview_list extends cinayahview {
 		// operatingsystem
 		// remarks
 		// datereceived
+		// serialcode
+		// latestupdate
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
@@ -1687,6 +1718,15 @@ class cinayahview_list extends cinayahview {
 		$this->datereceived->ViewValue = $this->datereceived->CurrentValue;
 		$this->datereceived->ViewValue = ew_FormatDateTime($this->datereceived->ViewValue, 7);
 		$this->datereceived->ViewCustomAttributes = "";
+
+		// serialcode
+		$this->serialcode->ViewValue = $this->serialcode->CurrentValue;
+		$this->serialcode->ViewCustomAttributes = "";
+
+		// latestupdate
+		$this->latestupdate->ViewValue = $this->latestupdate->CurrentValue;
+		$this->latestupdate->ViewValue = ew_FormatDateTime($this->latestupdate->ViewValue, 7);
+		$this->latestupdate->ViewCustomAttributes = "";
 
 			// no
 			$this->no->LinkCustomAttributes = "";
@@ -1762,6 +1802,16 @@ class cinayahview_list extends cinayahview {
 			$this->datereceived->LinkCustomAttributes = "";
 			$this->datereceived->HrefValue = "";
 			$this->datereceived->TooltipValue = "";
+
+			// serialcode
+			$this->serialcode->LinkCustomAttributes = "";
+			$this->serialcode->HrefValue = "";
+			$this->serialcode->TooltipValue = "";
+
+			// latestupdate
+			$this->latestupdate->LinkCustomAttributes = "";
+			$this->latestupdate->HrefValue = "";
+			$this->latestupdate->TooltipValue = "";
 		}
 
 		// Call Row Rendered event
@@ -2133,7 +2183,7 @@ class cinayahview_list extends cinayahview {
 	// ListOptions Rendered event
 	function ListOptions_Rendered() {
 
-		// Example: 
+		// Example:
 		//$this->ListOptions->Items["new"]->Body = "xxx";
 
 	}
@@ -2200,10 +2250,10 @@ var CurrentForm = finayahviewlist = new ew_Form("finayahviewlist", "list");
 finayahviewlist.FormKeyCountName = '<?php echo $inayahview_list->FormKeyCountName ?>';
 
 // Form_CustomValidate event
-finayahviewlist.Form_CustomValidate = 
+finayahviewlist.Form_CustomValidate =
  function(fobj) { // DO NOT CHANGE THIS LINE!
 
- 	// Your custom validation code here, return false if invalid. 
+ 	// Your custom validation code here, return false if invalid.
  	return true;
  }
 
@@ -2211,7 +2261,7 @@ finayahviewlist.Form_CustomValidate =
 <?php if (EW_CLIENT_VALIDATE) { ?>
 finayahviewlist.ValidateRequired = true;
 <?php } else { ?>
-finayahviewlist.ValidateRequired = false; 
+finayahviewlist.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
@@ -2391,7 +2441,7 @@ $inayahview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $inayahview->no->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($inayahview->no->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($inayahview->no->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($inayahview->assettag->Visible) { // assettag ?>
 	<?php if ($inayahview->SortUrl($inayahview->assettag) == "") { ?>
 		<th data-name="assettag"><div id="elh_inayahview_assettag" class="inayahview_assettag"><div class="ewTableHeaderCaption"><?php echo $inayahview->assettag->FldCaption() ?></div></div></th>
@@ -2400,7 +2450,7 @@ $inayahview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $inayahview->assettag->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($inayahview->assettag->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($inayahview->assettag->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($inayahview->servicetag->Visible) { // servicetag ?>
 	<?php if ($inayahview->SortUrl($inayahview->servicetag) == "") { ?>
 		<th data-name="servicetag"><div id="elh_inayahview_servicetag" class="inayahview_servicetag"><div class="ewTableHeaderCaption"><?php echo $inayahview->servicetag->FldCaption() ?></div></div></th>
@@ -2409,7 +2459,7 @@ $inayahview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $inayahview->servicetag->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($inayahview->servicetag->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($inayahview->servicetag->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($inayahview->ipaddress->Visible) { // ipaddress ?>
 	<?php if ($inayahview->SortUrl($inayahview->ipaddress) == "") { ?>
 		<th data-name="ipaddress"><div id="elh_inayahview_ipaddress" class="inayahview_ipaddress"><div class="ewTableHeaderCaption"><?php echo $inayahview->ipaddress->FldCaption() ?></div></div></th>
@@ -2418,7 +2468,7 @@ $inayahview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $inayahview->ipaddress->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($inayahview->ipaddress->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($inayahview->ipaddress->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($inayahview->employeeno->Visible) { // employeeno ?>
 	<?php if ($inayahview->SortUrl($inayahview->employeeno) == "") { ?>
 		<th data-name="employeeno"><div id="elh_inayahview_employeeno" class="inayahview_employeeno"><div class="ewTableHeaderCaption"><?php echo $inayahview->employeeno->FldCaption() ?></div></div></th>
@@ -2427,7 +2477,7 @@ $inayahview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $inayahview->employeeno->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($inayahview->employeeno->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($inayahview->employeeno->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($inayahview->employeename->Visible) { // employeename ?>
 	<?php if ($inayahview->SortUrl($inayahview->employeename) == "") { ?>
 		<th data-name="employeename"><div id="elh_inayahview_employeename" class="inayahview_employeename"><div class="ewTableHeaderCaption"><?php echo $inayahview->employeename->FldCaption() ?></div></div></th>
@@ -2436,7 +2486,7 @@ $inayahview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $inayahview->employeename->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($inayahview->employeename->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($inayahview->employeename->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($inayahview->company->Visible) { // company ?>
 	<?php if ($inayahview->SortUrl($inayahview->company) == "") { ?>
 		<th data-name="company"><div id="elh_inayahview_company" class="inayahview_company"><div class="ewTableHeaderCaption"><?php echo $inayahview->company->FldCaption() ?></div></div></th>
@@ -2445,7 +2495,7 @@ $inayahview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $inayahview->company->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($inayahview->company->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($inayahview->company->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($inayahview->department->Visible) { // department ?>
 	<?php if ($inayahview->SortUrl($inayahview->department) == "") { ?>
 		<th data-name="department"><div id="elh_inayahview_department" class="inayahview_department"><div class="ewTableHeaderCaption"><?php echo $inayahview->department->FldCaption() ?></div></div></th>
@@ -2454,7 +2504,7 @@ $inayahview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $inayahview->department->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($inayahview->department->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($inayahview->department->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($inayahview->type->Visible) { // type ?>
 	<?php if ($inayahview->SortUrl($inayahview->type) == "") { ?>
 		<th data-name="type"><div id="elh_inayahview_type" class="inayahview_type"><div class="ewTableHeaderCaption"><?php echo $inayahview->type->FldCaption() ?></div></div></th>
@@ -2463,7 +2513,7 @@ $inayahview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $inayahview->type->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($inayahview->type->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($inayahview->type->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($inayahview->model->Visible) { // model ?>
 	<?php if ($inayahview->SortUrl($inayahview->model) == "") { ?>
 		<th data-name="model"><div id="elh_inayahview_model" class="inayahview_model"><div class="ewTableHeaderCaption"><?php echo $inayahview->model->FldCaption() ?></div></div></th>
@@ -2472,7 +2522,7 @@ $inayahview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $inayahview->model->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($inayahview->model->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($inayahview->model->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($inayahview->location->Visible) { // location ?>
 	<?php if ($inayahview->SortUrl($inayahview->location) == "") { ?>
 		<th data-name="location"><div id="elh_inayahview_location" class="inayahview_location"><div class="ewTableHeaderCaption"><?php echo $inayahview->location->FldCaption() ?></div></div></th>
@@ -2481,7 +2531,7 @@ $inayahview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $inayahview->location->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($inayahview->location->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($inayahview->location->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($inayahview->alternateIP->Visible) { // alternateIP ?>
 	<?php if ($inayahview->SortUrl($inayahview->alternateIP) == "") { ?>
 		<th data-name="alternateIP"><div id="elh_inayahview_alternateIP" class="inayahview_alternateIP"><div class="ewTableHeaderCaption"><?php echo $inayahview->alternateIP->FldCaption() ?></div></div></th>
@@ -2490,7 +2540,7 @@ $inayahview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $inayahview->alternateIP->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($inayahview->alternateIP->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($inayahview->alternateIP->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($inayahview->officelicense->Visible) { // officelicense ?>
 	<?php if ($inayahview->SortUrl($inayahview->officelicense) == "") { ?>
 		<th data-name="officelicense"><div id="elh_inayahview_officelicense" class="inayahview_officelicense"><div class="ewTableHeaderCaption"><?php echo $inayahview->officelicense->FldCaption() ?></div></div></th>
@@ -2499,7 +2549,7 @@ $inayahview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $inayahview->officelicense->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($inayahview->officelicense->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($inayahview->officelicense->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($inayahview->operatingsystem->Visible) { // operatingsystem ?>
 	<?php if ($inayahview->SortUrl($inayahview->operatingsystem) == "") { ?>
 		<th data-name="operatingsystem"><div id="elh_inayahview_operatingsystem" class="inayahview_operatingsystem"><div class="ewTableHeaderCaption"><?php echo $inayahview->operatingsystem->FldCaption() ?></div></div></th>
@@ -2508,7 +2558,7 @@ $inayahview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $inayahview->operatingsystem->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($inayahview->operatingsystem->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($inayahview->operatingsystem->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($inayahview->datereceived->Visible) { // datereceived ?>
 	<?php if ($inayahview->SortUrl($inayahview->datereceived) == "") { ?>
 		<th data-name="datereceived"><div id="elh_inayahview_datereceived" class="inayahview_datereceived"><div class="ewTableHeaderCaption"><?php echo $inayahview->datereceived->FldCaption() ?></div></div></th>
@@ -2517,7 +2567,25 @@ $inayahview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $inayahview->datereceived->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($inayahview->datereceived->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($inayahview->datereceived->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
+<?php } ?>
+<?php if ($inayahview->serialcode->Visible) { // serialcode ?>
+<?php if ($inayahview->SortUrl($inayahview->serialcode) == "") { ?>
+	<th data-name="serialcode"><div id="elh_inayahview_serialcode" class="inayahview_serialcode"><div class="ewTableHeaderCaption"><?php echo $inayahview->serialcode->FldCaption() ?></div></div></th>
+<?php } else { ?>
+	<th data-name="serialcode"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $inayahview->SortUrl($inayahview->serialcode) ?>',1);"><div id="elh_inayahview_serialcode" class="inayahview_serialcode">
+		<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $inayahview->serialcode->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($inayahview->serialcode->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($inayahview->serialcode->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+			</div></div></th>
+		<?php } ?>
+	<?php } ?>
+<?php if ($inayahview->latestupdate->Visible) { // latestupdate ?>
+		<?php if ($inayahview->SortUrl($inayahview->latestupdate) == "") { ?>
+			<th data-name="latestupdate"><div id="elh_inayahview_latestupdate" class="inayahview_latestupdate"><div class="ewTableHeaderCaption"><?php echo $inayahview->latestupdate->FldCaption() ?></div></div></th>
+		<?php } else { ?>
+			<th data-name="latestupdate"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $inayahview->SortUrl($inayahview->latestupdate) ?>',1);"><div id="elh_inayahview_latestupdate" class="inayahview_latestupdate">
+				<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $inayahview->latestupdate->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($inayahview->latestupdate->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($inayahview->latestupdate->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+					</div></div></th>
+<?php } ?>
 <?php
 
 // Render list options (header, right)
@@ -2700,6 +2768,22 @@ $inayahview_list->ListOptions->Render("body", "left", $inayahview_list->RowCnt);
 <span id="el<?php echo $inayahview_list->RowCnt ?>_inayahview_datereceived" class="inayahview_datereceived">
 <span<?php echo $inayahview->datereceived->ViewAttributes() ?>>
 <?php echo $inayahview->datereceived->ListViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($inayahview->serialcode->Visible) { // serialcode ?>
+	<td data-name="serialcode"<?php echo $inayahview->serialcode->CellAttributes() ?>>
+<span id="el<?php echo $inayahview_list->RowCnt ?>_inayahview_serialcode" class="inayahview_serialcode">
+<span<?php echo $inayahview->serialcode->ViewAttributes() ?>>
+<?php echo $inayahview->serialcode->ListViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($inayahview->latestupdate->Visible) { // latestupdate ?>
+	<td data-name="latestupdate"<?php echo $inayahview-latestupdated->CellAttributes() ?>>
+<span id="el<?php echo $inayahview_list->RowCnt ?>_inayahview_latestupdate" class="inayahview_latestupdate">
+<span<?php echo $inayahview->latestupdate->ViewAttributes() ?>>
+<?php echo $inayahview->latestupdate->ListViewValue() ?></span>
 </span>
 </td>
 	<?php } ?>

@@ -335,7 +335,7 @@ class cSMEAview_list extends cSMEAview {
 		$this->ListActions = new cListActions();
 	}
 
-	// 
+	//
 	//  Page_Init
 	//
 	function Page_Init() {
@@ -527,7 +527,7 @@ class cSMEAview_list extends cSMEAview {
 	var $ColCnt = 0;
 	var $DbMasterFilter = ""; // Master filter
 	var $DbDetailFilter = ""; // Detail filter
-	var $MasterRecordExists;	
+	var $MasterRecordExists;
 	var $MultiSelectKey;
 	var $Command;
 	var $RestoreSearch = FALSE;
@@ -756,6 +756,8 @@ class cSMEAview_list extends cSMEAview {
 		$sFilterList = ew_Concat($sFilterList, $this->operatingsystem->AdvancedSearch->ToJSON(), ","); // Field operatingsystem
 		$sFilterList = ew_Concat($sFilterList, $this->remarks->AdvancedSearch->ToJSON(), ","); // Field remarks
 		$sFilterList = ew_Concat($sFilterList, $this->datereceived->AdvancedSearch->ToJSON(), ","); // Field datereceived
+		$sFilterList = ew_Concat($sFilterList, $this->serialcode->AdvancedSearch->ToJSON(), ","); // Field serialcode
+		$sFilterList = ew_Concat($sFilterList, $this->latestupdate->AdvancedSearch->ToJSON(), ","); // Field latestupdate
 		if ($this->BasicSearch->Keyword <> "") {
 			$sWrk = "\"" . EW_TABLE_BASIC_SEARCH . "\":\"" . ew_JsEncode2($this->BasicSearch->Keyword) . "\",\"" . EW_TABLE_BASIC_SEARCH_TYPE . "\":\"" . ew_JsEncode2($this->BasicSearch->Type) . "\"";
 			$sFilterList = ew_Concat($sFilterList, $sWrk, ",");
@@ -903,6 +905,24 @@ class cSMEAview_list extends cSMEAview {
 		$this->datereceived->AdvancedSearch->Save();
 		$this->BasicSearch->setKeyword(@$filter[EW_TABLE_BASIC_SEARCH]);
 		$this->BasicSearch->setType(@$filter[EW_TABLE_BASIC_SEARCH_TYPE]);
+
+		// Field serialcode
+		$this->serialcode->AdvancedSearch->SearchValue = @$filter["x_serialcode"];
+		$this->serialcode->AdvancedSearch->SearchOperator = @$filter["z_serialcode"];
+		$this->serialcode->AdvancedSearch->SearchCondition = @$filter["v_serialcode"];
+		$this->serialcode->AdvancedSearch->SearchValue2 = @$filter["y_serialcode"];
+		$this->serialcode->AdvancedSearch->SearchOperator2 = @$filter["w_serialcode"];
+		$this->serialcode->AdvancedSearch->Save();
+
+		// Field latestupdate
+		$this->latestupdate->AdvancedSearch->SearchValue = @$filter["x_latestupdate"];
+		$this->latestupdate->AdvancedSearch->SearchOperator = @$filter["z_latestupdate"];
+		$this->latestupdate->AdvancedSearch->SearchCondition = @$filter["v_latestupdate"];
+		$this->latestupdate->AdvancedSearch->SearchValue2 = @$filter["y_latestupdate"];
+		$this->latestupdate->AdvancedSearch->SearchOperator2 = @$filter["w_latestupdate"];
+		$this->latestupdate->AdvancedSearch->Save();
+		$this->BasicSearch->setKeyword(@$filter[EW_TABLE_BASIC_SEARCH]);
+		$this->BasicSearch->setType(@$filter[EW_TABLE_BASIC_SEARCH_TYPE]);
 	}
 
 	// Return basic search SQL
@@ -922,6 +942,7 @@ class cSMEAview_list extends cSMEAview {
 		$this->BuildBasicSearchSQL($sWhere, $this->officelicense, $arKeywords, $type);
 		$this->BuildBasicSearchSQL($sWhere, $this->operatingsystem, $arKeywords, $type);
 		$this->BuildBasicSearchSQL($sWhere, $this->remarks, $arKeywords, $type);
+			$this->BuildBasicSearchSQL($sWhere, $this->serialcode, $arKeywords, $type);
 		return $sWhere;
 	}
 
@@ -1101,6 +1122,8 @@ class cSMEAview_list extends cSMEAview {
 			$this->UpdateSort($this->officelicense); // officelicense
 			$this->UpdateSort($this->operatingsystem); // operatingsystem
 			$this->UpdateSort($this->datereceived); // datereceived
+			$this->UpdateSort($this->serialcode); // serialcode
+			$this->UpdateSort($this->latestupdate); // latestupdate
 			$this->setStartRecordNumber(1); // Reset start position
 		}
 	}
@@ -1148,6 +1171,8 @@ class cSMEAview_list extends cSMEAview {
 				$this->officelicense->setSort("");
 				$this->operatingsystem->setSort("");
 				$this->datereceived->setSort("");
+				$this->serialcode->setSort("");
+				$this->latestupdate->setSort("");
 			}
 
 			// Reset start position
@@ -1545,6 +1570,8 @@ class cSMEAview_list extends cSMEAview {
 		$this->operatingsystem->setDbValue($rs->fields('operatingsystem'));
 		$this->remarks->setDbValue($rs->fields('remarks'));
 		$this->datereceived->setDbValue($rs->fields('datereceived'));
+		$this->serialcode->setDbValue($rs->fields('serialcode'));
+		$this->latestupdate->setDbValue($rs->fields('latestupdate'));
 	}
 
 	// Load DbValue from recordset
@@ -1567,6 +1594,8 @@ class cSMEAview_list extends cSMEAview {
 		$this->operatingsystem->DbValue = $row['operatingsystem'];
 		$this->remarks->DbValue = $row['remarks'];
 		$this->datereceived->DbValue = $row['datereceived'];
+		$this->serialcode->DbValue = $row['serialcode'];
+		$this->latestupdate->DbValue = $row['latestupdate'];
 	}
 
 	// Load old record
@@ -1620,6 +1649,8 @@ class cSMEAview_list extends cSMEAview {
 		// operatingsystem
 		// remarks
 		// datereceived
+		// serialcode
+		// latestupdate
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
@@ -1687,6 +1718,15 @@ class cSMEAview_list extends cSMEAview {
 		$this->datereceived->ViewValue = $this->datereceived->CurrentValue;
 		$this->datereceived->ViewValue = ew_FormatDateTime($this->datereceived->ViewValue, 7);
 		$this->datereceived->ViewCustomAttributes = "";
+
+		// serialcode
+		$this->serialcode->ViewValue = $this->serialcode->CurrentValue;
+		$this->serialcode->ViewCustomAttributes = "";
+
+		// latestupdate
+		$this->latestupdate->ViewValue = $this->latestupdate->CurrentValue;
+		$this->latestupdate->ViewValue = ew_FormatDateTime($this->latestupdate->ViewValue, 7);
+		$this->latestupdate->ViewCustomAttributes = "";
 
 			// no
 			$this->no->LinkCustomAttributes = "";
@@ -1762,6 +1802,16 @@ class cSMEAview_list extends cSMEAview {
 			$this->datereceived->LinkCustomAttributes = "";
 			$this->datereceived->HrefValue = "";
 			$this->datereceived->TooltipValue = "";
+
+			// serialcode
+			$this->serialcode->LinkCustomAttributes = "";
+			$this->serialcode->HrefValue = "";
+			$this->serialcode->TooltipValue = "";
+
+			// latestupdate
+			$this->latestupdate->LinkCustomAttributes = "";
+			$this->latestupdate->HrefValue = "";
+			$this->latestupdate->TooltipValue = "";
 		}
 
 		// Call Row Rendered event
@@ -2133,7 +2183,7 @@ class cSMEAview_list extends cSMEAview {
 	// ListOptions Rendered event
 	function ListOptions_Rendered() {
 
-		// Example: 
+		// Example:
 		//$this->ListOptions->Items["new"]->Body = "xxx";
 
 	}
@@ -2200,10 +2250,10 @@ var CurrentForm = fSMEAviewlist = new ew_Form("fSMEAviewlist", "list");
 fSMEAviewlist.FormKeyCountName = '<?php echo $SMEAview_list->FormKeyCountName ?>';
 
 // Form_CustomValidate event
-fSMEAviewlist.Form_CustomValidate = 
+fSMEAviewlist.Form_CustomValidate =
  function(fobj) { // DO NOT CHANGE THIS LINE!
 
- 	// Your custom validation code here, return false if invalid. 
+ 	// Your custom validation code here, return false if invalid.
  	return true;
  }
 
@@ -2211,7 +2261,7 @@ fSMEAviewlist.Form_CustomValidate =
 <?php if (EW_CLIENT_VALIDATE) { ?>
 fSMEAviewlist.ValidateRequired = true;
 <?php } else { ?>
-fSMEAviewlist.ValidateRequired = false; 
+fSMEAviewlist.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
@@ -2391,7 +2441,7 @@ $SMEAview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $SMEAview->no->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($SMEAview->no->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($SMEAview->no->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($SMEAview->assettag->Visible) { // assettag ?>
 	<?php if ($SMEAview->SortUrl($SMEAview->assettag) == "") { ?>
 		<th data-name="assettag"><div id="elh_SMEAview_assettag" class="SMEAview_assettag"><div class="ewTableHeaderCaption"><?php echo $SMEAview->assettag->FldCaption() ?></div></div></th>
@@ -2400,7 +2450,7 @@ $SMEAview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $SMEAview->assettag->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($SMEAview->assettag->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($SMEAview->assettag->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($SMEAview->servicetag->Visible) { // servicetag ?>
 	<?php if ($SMEAview->SortUrl($SMEAview->servicetag) == "") { ?>
 		<th data-name="servicetag"><div id="elh_SMEAview_servicetag" class="SMEAview_servicetag"><div class="ewTableHeaderCaption"><?php echo $SMEAview->servicetag->FldCaption() ?></div></div></th>
@@ -2409,7 +2459,7 @@ $SMEAview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $SMEAview->servicetag->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($SMEAview->servicetag->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($SMEAview->servicetag->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($SMEAview->ipaddress->Visible) { // ipaddress ?>
 	<?php if ($SMEAview->SortUrl($SMEAview->ipaddress) == "") { ?>
 		<th data-name="ipaddress"><div id="elh_SMEAview_ipaddress" class="SMEAview_ipaddress"><div class="ewTableHeaderCaption"><?php echo $SMEAview->ipaddress->FldCaption() ?></div></div></th>
@@ -2418,7 +2468,7 @@ $SMEAview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $SMEAview->ipaddress->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($SMEAview->ipaddress->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($SMEAview->ipaddress->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($SMEAview->employeeno->Visible) { // employeeno ?>
 	<?php if ($SMEAview->SortUrl($SMEAview->employeeno) == "") { ?>
 		<th data-name="employeeno"><div id="elh_SMEAview_employeeno" class="SMEAview_employeeno"><div class="ewTableHeaderCaption"><?php echo $SMEAview->employeeno->FldCaption() ?></div></div></th>
@@ -2427,7 +2477,7 @@ $SMEAview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $SMEAview->employeeno->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($SMEAview->employeeno->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($SMEAview->employeeno->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($SMEAview->employeename->Visible) { // employeename ?>
 	<?php if ($SMEAview->SortUrl($SMEAview->employeename) == "") { ?>
 		<th data-name="employeename"><div id="elh_SMEAview_employeename" class="SMEAview_employeename"><div class="ewTableHeaderCaption"><?php echo $SMEAview->employeename->FldCaption() ?></div></div></th>
@@ -2436,7 +2486,7 @@ $SMEAview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $SMEAview->employeename->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($SMEAview->employeename->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($SMEAview->employeename->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($SMEAview->company->Visible) { // company ?>
 	<?php if ($SMEAview->SortUrl($SMEAview->company) == "") { ?>
 		<th data-name="company"><div id="elh_SMEAview_company" class="SMEAview_company"><div class="ewTableHeaderCaption"><?php echo $SMEAview->company->FldCaption() ?></div></div></th>
@@ -2445,7 +2495,7 @@ $SMEAview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $SMEAview->company->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($SMEAview->company->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($SMEAview->company->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($SMEAview->department->Visible) { // department ?>
 	<?php if ($SMEAview->SortUrl($SMEAview->department) == "") { ?>
 		<th data-name="department"><div id="elh_SMEAview_department" class="SMEAview_department"><div class="ewTableHeaderCaption"><?php echo $SMEAview->department->FldCaption() ?></div></div></th>
@@ -2454,7 +2504,7 @@ $SMEAview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $SMEAview->department->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($SMEAview->department->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($SMEAview->department->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($SMEAview->type->Visible) { // type ?>
 	<?php if ($SMEAview->SortUrl($SMEAview->type) == "") { ?>
 		<th data-name="type"><div id="elh_SMEAview_type" class="SMEAview_type"><div class="ewTableHeaderCaption"><?php echo $SMEAview->type->FldCaption() ?></div></div></th>
@@ -2463,7 +2513,7 @@ $SMEAview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $SMEAview->type->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($SMEAview->type->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($SMEAview->type->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($SMEAview->model->Visible) { // model ?>
 	<?php if ($SMEAview->SortUrl($SMEAview->model) == "") { ?>
 		<th data-name="model"><div id="elh_SMEAview_model" class="SMEAview_model"><div class="ewTableHeaderCaption"><?php echo $SMEAview->model->FldCaption() ?></div></div></th>
@@ -2472,7 +2522,7 @@ $SMEAview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $SMEAview->model->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($SMEAview->model->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($SMEAview->model->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($SMEAview->location->Visible) { // location ?>
 	<?php if ($SMEAview->SortUrl($SMEAview->location) == "") { ?>
 		<th data-name="location"><div id="elh_SMEAview_location" class="SMEAview_location"><div class="ewTableHeaderCaption"><?php echo $SMEAview->location->FldCaption() ?></div></div></th>
@@ -2481,7 +2531,7 @@ $SMEAview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $SMEAview->location->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($SMEAview->location->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($SMEAview->location->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($SMEAview->alternateIP->Visible) { // alternateIP ?>
 	<?php if ($SMEAview->SortUrl($SMEAview->alternateIP) == "") { ?>
 		<th data-name="alternateIP"><div id="elh_SMEAview_alternateIP" class="SMEAview_alternateIP"><div class="ewTableHeaderCaption"><?php echo $SMEAview->alternateIP->FldCaption() ?></div></div></th>
@@ -2490,7 +2540,7 @@ $SMEAview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $SMEAview->alternateIP->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($SMEAview->alternateIP->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($SMEAview->alternateIP->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($SMEAview->officelicense->Visible) { // officelicense ?>
 	<?php if ($SMEAview->SortUrl($SMEAview->officelicense) == "") { ?>
 		<th data-name="officelicense"><div id="elh_SMEAview_officelicense" class="SMEAview_officelicense"><div class="ewTableHeaderCaption"><?php echo $SMEAview->officelicense->FldCaption() ?></div></div></th>
@@ -2499,7 +2549,7 @@ $SMEAview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $SMEAview->officelicense->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($SMEAview->officelicense->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($SMEAview->officelicense->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($SMEAview->operatingsystem->Visible) { // operatingsystem ?>
 	<?php if ($SMEAview->SortUrl($SMEAview->operatingsystem) == "") { ?>
 		<th data-name="operatingsystem"><div id="elh_SMEAview_operatingsystem" class="SMEAview_operatingsystem"><div class="ewTableHeaderCaption"><?php echo $SMEAview->operatingsystem->FldCaption() ?></div></div></th>
@@ -2508,7 +2558,7 @@ $SMEAview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $SMEAview->operatingsystem->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($SMEAview->operatingsystem->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($SMEAview->operatingsystem->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($SMEAview->datereceived->Visible) { // datereceived ?>
 	<?php if ($SMEAview->SortUrl($SMEAview->datereceived) == "") { ?>
 		<th data-name="datereceived"><div id="elh_SMEAview_datereceived" class="SMEAview_datereceived"><div class="ewTableHeaderCaption"><?php echo $SMEAview->datereceived->FldCaption() ?></div></div></th>
@@ -2517,7 +2567,25 @@ $SMEAview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $SMEAview->datereceived->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($SMEAview->datereceived->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($SMEAview->datereceived->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
+<?php if ($SMEAview->serialcode->Visible) { // serialcode ?>
+	<?php if ($SMEAview->SortUrl($SMEAview->serialcode) == "") { ?>
+		<th data-name="serialcode"><div id="elh_SMEAview_serialcode" class="SMEAview_serialcode"><div class="ewTableHeaderCaption"><?php echo $SMEAview->serialcode->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="serialcode"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $SMEAview->SortUrl($SMEAview->serialcode) ?>',1);"><div id="elh_SMEAview_serialcode" class="SMEAview_serialcode">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $SMEAview->serialcode->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($SMEAview->serialcode->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($SMEAview->serialcode->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+				</div></div></th>
+	<?php } ?>
+<?php } ?>
+<?php if ($SMEAview->latestupdate->Visible) { // latestupdate ?>
+	<?php if ($SMEAview->SortUrl($SMEAview->latestupdate) == "") { ?>
+		<th data-name="latestupdate"><div id="elh_SMEAview_latestupdate" class="SMEAview_latestupdate"><div class="ewTableHeaderCaption"><?php echo $SMEAview->latestupdate->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="latestupdate"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $SMEAview->SortUrl($SMEAview->latestupdate) ?>',1);"><div id="elh_SMEAview_latestupdate" class="SMEAview_latestupdate">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $SMEAview->latestupdate->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($SMEAview->latestupdate->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($SMEAview->latestupdate->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+				</div></div></th>
+	<?php } ?>
+<?php } ?>
 <?php
 
 // Render list options (header, right)
@@ -2700,6 +2768,22 @@ $SMEAview_list->ListOptions->Render("body", "left", $SMEAview_list->RowCnt);
 <span id="el<?php echo $SMEAview_list->RowCnt ?>_SMEAview_datereceived" class="SMEAview_datereceived">
 <span<?php echo $SMEAview->datereceived->ViewAttributes() ?>>
 <?php echo $SMEAview->datereceived->ListViewValue() ?></span>
+</span>
+</td>
+	<?php } ?>
+	<?php if ($SMEAview->serialcode->Visible) { // serialcode ?>
+<td data-name="serialcode"<?php echo $SMEAview->serialcode->CellAttributes() ?>>
+<span id="el<?php echo $SMEAview_list->RowCnt ?>_SMEAview_serialcode" class="SMEAview_serialcode">
+<span<?php echo $SMEAview->serialcode->ViewAttributes() ?>>
+<?php echo $SMEAview->serialcode->ListViewValue() ?></span>
+</span>
+</td>
+	<?php } ?>
+	<?php if ($SMEAview->latestupdate->Visible) { // latestupdate ?>
+<td data-name="latestupdate"<?php echo $SMEAview->latestupdate->CellAttributes() ?>>
+<span id="el<?php echo $SMEAview_list->RowCnt ?>_SMEAview_latestupdate" class="SMEAview_latestupdate">
+<span<?php echo $SMEAview->latestupdate->ViewAttributes() ?>>
+<?php echo $SMEAview->latestupdate->ListViewValue() ?></span>
 </span>
 </td>
 	<?php } ?>

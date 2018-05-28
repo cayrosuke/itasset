@@ -252,7 +252,7 @@ class cairodview_search extends cairodview {
 		}
 	}
 
-	// 
+	//
 	//  Page_Init
 	//
 	function Page_Init() {
@@ -409,6 +409,8 @@ class cairodview_search extends cairodview {
 		$this->BuildSearchUrl($sSrchUrl, $this->location); // location
 		$this->BuildSearchUrl($sSrchUrl, $this->officelicense); // officelicense
 		$this->BuildSearchUrl($sSrchUrl, $this->datereceived); // datereceived
+		$this->BuildSearchUrl($sSrchUrl, $this->serialcode); // serialcode
+		$this->BuildSearchUrl($sSrchUrl, $this->latestupdate); // latestupdate
 		if ($sSrchUrl <> "") $sSrchUrl .= "&";
 		$sSrchUrl .= "cmd=search";
 		return $sSrchUrl;
@@ -517,6 +519,17 @@ class cairodview_search extends cairodview {
 		$this->datereceived->AdvancedSearch->SearchCondition = $objForm->GetValue("v_datereceived");
 		$this->datereceived->AdvancedSearch->SearchValue2 = ew_StripSlashes($objForm->GetValue("y_datereceived"));
 		$this->datereceived->AdvancedSearch->SearchOperator2 = $objForm->GetValue("w_datereceived");
+
+		// serialcode
+		$this->serialcode->AdvancedSearch->SearchValue = ew_StripSlashes($objForm->GetValue("x_serialcode"));
+		$this->serialcode->AdvancedSearch->SearchOperator = $objForm->GetValue("z_serialcode");
+
+		// latestupdate
+		$this->latestupdate->AdvancedSearch->SearchValue = ew_StripSlashes($objForm->GetValue("x_latestupdate"));
+		$this->latestupdate->AdvancedSearch->SearchOperator = $objForm->GetValue("z_latestupdate");
+		$this->latestupdate->AdvancedSearch->SearchCondition = $objForm->GetValue("v_latestupdate");
+		$this->latestupdate->AdvancedSearch->SearchValue2 = ew_StripSlashes($objForm->GetValue("y_latestupdate"));
+		$this->latestupdate->AdvancedSearch->SearchOperator2 = $objForm->GetValue("w_latestupdate");
 	}
 
 	// Render row values based on field settings
@@ -545,6 +558,8 @@ class cairodview_search extends cairodview {
 		// remarks
 		// officelicense
 		// datereceived
+		// serialcode
+		// latestupdate
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
@@ -609,6 +624,15 @@ class cairodview_search extends cairodview {
 		$this->datereceived->ViewValue = ew_FormatDateTime($this->datereceived->ViewValue, 7);
 		$this->datereceived->ViewCustomAttributes = "";
 
+		// serialcode
+		$this->serialcode->ViewValue = $this->serialcode->CurrentValue;
+		$this->serialcode->ViewCustomAttributes = "";
+
+		// latestupdate
+		$this->latestupdate->ViewValue = $this->latestupdate->CurrentValue;
+		$this->latestupdate->ViewValue = ew_FormatDateTime($this->latestupdate->ViewValue, 7);
+		$this->latestupdate->ViewCustomAttributes = "";
+
 			// assettag
 			$this->assettag->LinkCustomAttributes = "";
 			$this->assettag->HrefValue = "";
@@ -658,6 +682,16 @@ class cairodview_search extends cairodview {
 			$this->datereceived->LinkCustomAttributes = "";
 			$this->datereceived->HrefValue = "";
 			$this->datereceived->TooltipValue = "";
+
+			// serialcode
+			$this->serialcode->LinkCustomAttributes = "";
+			$this->serialcode->HrefValue = "";
+			$this->serialcode->TooltipValue = "";
+
+			// latestupdate
+			$this->latestupdate->LinkCustomAttributes = "";
+			$this->latestupdate->HrefValue = "";
+			$this->latestupdate->TooltipValue = "";
 		} elseif ($this->RowType == EW_ROWTYPE_SEARCH) { // Search row
 
 			// assettag
@@ -722,6 +756,22 @@ class cairodview_search extends cairodview {
 			$this->datereceived->EditCustomAttributes = "";
 			$this->datereceived->EditValue2 = ew_HtmlEncode(ew_FormatDateTime(ew_UnFormatDateTime($this->datereceived->AdvancedSearch->SearchValue2, 7), 7));
 			$this->datereceived->PlaceHolder = ew_RemoveHtml($this->datereceived->FldCaption());
+
+			// serialcode
+			$this->serialcode->EditAttrs["class"] = "form-control";
+			$this->serialcode->EditCustomAttributes = "";
+			$this->serialcode->EditValue = ew_HtmlEncode($this->serialcode->AdvancedSearch->SearchValue);
+			$this->serialcode->PlaceHolder = ew_RemoveHtml($this->serialcode->FldCaption());
+
+			// latestupdate
+			$this->latestupdate->EditAttrs["class"] = "form-control";
+			$this->latestupdate->EditCustomAttributes = "";
+			$this->latestupdate->EditValue = ew_HtmlEncode(ew_FormatDateTime(ew_UnFormatDateTime($this->latestupdate->AdvancedSearch->SearchValue, 7), 7));
+			$this->latestupdate->PlaceHolder = ew_RemoveHtml($this->latestupdate->FldCaption());
+			$this->latestupdate->EditAttrs["class"] = "form-control";
+			$this->latestupdate->EditCustomAttributes = "";
+			$this->latestupdate->EditValue2 = ew_HtmlEncode(ew_FormatDateTime(ew_UnFormatDateTime($this->latestupdate->AdvancedSearch->SearchValue2, 7), 7));
+			$this->latestupdate->PlaceHolder = ew_RemoveHtml($this->latestupdate->FldCaption());
 		}
 		if ($this->RowType == EW_ROWTYPE_ADD ||
 			$this->RowType == EW_ROWTYPE_EDIT ||
@@ -775,6 +825,8 @@ class cairodview_search extends cairodview {
 		$this->location->AdvancedSearch->Load();
 		$this->officelicense->AdvancedSearch->Load();
 		$this->datereceived->AdvancedSearch->Load();
+		$this->serialcode->AdvancedSearch->Load();
+		$this->latestupdate->AdvancedSearch->Load();
 	}
 
 	// Set up Breadcrumb
@@ -885,10 +937,10 @@ var CurrentForm = fairodviewsearch = new ew_Form("fairodviewsearch", "search");
 <?php } ?>
 
 // Form_CustomValidate event
-fairodviewsearch.Form_CustomValidate = 
+fairodviewsearch.Form_CustomValidate =
  function(fobj) { // DO NOT CHANGE THIS LINE!
 
- 	// Your custom validation code here, return false if invalid. 
+ 	// Your custom validation code here, return false if invalid.
  	return true;
  }
 
@@ -896,7 +948,7 @@ fairodviewsearch.Form_CustomValidate =
 <?php if (EW_CLIENT_VALIDATE) { ?>
 fairodviewsearch.ValidateRequired = true;
 <?php } else { ?>
-fairodviewsearch.ValidateRequired = false; 
+fairodviewsearch.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
@@ -948,7 +1000,7 @@ $airodview_search->ShowMessage();
 <div>
 <?php if ($airodview->assettag->Visible) { // assettag ?>
 	<div id="r_assettag" class="form-group">
-		<label for="x_assettag" class="<?php echo $airodview_search->SearchLabelClass ?>"><span id="elh_airodview_assettag"><?php echo $airodview->assettag->FldCaption() ?></span>	
+		<label for="x_assettag" class="<?php echo $airodview_search->SearchLabelClass ?>"><span id="elh_airodview_assettag"><?php echo $airodview->assettag->FldCaption() ?></span>
 		<p class="form-control-static ewSearchOperator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_assettag" id="z_assettag" value="="></p>
 		</label>
 		<div class="<?php echo $airodview_search->SearchRightColumnClass ?>"><div<?php echo $airodview->assettag->CellAttributes() ?>>
@@ -960,7 +1012,7 @@ $airodview_search->ShowMessage();
 <?php } ?>
 <?php if ($airodview->servicetag->Visible) { // servicetag ?>
 	<div id="r_servicetag" class="form-group">
-		<label for="x_servicetag" class="<?php echo $airodview_search->SearchLabelClass ?>"><span id="elh_airodview_servicetag"><?php echo $airodview->servicetag->FldCaption() ?></span>	
+		<label for="x_servicetag" class="<?php echo $airodview_search->SearchLabelClass ?>"><span id="elh_airodview_servicetag"><?php echo $airodview->servicetag->FldCaption() ?></span>
 		<p class="form-control-static ewSearchOperator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_servicetag" id="z_servicetag" value="="></p>
 		</label>
 		<div class="<?php echo $airodview_search->SearchRightColumnClass ?>"><div<?php echo $airodview->servicetag->CellAttributes() ?>>
@@ -972,7 +1024,7 @@ $airodview_search->ShowMessage();
 <?php } ?>
 <?php if ($airodview->ipaddress->Visible) { // ipaddress ?>
 	<div id="r_ipaddress" class="form-group">
-		<label for="x_ipaddress" class="<?php echo $airodview_search->SearchLabelClass ?>"><span id="elh_airodview_ipaddress"><?php echo $airodview->ipaddress->FldCaption() ?></span>	
+		<label for="x_ipaddress" class="<?php echo $airodview_search->SearchLabelClass ?>"><span id="elh_airodview_ipaddress"><?php echo $airodview->ipaddress->FldCaption() ?></span>
 		<p class="form-control-static ewSearchOperator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_ipaddress" id="z_ipaddress" value="="></p>
 		</label>
 		<div class="<?php echo $airodview_search->SearchRightColumnClass ?>"><div<?php echo $airodview->ipaddress->CellAttributes() ?>>
@@ -984,7 +1036,7 @@ $airodview_search->ShowMessage();
 <?php } ?>
 <?php if ($airodview->employeeno->Visible) { // employeeno ?>
 	<div id="r_employeeno" class="form-group">
-		<label for="x_employeeno" class="<?php echo $airodview_search->SearchLabelClass ?>"><span id="elh_airodview_employeeno"><?php echo $airodview->employeeno->FldCaption() ?></span>	
+		<label for="x_employeeno" class="<?php echo $airodview_search->SearchLabelClass ?>"><span id="elh_airodview_employeeno"><?php echo $airodview->employeeno->FldCaption() ?></span>
 		<p class="form-control-static ewSearchOperator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_employeeno" id="z_employeeno" value="="></p>
 		</label>
 		<div class="<?php echo $airodview_search->SearchRightColumnClass ?>"><div<?php echo $airodview->employeeno->CellAttributes() ?>>
@@ -996,7 +1048,7 @@ $airodview_search->ShowMessage();
 <?php } ?>
 <?php if ($airodview->employeename->Visible) { // employeename ?>
 	<div id="r_employeename" class="form-group">
-		<label for="x_employeename" class="<?php echo $airodview_search->SearchLabelClass ?>"><span id="elh_airodview_employeename"><?php echo $airodview->employeename->FldCaption() ?></span>	
+		<label for="x_employeename" class="<?php echo $airodview_search->SearchLabelClass ?>"><span id="elh_airodview_employeename"><?php echo $airodview->employeename->FldCaption() ?></span>
 		<p class="form-control-static ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_employeename" id="z_employeename" value="LIKE"></p>
 		</label>
 		<div class="<?php echo $airodview_search->SearchRightColumnClass ?>"><div<?php echo $airodview->employeename->CellAttributes() ?>>
@@ -1008,7 +1060,7 @@ $airodview_search->ShowMessage();
 <?php } ?>
 <?php if ($airodview->type->Visible) { // type ?>
 	<div id="r_type" class="form-group">
-		<label for="x_type" class="<?php echo $airodview_search->SearchLabelClass ?>"><span id="elh_airodview_type"><?php echo $airodview->type->FldCaption() ?></span>	
+		<label for="x_type" class="<?php echo $airodview_search->SearchLabelClass ?>"><span id="elh_airodview_type"><?php echo $airodview->type->FldCaption() ?></span>
 		<p class="form-control-static ewSearchOperator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_type" id="z_type" value="="></p>
 		</label>
 		<div class="<?php echo $airodview_search->SearchRightColumnClass ?>"><div<?php echo $airodview->type->CellAttributes() ?>>
@@ -1021,7 +1073,7 @@ if (is_array($airodview->type->EditValue)) {
 	$emptywrk = TRUE;
 	for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
 		$selwrk = ew_SameStr($airodview->type->AdvancedSearch->SearchValue, $arwrk[$rowcntwrk][0]) ? " selected" : "";
-		if ($selwrk <> "") $emptywrk = FALSE;		
+		if ($selwrk <> "") $emptywrk = FALSE;
 ?>
 <option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
 <?php echo $airodview->type->DisplayValue($arwrk[$rowcntwrk]) ?>
@@ -1042,7 +1094,7 @@ if (is_array($airodview->type->EditValue)) {
 <?php } ?>
 <?php if ($airodview->model->Visible) { // model ?>
 	<div id="r_model" class="form-group">
-		<label for="x_model" class="<?php echo $airodview_search->SearchLabelClass ?>"><span id="elh_airodview_model"><?php echo $airodview->model->FldCaption() ?></span>	
+		<label for="x_model" class="<?php echo $airodview_search->SearchLabelClass ?>"><span id="elh_airodview_model"><?php echo $airodview->model->FldCaption() ?></span>
 		<p class="form-control-static ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_model" id="z_model" value="LIKE"></p>
 		</label>
 		<div class="<?php echo $airodview_search->SearchRightColumnClass ?>"><div<?php echo $airodview->model->CellAttributes() ?>>
@@ -1054,7 +1106,7 @@ if (is_array($airodview->type->EditValue)) {
 <?php } ?>
 <?php if ($airodview->location->Visible) { // location ?>
 	<div id="r_location" class="form-group">
-		<label for="x_location" class="<?php echo $airodview_search->SearchLabelClass ?>"><span id="elh_airodview_location"><?php echo $airodview->location->FldCaption() ?></span>	
+		<label for="x_location" class="<?php echo $airodview_search->SearchLabelClass ?>"><span id="elh_airodview_location"><?php echo $airodview->location->FldCaption() ?></span>
 		<p class="form-control-static ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_location" id="z_location" value="LIKE"></p>
 		</label>
 		<div class="<?php echo $airodview_search->SearchRightColumnClass ?>"><div<?php echo $airodview->location->CellAttributes() ?>>
@@ -1066,7 +1118,7 @@ if (is_array($airodview->type->EditValue)) {
 <?php } ?>
 <?php if ($airodview->officelicense->Visible) { // officelicense ?>
 	<div id="r_officelicense" class="form-group">
-		<label for="x_officelicense" class="<?php echo $airodview_search->SearchLabelClass ?>"><span id="elh_airodview_officelicense"><?php echo $airodview->officelicense->FldCaption() ?></span>	
+		<label for="x_officelicense" class="<?php echo $airodview_search->SearchLabelClass ?>"><span id="elh_airodview_officelicense"><?php echo $airodview->officelicense->FldCaption() ?></span>
 		<p class="form-control-static ewSearchOperator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_officelicense" id="z_officelicense" value="="></p>
 		</label>
 		<div class="<?php echo $airodview_search->SearchRightColumnClass ?>"><div<?php echo $airodview->officelicense->CellAttributes() ?>>
@@ -1078,7 +1130,7 @@ if (is_array($airodview->type->EditValue)) {
 <?php } ?>
 <?php if ($airodview->datereceived->Visible) { // datereceived ?>
 	<div id="r_datereceived" class="form-group">
-		<label for="x_datereceived" class="<?php echo $airodview_search->SearchLabelClass ?>"><span id="elh_airodview_datereceived"><?php echo $airodview->datereceived->FldCaption() ?></span>	
+		<label for="x_datereceived" class="<?php echo $airodview_search->SearchLabelClass ?>"><span id="elh_airodview_datereceived"><?php echo $airodview->datereceived->FldCaption() ?></span>
 		<p class="form-control-static ewSearchOperator"><?php echo $Language->Phrase("BETWEEN") ?><input type="hidden" name="z_datereceived" id="z_datereceived" value="BETWEEN"></p>
 		</label>
 		<div class="<?php echo $airodview_search->SearchRightColumnClass ?>"><div<?php echo $airodview->datereceived->CellAttributes() ?>>
@@ -1096,6 +1148,44 @@ ew_CreateCalendar("fairodviewsearch", "x_datereceived", "%d-%m-%Y");
 <?php if (!$airodview->datereceived->ReadOnly && !$airodview->datereceived->Disabled && !isset($airodview->datereceived->EditAttrs["readonly"]) && !isset($airodview->datereceived->EditAttrs["disabled"])) { ?>
 <script type="text/javascript">
 ew_CreateCalendar("fairodviewsearch", "y_datereceived", "%d-%m-%Y");
+</script>
+<?php } ?>
+</span>
+		</div></div>
+	</div>
+<?php } ?>
+<?php if ($airodview->serialcode->Visible) { // serialcode ?>
+	<div id="r_serialcode" class="form-group">
+		<label for="x_serialcode" class="<?php echo $airodview_search->SearchLabelClass ?>"><span id="elh_airodview_serialcode"><?php echo $airodview->serialcode->FldCaption() ?></span>
+		<p class="form-control-static ewSearchOperator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_serialcode" id="z_serialcode" value="="></p>
+		</label>
+		<div class="<?php echo $airodview_search->SearchRightColumnClass ?>"><div<?php echo $airodview->serialcode->CellAttributes() ?>>
+			<span id="el_airodview_serialcode">
+<input type="text" data-table="airodview" data-field="x_serialcode" name="x_serialcode" id="x_serialcode" size="30" maxlength="60" placeholder="<?php echo ew_HtmlEncode($airodview->serialcode->getPlaceHolder()) ?>" value="<?php echo $airodview->serialcode->EditValue ?>"<?php echo $airodview->serialcode->EditAttributes() ?>>
+</span>
+		</div></div>
+	</div>
+<?php } ?>
+<?php if ($airodview->latestupdate->Visible) { // latestupdate ?>
+	<div id="r_latestupdate" class="form-group">
+		<label for="x_latestupdate" class="<?php echo $airodview_search->SearchLabelClass ?>"><span id="elh_airodview_latestupdate"><?php echo $airodview->latestupdate->FldCaption() ?></span>
+		<p class="form-control-static ewSearchOperator"><?php echo $Language->Phrase("BETWEEN") ?><input type="hidden" name="z_latestupdate" id="z_latestupdate" value="BETWEEN"></p>
+		</label>
+		<div class="<?php echo $airodview_search->SearchRightColumnClass ?>"><div<?php echo $airodview->latestupdate->CellAttributes() ?>>
+			<span id="el_airodview_latestupdate">
+<input type="text" data-table="airodview" data-field="x_latestupdate" data-format="7" name="x_latestupdate" id="x_latestupdate" placeholder="<?php echo ew_HtmlEncode($airodview->latestupdate->getPlaceHolder()) ?>" value="<?php echo $airodview->latestupdate->EditValue ?>"<?php echo $airodview->latestupdate->EditAttributes() ?>>
+<?php if (!$airodview->latestupdate->ReadOnly && !$airodview->latestupdate->Disabled && !isset($airodview->latestupdate->EditAttrs["readonly"]) && !isset($airodview->latestupdate->EditAttrs["disabled"])) { ?>
+<script type="text/javascript">
+ew_CreateCalendar("fairodviewsearch", "x_latestupdate", "%d-%m-%Y");
+</script>
+<?php } ?>
+</span>
+			<span class="ewSearchCond btw1_latestupdate">&nbsp;<?php echo $Language->Phrase("AND") ?>&nbsp;</span>
+			<span id="e2_airodview_latestupdate" class="btw1_latestupdate">
+<input type="text" data-table="airodview" data-field="x_latestupdate" data-format="7" name="y_latestupdate" id="y_latestupdate" placeholder="<?php echo ew_HtmlEncode($airodview->latestupdate->getPlaceHolder()) ?>" value="<?php echo $airodview->latestupdate->EditValue2 ?>"<?php echo $airodview->latestupdate->EditAttributes() ?>>
+<?php if (!$airodview->latestupdate->ReadOnly && !$airodview->latestupdate->Disabled && !isset($airodview->latestupdate->EditAttrs["readonly"]) && !isset($airodview->latestupdate->EditAttrs["disabled"])) { ?>
+<script type="text/javascript">
+ew_CreateCalendar("fairodviewsearch", "y_latestupdate", "%d-%m-%Y");
 </script>
 <?php } ?>
 </span>

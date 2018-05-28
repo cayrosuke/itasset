@@ -30,6 +30,8 @@ class cSMEA_Laptop_Report extends cTableBase {
 	var $operatingsystem;
 	var $remarks;
 	var $datereceived;
+	var $serialcode;
+	var $latestupdate;
 
 	//
 	// Table class constructor
@@ -121,6 +123,15 @@ class cSMEA_Laptop_Report extends cTableBase {
 		$this->datereceived = new cField('SMEA_Laptop_Report', 'SMEA Laptop Report', 'x_datereceived', 'datereceived', '`datereceived`', 'DATE_FORMAT(`datereceived`, \'%d-%m-%Y\')', 133, 7, FALSE, '`datereceived`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
 		$this->datereceived->FldDefaultErrMsg = str_replace("%s", "-", $Language->Phrase("IncorrectDateDMY"));
 		$this->fields['datereceived'] = &$this->datereceived;
+
+		// serialcode
+		$this->serialcode = new cField('SMEA_Inventory_Report', 'SMEA Inventory Report', 'x_serialcode', 'serialcode', '`serialcode`', '`serialcode`', 200, -1, FALSE, '`serialcode`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->fields['serialcode'] = &$this->serialcode;
+
+		// latestupdate
+		$this->latestupdate = new cField('SMEA_Inventory_Report', 'SMEA Inventory Report', 'x_latestupdate', 'latestupdate', '`latestupdate`', 'DATE_FORMAT(`latestupdate`, \'%d-%m-%Y\')', 133, 7, FALSE, '`latestupdate`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->latestupdate->FldDefaultErrMsg = str_replace("%s", "-", $Language->Phrase("IncorrectDateDMY"));
+		$this->fields['latestupdate'] = &$this->latestupdate;
 	}
 
 	// Report detail level SQL
@@ -386,14 +397,14 @@ class cSMEA_Laptop_Report extends cTableBase {
 	// Row Rendering event
 	function Row_Rendering() {
 
-		// Enter your code here	
+		// Enter your code here
 	}
 
 	// Row Rendered event
 	function Row_Rendered() {
 
 		// To view properties of field class, use:
-		//var_dump($this-><FieldName>); 
+		//var_dump($this-><FieldName>);
 
 	}
 
@@ -683,7 +694,7 @@ class cSMEA_Laptop_Report_report extends cSMEA_Laptop_Report {
 		$this->ExportOptions->TagClassName = "ewExportOption";
 	}
 
-	// 
+	//
 	//  Page_Init
 	//
 	function Page_Init() {
@@ -848,6 +859,8 @@ class cSMEA_Laptop_Report_report extends cSMEA_Laptop_Report {
 		// operatingsystem
 		// remarks
 		// datereceived
+		// serialcode
+		// latestupdate
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
@@ -911,6 +924,15 @@ class cSMEA_Laptop_Report_report extends cSMEA_Laptop_Report {
 		$this->datereceived->ViewValue = $this->datereceived->CurrentValue;
 		$this->datereceived->ViewValue = ew_FormatDateTime($this->datereceived->ViewValue, 7);
 		$this->datereceived->ViewCustomAttributes = "";
+
+		// serialcode
+		$this->serialcode->ViewValue = $this->serialcode->CurrentValue;
+		$this->serialcode->ViewCustomAttributes = "";
+
+		// latestupdate
+		$this->latestupdate->ViewValue = $this->latestupdate->CurrentValue;
+		$this->latestupdate->ViewValue = ew_FormatDateTime($this->latestupdate->ViewValue, 7);
+		$this->latestupdate->ViewCustomAttributes = "";
 
 			// assettag
 			$this->assettag->LinkCustomAttributes = "";
@@ -981,6 +1003,16 @@ class cSMEA_Laptop_Report_report extends cSMEA_Laptop_Report {
 			$this->datereceived->LinkCustomAttributes = "";
 			$this->datereceived->HrefValue = "";
 			$this->datereceived->TooltipValue = "";
+
+			// serialcode
+			$this->serialcode->LinkCustomAttributes = "";
+			$this->serialcode->HrefValue = "";
+			$this->serialcode->TooltipValue = "";
+
+			// latestupdate
+			$this->latestupdate->LinkCustomAttributes = "";
+			$this->latestupdate->HrefValue = "";
+			$this->latestupdate->TooltipValue = "";
 		}
 
 		// Call Row Rendered event
@@ -1225,6 +1257,8 @@ $SMEA_Laptop_Report_report->RecordExists = !$SMEA_Laptop_Report_report->Recordse
 		<td class="ewGroupHeader"><?php echo $SMEA_Laptop_Report->operatingsystem->FldCaption() ?></td>
 		<td class="ewGroupHeader"><?php echo $SMEA_Laptop_Report->remarks->FldCaption() ?></td>
 		<td class="ewGroupHeader"><?php echo $SMEA_Laptop_Report->datereceived->FldCaption() ?></td>
+		<td class="ewGroupHeader"><?php echo $SMEA_Inventory_Report->serialcode->FldCaption() ?></td>
+			<td class="ewGroupHeader"><?php echo $SMEA_Inventory_Report->latestupdate->FldCaption() ?></td>
 	</tr>
 <?php
 	}
@@ -1244,6 +1278,8 @@ $SMEA_Laptop_Report_report->RecordExists = !$SMEA_Laptop_Report_report->Recordse
 		$SMEA_Laptop_Report->operatingsystem->setDbValue($SMEA_Laptop_Report_report->DetailRecordset->fields('operatingsystem'));
 		$SMEA_Laptop_Report->remarks->setDbValue($SMEA_Laptop_Report_report->DetailRecordset->fields('remarks'));
 		$SMEA_Laptop_Report->datereceived->setDbValue($SMEA_Laptop_Report_report->DetailRecordset->fields('datereceived'));
+		$SMEA_Inventory_Report->serialcode->setDbValue($SMEA_Inventory_Report_report->DetailRecordset->fields('serialcode'));
+		$SMEA_Inventory_Report->latestupdate->setDbValue($SMEA_Inventory_Report_report->DetailRecordset->fields('latestupdate'));
 
 		// Render for view
 		$SMEA_Laptop_Report->RowType = EW_ROWTYPE_VIEW;
@@ -1306,6 +1342,14 @@ $SMEA_Laptop_Report_report->RecordExists = !$SMEA_Laptop_Report_report->Recordse
 		<td<?php echo $SMEA_Laptop_Report->datereceived->CellAttributes() ?>>
 <span<?php echo $SMEA_Laptop_Report->datereceived->ViewAttributes() ?>>
 <?php echo $SMEA_Laptop_Report->datereceived->ViewValue ?></span>
+</td>
+		<td<?php echo $SMEA_Inventory_Report->serialcode->CellAttributes() ?>>
+<span<?php echo $SMEA_Inventory_Report->serialcode->ViewAttributes() ?>>
+<?php echo $SMEA_Inventory_Report->serialcode->ViewValue ?></span>
+</td>
+		<td<?php echo $SMEA_Inventory_Report->latestupdate->CellAttributes() ?>>
+<span<?php echo $SMEA_Inventory_Report->latestupdate->ViewAttributes() ?>>
+<?php echo $SMEA_Inventory_Report->latestupdate->ViewValue ?></span>
 </td>
 	</tr>
 <?php

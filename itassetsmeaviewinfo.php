@@ -23,6 +23,8 @@ class cSMEAview extends cTable {
 	var $operatingsystem;
 	var $remarks;
 	var $datereceived;
+	var $serialcode;
+	var $latestupdate;
 
 	//
 	// Table class constructor
@@ -120,6 +122,15 @@ class cSMEAview extends cTable {
 		$this->datereceived = new cField('SMEAview', 'SMEAview', 'x_datereceived', 'datereceived', '`datereceived`', 'DATE_FORMAT(`datereceived`, \'%d-%m-%Y\')', 133, 7, FALSE, '`datereceived`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
 		$this->datereceived->FldDefaultErrMsg = str_replace("%s", "-", $Language->Phrase("IncorrectDateDMY"));
 		$this->fields['datereceived'] = &$this->datereceived;
+
+		// serialcode
+		$this->serialcode = new cField('nadiview', 'nadiview', 'x_serialcode', 'serialcode', '`serialcode`', '`serialcode`', 200, -1, FALSE, '`serialcode`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->fields['serialcode'] = &$this->serialcode;
+
+		// latestupdate
+		$this->latestupdate = new cField('nadiview', 'nadiview', 'x_latestupdate', 'latestupdate', '`latestupdate`', 'DATE_FORMAT(`latestupdate`, \'%d-%m-%Y\')', 133, 7, FALSE, '`latestupdate`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->latestupdate->FldDefaultErrMsg = str_replace("%s", "-", $Language->Phrase("IncorrectDateDMY"));
+		$this->fields['latestupdate'] = &$this->latestupdate;
 	}
 
 	// Single column sort
@@ -592,6 +603,8 @@ class cSMEAview extends cTable {
 		$this->operatingsystem->setDbValue($rs->fields('operatingsystem'));
 		$this->remarks->setDbValue($rs->fields('remarks'));
 		$this->datereceived->setDbValue($rs->fields('datereceived'));
+		$this->serialcode->setDbValue($rs->fields('serialcode'));
+		$this->latestupdate->setDbValue($rs->fields('latestupdate'));
 	}
 
 	// Render list row values
@@ -619,6 +632,8 @@ class cSMEAview extends cTable {
 		// remarks
 		// datereceived
 		// no
+		// serialcode
+		// latestupdate
 
 		$this->no->ViewValue = $this->no->CurrentValue;
 		$this->no->ViewCustomAttributes = "";
@@ -687,6 +702,16 @@ class cSMEAview extends cTable {
 		$this->datereceived->ViewValue = $this->datereceived->CurrentValue;
 		$this->datereceived->ViewValue = ew_FormatDateTime($this->datereceived->ViewValue, 7);
 		$this->datereceived->ViewCustomAttributes = "";
+
+		// serialcode
+		$this->serialcode->ViewValue = $this->serialcode->CurrentValue;
+		$this->serialcode->ViewCustomAttributes = "";
+
+		// latestupdate
+		$this->latestupdate->ViewValue = $this->latestupdate->CurrentValue;
+		$this->latestupdate->ViewValue = ew_FormatDateTime($this->latestupdate->ViewValue, 7);
+		$this->latestupdate->ViewCustomAttributes = "";
+
 
 		// no
 		$this->no->LinkCustomAttributes = "";
@@ -767,6 +792,16 @@ class cSMEAview extends cTable {
 		$this->datereceived->LinkCustomAttributes = "";
 		$this->datereceived->HrefValue = "";
 		$this->datereceived->TooltipValue = "";
+
+		// serialcode
+		$this->serialcode->LinkCustomAttributes = "";
+		$this->serialcode->HrefValue = "";
+		$this->serialcode->TooltipValue = "";
+
+		// latestupdate
+		$this->latestupdate->LinkCustomAttributes = "";
+		$this->latestupdate->HrefValue = "";
+		$this->latestupdate->TooltipValue = "";
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -874,6 +909,18 @@ class cSMEAview extends cTable {
 		$this->datereceived->EditValue = ew_FormatDateTime($this->datereceived->CurrentValue, 7);
 		$this->datereceived->PlaceHolder = ew_RemoveHtml($this->datereceived->FldCaption());
 
+		// serialcode
+		$this->serialcode->EditAttrs["class"] = "form-control";
+		$this->serialcode->EditCustomAttributes = "";
+		$this->serialcode->EditValue = $this->serialcode->CurrentValue;
+		$this->serialcode->PlaceHolder = ew_RemoveHtml($this->serialcode->FldCaption());
+
+		// latestupdate
+		$this->latestupdate->EditAttrs["class"] = "form-control";
+		$this->latestupdate->EditCustomAttributes = "";
+		$this->latestupdate->EditValue = ew_FormatDateTime($this->latestupdate->CurrentValue, 7);
+		$this->latestupdate->PlaceHolder = ew_RemoveHtml($this->latestupdate->FldCaption());
+
 		// Call Row Rendered event
 		$this->Row_Rendered();
 	}
@@ -917,6 +964,8 @@ class cSMEAview extends cTable {
 					if ($this->operatingsystem->Exportable) $Doc->ExportCaption($this->operatingsystem);
 					if ($this->remarks->Exportable) $Doc->ExportCaption($this->remarks);
 					if ($this->datereceived->Exportable) $Doc->ExportCaption($this->datereceived);
+					if ($this->serialcode->Exportable) $Doc->ExportCaption($this->serialcode);
+					if ($this->latestupdate->Exportable) $Doc->ExportCaption($this->latestupdate);
 				} else {
 					if ($this->no->Exportable) $Doc->ExportCaption($this->no);
 					if ($this->assettag->Exportable) $Doc->ExportCaption($this->assettag);
@@ -933,6 +982,8 @@ class cSMEAview extends cTable {
 					if ($this->officelicense->Exportable) $Doc->ExportCaption($this->officelicense);
 					if ($this->operatingsystem->Exportable) $Doc->ExportCaption($this->operatingsystem);
 					if ($this->datereceived->Exportable) $Doc->ExportCaption($this->datereceived);
+					if ($this->serialcode->Exportable) $Doc->ExportCaption($this->serialcode);
+					if ($this->latestupdate->Exportable) $Doc->ExportCaption($this->latestupdate);
 				}
 				$Doc->EndExportRow();
 			}
@@ -980,6 +1031,8 @@ class cSMEAview extends cTable {
 						if ($this->operatingsystem->Exportable) $Doc->ExportField($this->operatingsystem);
 						if ($this->remarks->Exportable) $Doc->ExportField($this->remarks);
 						if ($this->datereceived->Exportable) $Doc->ExportField($this->datereceived);
+						if ($this->serialcode->Exportable) $Doc->ExportField($this->serialcode);
+						if ($this->latestupdate->Exportable) $Doc->ExportField($this->latestupdate);
 					} else {
 						if ($this->no->Exportable) $Doc->ExportField($this->no);
 						if ($this->assettag->Exportable) $Doc->ExportField($this->assettag);
@@ -996,6 +1049,8 @@ class cSMEAview extends cTable {
 						if ($this->officelicense->Exportable) $Doc->ExportField($this->officelicense);
 						if ($this->operatingsystem->Exportable) $Doc->ExportField($this->operatingsystem);
 						if ($this->datereceived->Exportable) $Doc->ExportField($this->datereceived);
+						if ($this->serialcode->Exportable) $Doc->ExportField($this->serialcode);
+						if ($this->latestupdate->Exportable) $Doc->ExportField($this->latestupdate);
 					}
 					$Doc->EndExportRow();
 				}
@@ -1041,7 +1096,7 @@ class cSMEAview extends cTable {
 	// Recordset Selecting event
 	function Recordset_Selecting(&$filter) {
 
-		// Enter your code here	
+		// Enter your code here
 	}
 
 	// Recordset Selected event
@@ -1061,13 +1116,13 @@ class cSMEAview extends cTable {
 	// Recordset Searching event
 	function Recordset_Searching(&$filter) {
 
-		// Enter your code here	
+		// Enter your code here
 	}
 
 	// Row_Selecting event
 	function Row_Selecting(&$filter) {
 
-		// Enter your code here	
+		// Enter your code here
 	}
 
 	// Row Selected event
@@ -1178,14 +1233,14 @@ class cSMEAview extends cTable {
 	// Row Rendering event
 	function Row_Rendering() {
 
-		// Enter your code here	
+		// Enter your code here
 	}
 
 	// Row Rendered event
 	function Row_Rendered() {
 
 		// To view properties of field class, use:
-		//var_dump($this-><FieldName>); 
+		//var_dump($this-><FieldName>);
 
 	}
 

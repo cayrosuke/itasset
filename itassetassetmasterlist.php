@@ -335,7 +335,7 @@ class cassetmaster_list extends cassetmaster {
 		$this->ListActions = new cListActions();
 	}
 
-	// 
+	//
 	//  Page_Init
 	//
 	function Page_Init() {
@@ -526,7 +526,7 @@ class cassetmaster_list extends cassetmaster {
 	var $ColCnt = 0;
 	var $DbMasterFilter = ""; // Master filter
 	var $DbDetailFilter = ""; // Detail filter
-	var $MasterRecordExists;	
+	var $MasterRecordExists;
 	var $MultiSelectKey;
 	var $Command;
 	var $RestoreSearch = FALSE;
@@ -771,6 +771,8 @@ class cassetmaster_list extends cassetmaster {
 		$sFilterList = ew_Concat($sFilterList, $this->operatingsystem->AdvancedSearch->ToJSON(), ","); // Field operatingsystem
 		$sFilterList = ew_Concat($sFilterList, $this->officelicense->AdvancedSearch->ToJSON(), ","); // Field officelicense
 		$sFilterList = ew_Concat($sFilterList, $this->datereceived->AdvancedSearch->ToJSON(), ","); // Field datereceived
+		$sFilterList = ew_Concat($sFilterList, $this->serialcode->AdvancedSearch->ToJSON(), ","); // Field serialcode
+		$sFilterList = ew_Concat($sFilterList, $this->latestupdate->AdvancedSearch->ToJSON(), ","); // Field latestupdate
 		if ($this->BasicSearch->Keyword <> "") {
 			$sWrk = "\"" . EW_TABLE_BASIC_SEARCH . "\":\"" . ew_JsEncode2($this->BasicSearch->Keyword) . "\",\"" . EW_TABLE_BASIC_SEARCH_TYPE . "\":\"" . ew_JsEncode2($this->BasicSearch->Type) . "\"";
 			$sFilterList = ew_Concat($sFilterList, $sWrk, ",");
@@ -900,6 +902,24 @@ class cassetmaster_list extends cassetmaster {
 		$this->datereceived->AdvancedSearch->SearchValue2 = @$filter["y_datereceived"];
 		$this->datereceived->AdvancedSearch->SearchOperator2 = @$filter["w_datereceived"];
 		$this->datereceived->AdvancedSearch->Save();
+
+		// Field serialcode
+		$this->serialcode->AdvancedSearch->SearchValue = @$filter["x_serialcode"];
+		$this->serialcode->AdvancedSearch->SearchOperator = @$filter["z_serialcode"];
+		$this->serialcode->AdvancedSearch->SearchCondition = @$filter["v_serialcode"];
+		$this->serialcode->AdvancedSearch->SearchValue2 = @$filter["y_serialcode"];
+		$this->serialcode->AdvancedSearch->SearchOperator2 = @$filter["w_serialcode"];
+		$this->serialcode->AdvancedSearch->Save();
+
+		// Field latestupdate
+		$this->latestupdate->AdvancedSearch->SearchValue = @$filter["x_latestupdate"];
+		$this->latestupdate->AdvancedSearch->SearchOperator = @$filter["z_latestupdate"];
+		$this->latestupdate->AdvancedSearch->SearchCondition = @$filter["v_latestupdate"];
+		$this->latestupdate->AdvancedSearch->SearchValue2 = @$filter["y_latestupdate"];
+		$this->latestupdate->AdvancedSearch->SearchOperator2 = @$filter["w_latestupdate"];
+		$this->latestupdate->AdvancedSearch->Save();
+
+
 		$this->BasicSearch->setKeyword(@$filter[EW_TABLE_BASIC_SEARCH]);
 		$this->BasicSearch->setType(@$filter[EW_TABLE_BASIC_SEARCH_TYPE]);
 	}
@@ -923,6 +943,8 @@ class cassetmaster_list extends cassetmaster {
 		$this->BuildSearchSql($sWhere, $this->operatingsystem, $Default, FALSE); // operatingsystem
 		$this->BuildSearchSql($sWhere, $this->officelicense, $Default, FALSE); // officelicense
 		$this->BuildSearchSql($sWhere, $this->datereceived, $Default, FALSE); // datereceived
+		$this->BuildSearchSql($sWhere, $this->serialcode, $Default, FALSE); // serialcode
+		$this->BuildSearchSql($sWhere, $this->latestupdate, $Default, FALSE); // latestupdate
 
 		// Set up search parm
 		if (!$Default && $sWhere <> "") {
@@ -943,6 +965,8 @@ class cassetmaster_list extends cassetmaster {
 			$this->operatingsystem->AdvancedSearch->Save(); // operatingsystem
 			$this->officelicense->AdvancedSearch->Save(); // officelicense
 			$this->datereceived->AdvancedSearch->Save(); // datereceived
+			$this->serialcode->AdvancedSearch->Save(); // serialcode
+			$this->latestupdate->AdvancedSearch->Save(); // latestupdate
 		}
 		return $sWhere;
 	}
@@ -1009,6 +1033,8 @@ class cassetmaster_list extends cassetmaster {
 		$this->BuildBasicSearchSQL($sWhere, $this->type, $arKeywords, $type);
 		$this->BuildBasicSearchSQL($sWhere, $this->model, $arKeywords, $type);
 		$this->BuildBasicSearchSQL($sWhere, $this->officelicense, $arKeywords, $type);
+		$this->BuildBasicSearchSQL($sWhere, $this->serialcode, $arKeywords, $type);
+
 		return $sWhere;
 	}
 
@@ -1162,6 +1188,10 @@ class cassetmaster_list extends cassetmaster {
 			return TRUE;
 		if ($this->datereceived->AdvancedSearch->IssetSession())
 			return TRUE;
+		if ($this->serialcode->AdvancedSearch->IssetSession())
+			return TRUE;
+		if ($this->latestupdate->AdvancedSearch->IssetSession())
+			return TRUE;
 		return FALSE;
 	}
 
@@ -1205,6 +1235,8 @@ class cassetmaster_list extends cassetmaster {
 		$this->operatingsystem->AdvancedSearch->UnsetSession();
 		$this->officelicense->AdvancedSearch->UnsetSession();
 		$this->datereceived->AdvancedSearch->UnsetSession();
+		$this->serialcode->AdvancedSearch->UnsetSession();
+		$this->latestupdate->AdvancedSearch->UnsetSession();
 	}
 
 	// Restore all search parameters
@@ -1229,6 +1261,8 @@ class cassetmaster_list extends cassetmaster {
 		$this->operatingsystem->AdvancedSearch->Load();
 		$this->officelicense->AdvancedSearch->Load();
 		$this->datereceived->AdvancedSearch->Load();
+		$this->serialcode->AdvancedSearch->Load();
+		$this->latestupdate->AdvancedSearch->Load();
 	}
 
 	// Set up sort parameters
@@ -1252,6 +1286,8 @@ class cassetmaster_list extends cassetmaster {
 			$this->UpdateSort($this->operatingsystem); // operatingsystem
 			$this->UpdateSort($this->officelicense); // officelicense
 			$this->UpdateSort($this->datereceived); // datereceived
+			$this->UpdateSort($this->serialcode); // serialcode
+			$this->UpdateSort($this->latestupdate); // latestupdate
 			$this->setStartRecordNumber(1); // Reset start position
 		}
 	}
@@ -1298,6 +1334,8 @@ class cassetmaster_list extends cassetmaster {
 				$this->operatingsystem->setSort("");
 				$this->officelicense->setSort("");
 				$this->datereceived->setSort("");
+				$this->serialcode->setSort("");
+				$this->latestupdate->setSort("");
 			}
 
 			// Reset start position
@@ -1772,6 +1810,24 @@ class cassetmaster_list extends cassetmaster {
 		$this->datereceived->AdvancedSearch->SearchValue2 = ew_StripSlashes(@$_GET["y_datereceived"]);
 		if ($this->datereceived->AdvancedSearch->SearchValue2 <> "") $this->Command = "search";
 		$this->datereceived->AdvancedSearch->SearchOperator2 = @$_GET["w_datereceived"];
+
+		// serialcode
+		$this->serialcode->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_serialcode"]);
+		if ($this->serialcode->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->serialcode->AdvancedSearch->SearchOperator = @$_GET["z_serialcode"];
+		$this->serialcode->AdvancedSearch->SearchCondition = @$_GET["v_serialcode"];
+		$this->serialcode->AdvancedSearch->SearchValue2 = ew_StripSlashes(@$_GET["y_serialcode"]);
+		if ($this->serialcode->AdvancedSearch->SearchValue2 <> "") $this->Command = "search";
+		$this->serialcode->AdvancedSearch->SearchOperator2 = @$_GET["w_serialcode"];
+
+		// latestupdate
+		$this->latestupdate->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_latestupdate"]);
+		if ($this->latestupdate->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->latestupdate->AdvancedSearch->SearchOperator = @$_GET["z_latestupdate"];
+		$this->latestupdate->AdvancedSearch->SearchCondition = @$_GET["v_latestupdate"];
+		$this->latestupdate->AdvancedSearch->SearchValue2 = ew_StripSlashes(@$_GET["y_latestupdate"]);
+		if ($this->latestupdate->AdvancedSearch->SearchValue2 <> "") $this->Command = "search";
+		$this->latestupdate->AdvancedSearch->SearchOperator2 = @$_GET["w_latestupdate"];
 	}
 
 	// Load recordset
@@ -1845,6 +1901,8 @@ class cassetmaster_list extends cassetmaster {
 		$this->remarks->setDbValue($rs->fields('remarks'));
 		$this->officelicense->setDbValue($rs->fields('officelicense'));
 		$this->datereceived->setDbValue($rs->fields('datereceived'));
+		$this->serialcode->setDbValue($rs->fields('serialcode'));
+		$this->latestupdate->setDbValue($rs->fields('latestupdate'));
 	}
 
 	// Load DbValue from recordset
@@ -1867,6 +1925,8 @@ class cassetmaster_list extends cassetmaster {
 		$this->remarks->DbValue = $row['remarks'];
 		$this->officelicense->DbValue = $row['officelicense'];
 		$this->datereceived->DbValue = $row['datereceived'];
+		$this->serialcode->DbValue = $row['serialcode'];
+		$this->latestupdate->DbValue = $row['latestupdate'];
 	}
 
 	// Load old record
@@ -1927,6 +1987,8 @@ class cassetmaster_list extends cassetmaster {
 		// remarks
 		// officelicense
 		// datereceived
+		// serialcode
+		// latestupdate
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
@@ -1994,6 +2056,16 @@ class cassetmaster_list extends cassetmaster {
 		$this->datereceived->ViewValue = $this->datereceived->CurrentValue;
 		$this->datereceived->ViewValue = ew_FormatDateTime($this->datereceived->ViewValue, 7);
 		$this->datereceived->ViewCustomAttributes = "";
+
+		// serialcode
+		$this->serialcode->ViewValue = $this->serialcode->CurrentValue;
+		$this->serialcode->ViewCustomAttributes = "";
+
+		// latestupdate
+		$this->latestupdate->ViewValue = $this->latestupdate->CurrentValue;
+		$this->latestupdate->ViewValue = ew_FormatDateTime($this->latestupdate->ViewValue, 7);
+		$this->latestupdate->ViewCustomAttributes = "";
+
 
 			// assettag
 			$this->assettag->LinkCustomAttributes = "";
@@ -2064,6 +2136,16 @@ class cassetmaster_list extends cassetmaster {
 			$this->datereceived->LinkCustomAttributes = "";
 			$this->datereceived->HrefValue = "";
 			$this->datereceived->TooltipValue = "";
+
+			// serialcode
+			$this->serialcode->LinkCustomAttributes = "";
+			$this->serialcode->HrefValue = "";
+			$this->serialcode->TooltipValue = "";
+
+			// latestupdate
+			$this->latestupdate->LinkCustomAttributes = "";
+			$this->latestupdate->HrefValue = "";
+			$this->latestupdate->TooltipValue = "";
 		}
 
 		// Call Row Rendered event
@@ -2110,6 +2192,8 @@ class cassetmaster_list extends cassetmaster {
 		$this->operatingsystem->AdvancedSearch->Load();
 		$this->officelicense->AdvancedSearch->Load();
 		$this->datereceived->AdvancedSearch->Load();
+		$this->serialcode->AdvancedSearch->Load();
+		$this->latestupdate->AdvancedSearch->Load();
 	}
 
 	// Set up export options
@@ -2378,6 +2462,8 @@ class cassetmaster_list extends cassetmaster {
 		$this->AddSearchQueryString($sQry, $this->operatingsystem); // operatingsystem
 		$this->AddSearchQueryString($sQry, $this->officelicense); // officelicense
 		$this->AddSearchQueryString($sQry, $this->datereceived); // datereceived
+		$this->AddSearchQueryString($sQry, $this->serialcode); // serialcode
+		$this->AddSearchQueryString($sQry, $this->latestupdate); // latestupdate
 
 		// Build QueryString for pager
 		$sQry .= "&" . EW_TABLE_REC_PER_PAGE . "=" . urlencode($this->getRecordsPerPage()) . "&" . EW_TABLE_START_REC . "=" . urlencode($this->getStartRecordNumber());
@@ -2490,7 +2576,7 @@ class cassetmaster_list extends cassetmaster {
 	// ListOptions Rendered event
 	function ListOptions_Rendered() {
 
-		// Example: 
+		// Example:
 		//$this->ListOptions->Items["new"]->Body = "xxx";
 
 	}
@@ -2557,10 +2643,10 @@ var CurrentForm = fassetmasterlist = new ew_Form("fassetmasterlist", "list");
 fassetmasterlist.FormKeyCountName = '<?php echo $assetmaster_list->FormKeyCountName ?>';
 
 // Form_CustomValidate event
-fassetmasterlist.Form_CustomValidate = 
+fassetmasterlist.Form_CustomValidate =
  function(fobj) { // DO NOT CHANGE THIS LINE!
 
- 	// Your custom validation code here, return false if invalid. 
+ 	// Your custom validation code here, return false if invalid.
  	return true;
  }
 
@@ -2568,7 +2654,7 @@ fassetmasterlist.Form_CustomValidate =
 <?php if (EW_CLIENT_VALIDATE) { ?>
 fassetmasterlist.ValidateRequired = true;
 <?php } else { ?>
-fassetmasterlist.ValidateRequired = false; 
+fassetmasterlist.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
@@ -2750,7 +2836,7 @@ $assetmaster_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $assetmaster->assettag->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($assetmaster->assettag->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($assetmaster->assettag->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($assetmaster->servicetag->Visible) { // servicetag ?>
 	<?php if ($assetmaster->SortUrl($assetmaster->servicetag) == "") { ?>
 		<th data-name="servicetag"><div id="elh_assetmaster_servicetag" class="assetmaster_servicetag"><div class="ewTableHeaderCaption"><?php echo $assetmaster->servicetag->FldCaption() ?></div></div></th>
@@ -2759,7 +2845,7 @@ $assetmaster_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $assetmaster->servicetag->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($assetmaster->servicetag->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($assetmaster->servicetag->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($assetmaster->ipaddress->Visible) { // ipaddress ?>
 	<?php if ($assetmaster->SortUrl($assetmaster->ipaddress) == "") { ?>
 		<th data-name="ipaddress"><div id="elh_assetmaster_ipaddress" class="assetmaster_ipaddress"><div class="ewTableHeaderCaption"><?php echo $assetmaster->ipaddress->FldCaption() ?></div></div></th>
@@ -2768,7 +2854,7 @@ $assetmaster_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $assetmaster->ipaddress->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($assetmaster->ipaddress->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($assetmaster->ipaddress->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($assetmaster->employeeno->Visible) { // employeeno ?>
 	<?php if ($assetmaster->SortUrl($assetmaster->employeeno) == "") { ?>
 		<th data-name="employeeno"><div id="elh_assetmaster_employeeno" class="assetmaster_employeeno"><div class="ewTableHeaderCaption"><?php echo $assetmaster->employeeno->FldCaption() ?></div></div></th>
@@ -2777,7 +2863,7 @@ $assetmaster_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $assetmaster->employeeno->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($assetmaster->employeeno->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($assetmaster->employeeno->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($assetmaster->employeename->Visible) { // employeename ?>
 	<?php if ($assetmaster->SortUrl($assetmaster->employeename) == "") { ?>
 		<th data-name="employeename"><div id="elh_assetmaster_employeename" class="assetmaster_employeename"><div class="ewTableHeaderCaption"><?php echo $assetmaster->employeename->FldCaption() ?></div></div></th>
@@ -2786,7 +2872,7 @@ $assetmaster_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $assetmaster->employeename->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($assetmaster->employeename->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($assetmaster->employeename->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($assetmaster->company->Visible) { // company ?>
 	<?php if ($assetmaster->SortUrl($assetmaster->company) == "") { ?>
 		<th data-name="company"><div id="elh_assetmaster_company" class="assetmaster_company"><div class="ewTableHeaderCaption"><?php echo $assetmaster->company->FldCaption() ?></div></div></th>
@@ -2795,7 +2881,7 @@ $assetmaster_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $assetmaster->company->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($assetmaster->company->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($assetmaster->company->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($assetmaster->department->Visible) { // department ?>
 	<?php if ($assetmaster->SortUrl($assetmaster->department) == "") { ?>
 		<th data-name="department"><div id="elh_assetmaster_department" class="assetmaster_department"><div class="ewTableHeaderCaption"><?php echo $assetmaster->department->FldCaption() ?></div></div></th>
@@ -2804,7 +2890,7 @@ $assetmaster_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $assetmaster->department->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($assetmaster->department->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($assetmaster->department->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($assetmaster->type->Visible) { // type ?>
 	<?php if ($assetmaster->SortUrl($assetmaster->type) == "") { ?>
 		<th data-name="type"><div id="elh_assetmaster_type" class="assetmaster_type"><div class="ewTableHeaderCaption"><?php echo $assetmaster->type->FldCaption() ?></div></div></th>
@@ -2813,7 +2899,7 @@ $assetmaster_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $assetmaster->type->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($assetmaster->type->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($assetmaster->type->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($assetmaster->model->Visible) { // model ?>
 	<?php if ($assetmaster->SortUrl($assetmaster->model) == "") { ?>
 		<th data-name="model"><div id="elh_assetmaster_model" class="assetmaster_model"><div class="ewTableHeaderCaption"><?php echo $assetmaster->model->FldCaption() ?></div></div></th>
@@ -2822,7 +2908,7 @@ $assetmaster_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $assetmaster->model->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($assetmaster->model->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($assetmaster->model->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($assetmaster->location->Visible) { // location ?>
 	<?php if ($assetmaster->SortUrl($assetmaster->location) == "") { ?>
 		<th data-name="location"><div id="elh_assetmaster_location" class="assetmaster_location"><div class="ewTableHeaderCaption"><?php echo $assetmaster->location->FldCaption() ?></div></div></th>
@@ -2831,7 +2917,7 @@ $assetmaster_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $assetmaster->location->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($assetmaster->location->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($assetmaster->location->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($assetmaster->alternateIP->Visible) { // alternateIP ?>
 	<?php if ($assetmaster->SortUrl($assetmaster->alternateIP) == "") { ?>
 		<th data-name="alternateIP"><div id="elh_assetmaster_alternateIP" class="assetmaster_alternateIP"><div class="ewTableHeaderCaption"><?php echo $assetmaster->alternateIP->FldCaption() ?></div></div></th>
@@ -2840,7 +2926,7 @@ $assetmaster_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $assetmaster->alternateIP->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($assetmaster->alternateIP->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($assetmaster->alternateIP->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($assetmaster->operatingsystem->Visible) { // operatingsystem ?>
 	<?php if ($assetmaster->SortUrl($assetmaster->operatingsystem) == "") { ?>
 		<th data-name="operatingsystem"><div id="elh_assetmaster_operatingsystem" class="assetmaster_operatingsystem"><div class="ewTableHeaderCaption"><?php echo $assetmaster->operatingsystem->FldCaption() ?></div></div></th>
@@ -2849,7 +2935,7 @@ $assetmaster_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $assetmaster->operatingsystem->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($assetmaster->operatingsystem->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($assetmaster->operatingsystem->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($assetmaster->officelicense->Visible) { // officelicense ?>
 	<?php if ($assetmaster->SortUrl($assetmaster->officelicense) == "") { ?>
 		<th data-name="officelicense"><div id="elh_assetmaster_officelicense" class="assetmaster_officelicense"><div class="ewTableHeaderCaption"><?php echo $assetmaster->officelicense->FldCaption() ?></div></div></th>
@@ -2858,7 +2944,7 @@ $assetmaster_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $assetmaster->officelicense->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($assetmaster->officelicense->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($assetmaster->officelicense->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($assetmaster->datereceived->Visible) { // datereceived ?>
 	<?php if ($assetmaster->SortUrl($assetmaster->datereceived) == "") { ?>
 		<th data-name="datereceived"><div id="elh_assetmaster_datereceived" class="assetmaster_datereceived"><div class="ewTableHeaderCaption"><?php echo $assetmaster->datereceived->FldCaption() ?></div></div></th>
@@ -2867,7 +2953,25 @@ $assetmaster_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $assetmaster->datereceived->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($assetmaster->datereceived->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($assetmaster->datereceived->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
+<?php if ($assetmaster->serialcode->Visible) { // serialcode ?>
+	<?php if ($assetmaster->SortUrl($assetmaster->serialcode) == "") { ?>
+		<th data-name="serialcode"><div id="elh_assetmaster_serialcode" class="assetmaster_serialcode"><div class="ewTableHeaderCaption"><?php echo $assetmaster->serialcode->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="serialcode"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $assetmaster->SortUrl($assetmaster->serialcode) ?>',1);"><div id="elh_assetmaster_serialcode" class="assetmaster_serialcode">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $assetmaster->serialcode->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($assetmaster->serialcode->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($assetmaster->serialcode->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+        </div></div></th>
+	<?php } ?>
+<?php } ?>
+<?php if ($assetmaster->latestupdate->Visible) { // latestupdate ?>
+	<?php if ($assetmaster->SortUrl($assetmaster->latestupdate) == "") { ?>
+		<th data-name="latestupdate"><div id="elh_assetmaster_latestupdate" class="assetmaster_latestupdate"><div class="ewTableHeaderCaption"><?php echo $assetmaster->latestupdate->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="latestupdate"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $assetmaster->SortUrl($assetmaster->latestupdate) ?>',1);"><div id="elh_assetmaster_latestupdate" class="assetmaster_latestupdate">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $assetmaster->latestupdate->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($assetmaster->latestupdate->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($assetmaster->latestupdate->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+        </div></div></th>
+	<?php } ?>
+<?php } ?>
 <?php
 
 // Render list options (header, right)
@@ -3042,6 +3146,22 @@ $assetmaster_list->ListOptions->Render("body", "left", $assetmaster_list->RowCnt
 <span id="el<?php echo $assetmaster_list->RowCnt ?>_assetmaster_datereceived" class="assetmaster_datereceived">
 <span<?php echo $assetmaster->datereceived->ViewAttributes() ?>>
 <?php echo $assetmaster->datereceived->ListViewValue() ?></span>
+</span>
+</td>
+	<?php } ?>
+	<?php if ($assetmaster->serialcode->Visible) { // serialcode ?>
+		<td data-name="serialcode"<?php echo $assetmaster->serialcode->CellAttributes() ?>>
+<span id="el<?php echo $assetmaster_list->RowCnt ?>_assetmaster_serialcode" class="assetmaster_serialcode">
+<span<?php echo $assetmaster->serialcode->ViewAttributes() ?>>
+<?php echo $assetmaster->serialcode->ListViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($assetmaster->latestupdate->Visible) { // latestupdate ?>
+	<td data-name="latestupdate"<?php echo $assetmaster->latestupdate->CellAttributes() ?>>
+<span id="el<?php echo $assetmaster_list->RowCnt ?>_assetmaster_latestupdate" class="assetmaster_latestupdate">
+<span<?php echo $assetmaster->latestupdate->ViewAttributes() ?>>
+<?php echo $assetmaster->latestupdate->ListViewValue() ?></span>
 </span>
 </td>
 	<?php } ?>

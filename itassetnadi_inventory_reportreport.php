@@ -30,6 +30,8 @@ class cNadi_Inventory_Report extends cTableBase {
 	var $remarks;
 	var $officelicense;
 	var $datereceived;
+	var $serialcode;
+	var $latestupdate;
 
 	//
 	// Table class constructor
@@ -119,13 +121,21 @@ class cNadi_Inventory_Report extends cTableBase {
 		$this->datereceived = new cField('Nadi_Inventory_Report', 'Nadi Inventory Report', 'x_datereceived', 'datereceived', '`datereceived`', 'DATE_FORMAT(`datereceived`, \'%d-%m-%Y\')', 133, 7, FALSE, '`datereceived`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
 		$this->datereceived->FldDefaultErrMsg = str_replace("%s", "-", $Language->Phrase("IncorrectDateDMY"));
 		$this->fields['datereceived'] = &$this->datereceived;
+
+		// serialcode
+		$this->serialcode = new cField('Nadi_Inventory_Report', 'Nadi Inventory Report', 'x_serialcode', 'serialcode', '`serialcode`', '`serialcode`', 200, -1, FALSE, '`serialcode`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->fields['serialcode'] = &$this->serialcode;
+
+		// latestupdate
+		$this->latestupdate = new cField('Nadi_Inventory_Report', 'Nadi Inventory Report', 'x_latestupdate', 'latestupdate', '`latestupdate`', 'DATE_FORMAT(`latestupdate`, \'%d-%m-%Y\')', 133, 7, FALSE, '`latestupdate`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->latestupdate->FldDefaultErrMsg = str_replace("%s", "-", $Language->Phrase("IncorrectDateDMY"));
+		$this->fields['latestupdate'] = &$this->latestupdate;
 	}
 
 	// Report group level SQL
 	var $_SqlGroupSelect = "";
 
-	function getSqlGroupSelect() { // Select
-		return ($this->_SqlGroupSelect <> "") ? $this->_SqlGroupSelect : "SELECT DISTINCT `type` FROM assetmaster";
+	function getSqlGroupSelect() { // Selec$latestupdate$this->_SqlGroupSelect <> "") ? $this->_SqlGroupSelect : "SELECT DISTINCT `type` FROM assetmaster";
 	}
 
 	function SqlGroupSelect() { // For backward compatibility
@@ -461,14 +471,14 @@ class cNadi_Inventory_Report extends cTableBase {
 	// Row Rendering event
 	function Row_Rendering() {
 
-		// Enter your code here	
+		// Enter your code here
 	}
 
 	// Row Rendered event
 	function Row_Rendered() {
 
 		// To view properties of field class, use:
-		//var_dump($this-><FieldName>); 
+		//var_dump($this-><FieldName>);
 
 	}
 
@@ -758,7 +768,7 @@ class cNadi_Inventory_Report_report extends cNadi_Inventory_Report {
 		$this->ExportOptions->TagClassName = "ewExportOption";
 	}
 
-	// 
+	//
 	//  Page_Init
 	//
 	function Page_Init() {
@@ -935,6 +945,8 @@ class cNadi_Inventory_Report_report extends cNadi_Inventory_Report {
 		// remarks
 		// officelicense
 		// datereceived
+		// serialcode
+		// latestupdate
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
@@ -998,6 +1010,15 @@ class cNadi_Inventory_Report_report extends cNadi_Inventory_Report {
 		$this->datereceived->ViewValue = $this->datereceived->CurrentValue;
 		$this->datereceived->ViewValue = ew_FormatDateTime($this->datereceived->ViewValue, 7);
 		$this->datereceived->ViewCustomAttributes = "";
+
+		// serialcode
+		$this->serialcode->ViewValue = $this->serialcode->CurrentValue;
+		$this->serialcode->ViewCustomAttributes = "";
+
+		// latestupdate
+		$this->latestupdate->ViewValue = $this->latestupdate->CurrentValue;
+		$this->latestupdate->ViewValue = ew_FormatDateTime($this->latestupdate->ViewValue, 7);
+		$this->latestupdate->ViewCustomAttributes = "";
 
 			// assettag
 			$this->assettag->LinkCustomAttributes = "";
@@ -1073,6 +1094,16 @@ class cNadi_Inventory_Report_report extends cNadi_Inventory_Report {
 			$this->datereceived->LinkCustomAttributes = "";
 			$this->datereceived->HrefValue = "";
 			$this->datereceived->TooltipValue = "";
+
+			// serialcode
+			$this->serialcode->LinkCustomAttributes = "";
+			$this->serialcode->HrefValue = "";
+			$this->serialcode->TooltipValue = "";
+
+			// latestupdate
+			$this->latestupdate->LinkCustomAttributes = "";
+			$this->latestupdate->HrefValue = "";
+			$this->latestupdate->TooltipValue = "";
 		}
 
 		// Call Row Rendered event
@@ -1361,6 +1392,8 @@ while (!$Nadi_Inventory_Report_report->Recordset->EOF) {
 		<td class="ewGroupHeader"><?php echo $Nadi_Inventory_Report->remarks->FldCaption() ?></td>
 		<td class="ewGroupHeader"><?php echo $Nadi_Inventory_Report->officelicense->FldCaption() ?></td>
 		<td class="ewGroupHeader"><?php echo $Nadi_Inventory_Report->datereceived->FldCaption() ?></td>
+		<td class="ewGroupHeader"><?php echo $Nadi_Inventory_Report->serialcode->FldCaption() ?></td>
+		<td class="ewGroupHeader"><?php echo $Nadi_Inventory_Report->latestupdate->FldCaption() ?></td>
 	</tr>
 <?php
 	}
@@ -1380,6 +1413,8 @@ while (!$Nadi_Inventory_Report_report->Recordset->EOF) {
 		$Nadi_Inventory_Report->remarks->setDbValue($Nadi_Inventory_Report_report->DetailRecordset->fields('remarks'));
 		$Nadi_Inventory_Report->officelicense->setDbValue($Nadi_Inventory_Report_report->DetailRecordset->fields('officelicense'));
 		$Nadi_Inventory_Report->datereceived->setDbValue($Nadi_Inventory_Report_report->DetailRecordset->fields('datereceived'));
+		$Nadi_Inventory_Report->serialcode->setDbValue($Nadi_Inventory_Report_report->DetailRecordset->fields('serialcode'));
+		$Nadi_Inventory_Report->latestupdate->setDbValue($Nadi_Inventory_Report_report->DetailRecordset->fields('latestupdate'));
 
 		// Render for view
 		$Nadi_Inventory_Report->RowType = EW_ROWTYPE_VIEW;
@@ -1443,6 +1478,14 @@ while (!$Nadi_Inventory_Report_report->Recordset->EOF) {
 		<td<?php echo $Nadi_Inventory_Report->datereceived->CellAttributes() ?>>
 <span<?php echo $Nadi_Inventory_Report->datereceived->ViewAttributes() ?>>
 <?php echo $Nadi_Inventory_Report->datereceived->ViewValue ?></span>
+</td>
+		<td<?php echo $Nadi_Inventory_Report->serialcode->CellAttributes() ?>>
+<span<?php echo $Nadi_Inventory_Report->serialcode->ViewAttributes() ?>>
+<?php echo $Nadi_Inventory_Report->serialcode->ViewValue ?></span>
+</td>
+		<td<?php echo $Nadi_Inventory_Report->latestupdate->CellAttributes() ?>>
+<span<?php echo $Nadi_Inventory_Report->latestupdate->ViewAttributes() ?>>
+<?php echo $Nadi_Inventory_Report->latestupdate->ViewValue ?></span>
 </td>
 	</tr>
 <?php

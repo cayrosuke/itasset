@@ -335,7 +335,7 @@ class cairodview_list extends cairodview {
 		$this->ListActions = new cListActions();
 	}
 
-	// 
+	//
 	//  Page_Init
 	//
 	function Page_Init() {
@@ -526,7 +526,7 @@ class cairodview_list extends cairodview {
 	var $ColCnt = 0;
 	var $DbMasterFilter = ""; // Master filter
 	var $DbDetailFilter = ""; // Detail filter
-	var $MasterRecordExists;	
+	var $MasterRecordExists;
 	var $MultiSelectKey;
 	var $Command;
 	var $RestoreSearch = FALSE;
@@ -762,8 +762,10 @@ class cairodview_list extends cairodview {
 		$sFilterList = ew_Concat($sFilterList, $this->type->AdvancedSearch->ToJSON(), ","); // Field type
 		$sFilterList = ew_Concat($sFilterList, $this->model->AdvancedSearch->ToJSON(), ","); // Field model
 		$sFilterList = ew_Concat($sFilterList, $this->location->AdvancedSearch->ToJSON(), ","); // Field location
-		$sFilterList = ew_Concat($sFilterList, $this->officelicense->AdvancedSearch->ToJSON(), ","); // Field officelicense
+		$sFilterList = ew_Concat($sFilterList, $this->serialcode->AdvancedSearch->ToJSON(), ","); // Field officelicense
 		$sFilterList = ew_Concat($sFilterList, $this->datereceived->AdvancedSearch->ToJSON(), ","); // Field datereceived
+		$sFilterList = ew_Concat($sFilterList, $this->serialcode->AdvancedSearch->ToJSON(), ","); // Field serialcode
+		$sFilterList = ew_Concat($sFilterList, $this->latestupdate->AdvancedSearch->ToJSON(), ","); // Field latestupdate
 		if ($this->BasicSearch->Keyword <> "") {
 			$sWrk = "\"" . EW_TABLE_BASIC_SEARCH . "\":\"" . ew_JsEncode2($this->BasicSearch->Keyword) . "\",\"" . EW_TABLE_BASIC_SEARCH_TYPE . "\":\"" . ew_JsEncode2($this->BasicSearch->Type) . "\"";
 			$sFilterList = ew_Concat($sFilterList, $sWrk, ",");
@@ -861,6 +863,22 @@ class cairodview_list extends cairodview {
 		$this->datereceived->AdvancedSearch->SearchValue2 = @$filter["y_datereceived"];
 		$this->datereceived->AdvancedSearch->SearchOperator2 = @$filter["w_datereceived"];
 		$this->datereceived->AdvancedSearch->Save();
+
+		// Field serialcode
+		$this->serialcode->AdvancedSearch->SearchValue = @$filter["x_serialcode"];
+		$this->serialcode->AdvancedSearch->SearchOperator = @$filter["z_serialcode"];
+		$this->serialcode->AdvancedSearch->SearchCondition = @$filter["v_serialcode"];
+		$this->serialcode->AdvancedSearch->SearchValue2 = @$filter["y_serialcode"];
+		$this->serialcode->AdvancedSearch->SearchOperator2 = @$filter["w_serialcode"];
+		$this->serialcode->AdvancedSearch->Save();
+
+		// Field latestupdate
+		$this->latestupdate->AdvancedSearch->SearchValue = @$filter["x_latestupdate"];
+		$this->latestupdate->AdvancedSearch->SearchOperator = @$filter["z_latestupdate"];
+		$this->latestupdate->AdvancedSearch->SearchCondition = @$filter["v_latestupdate"];
+		$this->latestupdate->AdvancedSearch->SearchValue2 = @$filter["y_latestupdate"];
+		$this->latestupdate->AdvancedSearch->SearchOperator2 = @$filter["w_latestupdate"];
+		$this->latestupdate->AdvancedSearch->Save();
 		$this->BasicSearch->setKeyword(@$filter[EW_TABLE_BASIC_SEARCH]);
 		$this->BasicSearch->setType(@$filter[EW_TABLE_BASIC_SEARCH_TYPE]);
 	}
@@ -880,6 +898,8 @@ class cairodview_list extends cairodview {
 		$this->BuildSearchSql($sWhere, $this->location, $Default, FALSE); // location
 		$this->BuildSearchSql($sWhere, $this->officelicense, $Default, FALSE); // officelicense
 		$this->BuildSearchSql($sWhere, $this->datereceived, $Default, FALSE); // datereceived
+		$this->BuildSearchSql($sWhere, $this->serialcode, $Default, FALSE); // serialcode
+		$this->BuildSearchSql($sWhere, $this->latestupdate, $Default, FALSE); // latestupdate
 
 		// Set up search parm
 		if (!$Default && $sWhere <> "") {
@@ -896,6 +916,8 @@ class cairodview_list extends cairodview {
 			$this->location->AdvancedSearch->Save(); // location
 			$this->officelicense->AdvancedSearch->Save(); // officelicense
 			$this->datereceived->AdvancedSearch->Save(); // datereceived
+			$this->serialcode->AdvancedSearch->Save(); // serialcode
+			$this->latestupdate->AdvancedSearch->Save(); // latestupdate
 		}
 		return $sWhere;
 	}
@@ -1111,6 +1133,9 @@ class cairodview_list extends cairodview {
 			return TRUE;
 		if ($this->datereceived->AdvancedSearch->IssetSession())
 			return TRUE;
+			if ($this->serialcode->AdvancedSearch->IssetSession())
+				return TRUE;
+			if ($this->latestupdate->AdvancedSearch->IssetSession())
 		return FALSE;
 	}
 
@@ -1150,6 +1175,8 @@ class cairodview_list extends cairodview {
 		$this->location->AdvancedSearch->UnsetSession();
 		$this->officelicense->AdvancedSearch->UnsetSession();
 		$this->datereceived->AdvancedSearch->UnsetSession();
+		$this->serialcode->AdvancedSearch->UnsetSession();
+		$this->latestupdate->AdvancedSearch->UnsetSession();
 	}
 
 	// Restore all search parameters
@@ -1170,6 +1197,8 @@ class cairodview_list extends cairodview {
 		$this->location->AdvancedSearch->Load();
 		$this->officelicense->AdvancedSearch->Load();
 		$this->datereceived->AdvancedSearch->Load();
+		$this->serialcode->AdvancedSearch->Load();
+		$this->latestupdate->AdvancedSearch->Load();
 	}
 
 	// Set up sort parameters
@@ -1193,6 +1222,8 @@ class cairodview_list extends cairodview {
 			$this->UpdateSort($this->operatingsystem); // operatingsystem
 			$this->UpdateSort($this->officelicense); // officelicense
 			$this->UpdateSort($this->datereceived); // datereceived
+			$this->UpdateSort($this->serialcode); // serialcode
+			$this->UpdateSort($this->latestupdate); // latestupdate
 			$this->setStartRecordNumber(1); // Reset start position
 		}
 	}
@@ -1239,6 +1270,8 @@ class cairodview_list extends cairodview {
 				$this->operatingsystem->setSort("");
 				$this->officelicense->setSort("");
 				$this->datereceived->setSort("");
+				$this->serialcode->setSort("");
+				$this->latestupdate->setSort("");
 			}
 
 			// Reset start position
@@ -1632,6 +1665,20 @@ class cairodview_list extends cairodview {
 		$this->datereceived->AdvancedSearch->SearchValue2 = ew_StripSlashes(@$_GET["y_datereceived"]);
 		if ($this->datereceived->AdvancedSearch->SearchValue2 <> "") $this->Command = "search";
 		$this->datereceived->AdvancedSearch->SearchOperator2 = @$_GET["w_datereceived"];
+
+		// serialcode
+		$this->serialcode->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_serialcode"]);
+		if ($this->serialcode->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->serialcode->AdvancedSearch->SearchOperator = @$_GET["z_serialcode"];
+
+		// latestupdate
+		$this->latestupdate->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_latestupdate"]);
+		if ($this->latestupdate->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->latestupdate->AdvancedSearch->SearchOperator = @$_GET["z_latestupdate"];
+		$this->latestupdate->AdvancedSearch->SearchCondition = @$_GET["v_latestupdate"];
+		$this->latestupdate->AdvancedSearch->SearchValue2 = ew_StripSlashes(@$_GET["y_latestupdate"]);
+		if ($this->latestupdate->AdvancedSearch->SearchValue2 <> "") $this->Command = "search";
+		$this->latestupdate->AdvancedSearch->SearchOperator2 = @$_GET["w_latestupdate"];
 	}
 
 	// Load recordset
@@ -1705,6 +1752,8 @@ class cairodview_list extends cairodview {
 		$this->remarks->setDbValue($rs->fields('remarks'));
 		$this->officelicense->setDbValue($rs->fields('officelicense'));
 		$this->datereceived->setDbValue($rs->fields('datereceived'));
+		$this->serialcode->setDbValue($rs->fields('serialcode'));
+		$this->latestupdate->setDbValue($rs->fields('latestupdate'));
 	}
 
 	// Load DbValue from recordset
@@ -1727,6 +1776,8 @@ class cairodview_list extends cairodview {
 		$this->remarks->DbValue = $row['remarks'];
 		$this->officelicense->DbValue = $row['officelicense'];
 		$this->datereceived->DbValue = $row['datereceived'];
+		$this->serialcode->DbValue = $row['serialcode'];
+		$this->latestupdate->DbValue = $row['latestupdate'];
 	}
 
 	// Load old record
@@ -1783,6 +1834,8 @@ class cairodview_list extends cairodview {
 		// remarks
 		// officelicense
 		// datereceived
+		// serialcode
+		// latestupdate
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
@@ -1846,6 +1899,15 @@ class cairodview_list extends cairodview {
 		$this->datereceived->ViewValue = $this->datereceived->CurrentValue;
 		$this->datereceived->ViewValue = ew_FormatDateTime($this->datereceived->ViewValue, 7);
 		$this->datereceived->ViewCustomAttributes = "";
+
+		// serialcode
+		$this->serialcode->ViewValue = $this->serialcode->CurrentValue;
+		$this->serialcode->ViewCustomAttributes = "";
+
+		// latestupdate
+		$this->latestupdate->ViewValue = $this->latestupdate->CurrentValue;
+		$this->latestupdate->ViewValue = ew_FormatDateTime($this->latestupdate->ViewValue, 7);
+		$this->latestupdate->ViewCustomAttributes = "";
 
 			// assettag
 			$this->assettag->LinkCustomAttributes = "";
@@ -1916,6 +1978,16 @@ class cairodview_list extends cairodview {
 			$this->datereceived->LinkCustomAttributes = "";
 			$this->datereceived->HrefValue = "";
 			$this->datereceived->TooltipValue = "";
+
+			// serialcode
+			$this->serialcode->LinkCustomAttributes = "";
+			$this->serialcode->HrefValue = "";
+			$this->serialcode->TooltipValue = "";
+
+			// latestupdate
+			$this->latestupdate->LinkCustomAttributes = "";
+			$this->latestupdate->HrefValue = "";
+			$this->latestupdate->TooltipValue = "";
 		}
 
 		// Call Row Rendered event
@@ -1958,6 +2030,8 @@ class cairodview_list extends cairodview {
 		$this->location->AdvancedSearch->Load();
 		$this->officelicense->AdvancedSearch->Load();
 		$this->datereceived->AdvancedSearch->Load();
+		$this->serialcode->AdvancedSearch->Load();
+		$this->latestupdate->AdvancedSearch->Load();
 	}
 
 	// Set up export options
@@ -2222,6 +2296,8 @@ class cairodview_list extends cairodview {
 		$this->AddSearchQueryString($sQry, $this->location); // location
 		$this->AddSearchQueryString($sQry, $this->officelicense); // officelicense
 		$this->AddSearchQueryString($sQry, $this->datereceived); // datereceived
+		$this->AddSearchQueryString($sQry, $this->serialcode); // serialcode
+		$this->AddSearchQueryString($sQry, $this->latestupdate); // latestupdate
 
 		// Build QueryString for pager
 		$sQry .= "&" . EW_TABLE_REC_PER_PAGE . "=" . urlencode($this->getRecordsPerPage()) . "&" . EW_TABLE_START_REC . "=" . urlencode($this->getStartRecordNumber());
@@ -2334,7 +2410,7 @@ class cairodview_list extends cairodview {
 	// ListOptions Rendered event
 	function ListOptions_Rendered() {
 
-		// Example: 
+		// Example:
 		//$this->ListOptions->Items["new"]->Body = "xxx";
 
 	}
@@ -2401,10 +2477,10 @@ var CurrentForm = fairodviewlist = new ew_Form("fairodviewlist", "list");
 fairodviewlist.FormKeyCountName = '<?php echo $airodview_list->FormKeyCountName ?>';
 
 // Form_CustomValidate event
-fairodviewlist.Form_CustomValidate = 
+fairodviewlist.Form_CustomValidate =
  function(fobj) { // DO NOT CHANGE THIS LINE!
 
- 	// Your custom validation code here, return false if invalid. 
+ 	// Your custom validation code here, return false if invalid.
  	return true;
  }
 
@@ -2412,7 +2488,7 @@ fairodviewlist.Form_CustomValidate =
 <?php if (EW_CLIENT_VALIDATE) { ?>
 fairodviewlist.ValidateRequired = true;
 <?php } else { ?>
-fairodviewlist.ValidateRequired = false; 
+fairodviewlist.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
@@ -2592,7 +2668,7 @@ $airodview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $airodview->assettag->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($airodview->assettag->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($airodview->assettag->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($airodview->servicetag->Visible) { // servicetag ?>
 	<?php if ($airodview->SortUrl($airodview->servicetag) == "") { ?>
 		<th data-name="servicetag"><div id="elh_airodview_servicetag" class="airodview_servicetag"><div class="ewTableHeaderCaption"><?php echo $airodview->servicetag->FldCaption() ?></div></div></th>
@@ -2601,7 +2677,7 @@ $airodview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $airodview->servicetag->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($airodview->servicetag->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($airodview->servicetag->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($airodview->ipaddress->Visible) { // ipaddress ?>
 	<?php if ($airodview->SortUrl($airodview->ipaddress) == "") { ?>
 		<th data-name="ipaddress"><div id="elh_airodview_ipaddress" class="airodview_ipaddress"><div class="ewTableHeaderCaption"><?php echo $airodview->ipaddress->FldCaption() ?></div></div></th>
@@ -2610,7 +2686,7 @@ $airodview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $airodview->ipaddress->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($airodview->ipaddress->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($airodview->ipaddress->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($airodview->employeeno->Visible) { // employeeno ?>
 	<?php if ($airodview->SortUrl($airodview->employeeno) == "") { ?>
 		<th data-name="employeeno"><div id="elh_airodview_employeeno" class="airodview_employeeno"><div class="ewTableHeaderCaption"><?php echo $airodview->employeeno->FldCaption() ?></div></div></th>
@@ -2619,7 +2695,7 @@ $airodview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $airodview->employeeno->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($airodview->employeeno->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($airodview->employeeno->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($airodview->employeename->Visible) { // employeename ?>
 	<?php if ($airodview->SortUrl($airodview->employeename) == "") { ?>
 		<th data-name="employeename"><div id="elh_airodview_employeename" class="airodview_employeename"><div class="ewTableHeaderCaption"><?php echo $airodview->employeename->FldCaption() ?></div></div></th>
@@ -2628,7 +2704,7 @@ $airodview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $airodview->employeename->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($airodview->employeename->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($airodview->employeename->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($airodview->company->Visible) { // company ?>
 	<?php if ($airodview->SortUrl($airodview->company) == "") { ?>
 		<th data-name="company"><div id="elh_airodview_company" class="airodview_company"><div class="ewTableHeaderCaption"><?php echo $airodview->company->FldCaption() ?></div></div></th>
@@ -2637,7 +2713,7 @@ $airodview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $airodview->company->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($airodview->company->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($airodview->company->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($airodview->department->Visible) { // department ?>
 	<?php if ($airodview->SortUrl($airodview->department) == "") { ?>
 		<th data-name="department"><div id="elh_airodview_department" class="airodview_department"><div class="ewTableHeaderCaption"><?php echo $airodview->department->FldCaption() ?></div></div></th>
@@ -2646,7 +2722,7 @@ $airodview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $airodview->department->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($airodview->department->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($airodview->department->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($airodview->type->Visible) { // type ?>
 	<?php if ($airodview->SortUrl($airodview->type) == "") { ?>
 		<th data-name="type"><div id="elh_airodview_type" class="airodview_type"><div class="ewTableHeaderCaption"><?php echo $airodview->type->FldCaption() ?></div></div></th>
@@ -2655,7 +2731,7 @@ $airodview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $airodview->type->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($airodview->type->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($airodview->type->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($airodview->model->Visible) { // model ?>
 	<?php if ($airodview->SortUrl($airodview->model) == "") { ?>
 		<th data-name="model"><div id="elh_airodview_model" class="airodview_model"><div class="ewTableHeaderCaption"><?php echo $airodview->model->FldCaption() ?></div></div></th>
@@ -2664,7 +2740,7 @@ $airodview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $airodview->model->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($airodview->model->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($airodview->model->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($airodview->location->Visible) { // location ?>
 	<?php if ($airodview->SortUrl($airodview->location) == "") { ?>
 		<th data-name="location"><div id="elh_airodview_location" class="airodview_location"><div class="ewTableHeaderCaption"><?php echo $airodview->location->FldCaption() ?></div></div></th>
@@ -2673,7 +2749,7 @@ $airodview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $airodview->location->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($airodview->location->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($airodview->location->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($airodview->alternateIP->Visible) { // alternateIP ?>
 	<?php if ($airodview->SortUrl($airodview->alternateIP) == "") { ?>
 		<th data-name="alternateIP"><div id="elh_airodview_alternateIP" class="airodview_alternateIP"><div class="ewTableHeaderCaption"><?php echo $airodview->alternateIP->FldCaption() ?></div></div></th>
@@ -2682,7 +2758,7 @@ $airodview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $airodview->alternateIP->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($airodview->alternateIP->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($airodview->alternateIP->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($airodview->operatingsystem->Visible) { // operatingsystem ?>
 	<?php if ($airodview->SortUrl($airodview->operatingsystem) == "") { ?>
 		<th data-name="operatingsystem"><div id="elh_airodview_operatingsystem" class="airodview_operatingsystem"><div class="ewTableHeaderCaption"><?php echo $airodview->operatingsystem->FldCaption() ?></div></div></th>
@@ -2691,7 +2767,7 @@ $airodview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $airodview->operatingsystem->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($airodview->operatingsystem->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($airodview->operatingsystem->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($airodview->officelicense->Visible) { // officelicense ?>
 	<?php if ($airodview->SortUrl($airodview->officelicense) == "") { ?>
 		<th data-name="officelicense"><div id="elh_airodview_officelicense" class="airodview_officelicense"><div class="ewTableHeaderCaption"><?php echo $airodview->officelicense->FldCaption() ?></div></div></th>
@@ -2700,7 +2776,7 @@ $airodview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $airodview->officelicense->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($airodview->officelicense->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($airodview->officelicense->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($airodview->datereceived->Visible) { // datereceived ?>
 	<?php if ($airodview->SortUrl($airodview->datereceived) == "") { ?>
 		<th data-name="datereceived"><div id="elh_airodview_datereceived" class="airodview_datereceived"><div class="ewTableHeaderCaption"><?php echo $airodview->datereceived->FldCaption() ?></div></div></th>
@@ -2708,8 +2784,26 @@ $airodview_list->ListOptions->Render("header", "left");
 		<th data-name="datereceived"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $airodview->SortUrl($airodview->datereceived) ?>',1);"><div id="elh_airodview_datereceived" class="airodview_datereceived">
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $airodview->datereceived->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($airodview->datereceived->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($airodview->datereceived->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
+ <?php } ?>
+<?php } ?>
+<?php if ($airodview->serialcode->Visible) { // serialcode ?>
+	<?php if ($airodview->SortUrl($airodview->serialcode) == "") { ?>
+		<th data-name="serialcode"><div id="elh_airodview_serialcode" class="airodview_serialcode"><div class="ewTableHeaderCaption"><?php echo $airodview->serialcode->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="serialcode"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $airodview->SortUrl($airodview->serialcode) ?>',1);"><div id="elh_airodview_serialcode" class="airodview_serialcode">
+				<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $airodview->serialcode->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($airodview->serialcode->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($airodview->serialcode->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+				</div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
+<?php if ($airodview->latestupdate->Visible) { // latestupdate ?>
+	<?php if ($airodview->SortUrl($airodview->latestupdate) == "") { ?>
+		<th data-name="latestupdate"><div id="elh_airodview_latestupdate" class="airodview_latestupdate"><div class="ewTableHeaderCaption"><?php echo $airodview->latestupdate->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="latestupdate"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $airodview->SortUrl($airodview->latestupdate) ?>',1);"><div id="elh_airodview_latestupdate" class="airodview_latestupdate">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $airodview->latestupdate->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($airodview->latestupdate->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($airodview->latestupdate->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+				</div></div></th>
+	<?php } ?>
+<?php } ?>
 <?php
 
 // Render list options (header, right)
@@ -2884,6 +2978,22 @@ $airodview_list->ListOptions->Render("body", "left", $airodview_list->RowCnt);
 <span id="el<?php echo $airodview_list->RowCnt ?>_airodview_datereceived" class="airodview_datereceived">
 <span<?php echo $airodview->datereceived->ViewAttributes() ?>>
 <?php echo $airodview->datereceived->ListViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($airodview->serialcode->Visible) { // serialcode ?>
+	<td data-name="serialcode"<?php echo $airodview->serialcode->CellAttributes() ?>>
+<span id="el<?php echo $airodview_list->RowCnt ?>_airodview_serialcode" class="airodview_serialcode">
+<span<?php echo $airodview->serialcode->ViewAttributes() ?>>
+<?php echo $airodview->serialcode->ListViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($airodview->latestupdate->Visible) { // latestupdate ?>
+	<td data-name="latestupdate"<?php echo $airodview->latestupdate->CellAttributes() ?>>
+<span id="el<?php echo $airodview_list->RowCnt ?>_airodview_latestupdate" class="airodview_latestupdate">
+<span<?php echo $airodview->latestupdate->ViewAttributes() ?>>
+<?php echo $airodview->latestupdate->ListViewValue() ?></span>
 </span>
 </td>
 	<?php } ?>

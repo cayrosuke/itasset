@@ -252,7 +252,7 @@ class cassetmaster_delete extends cassetmaster {
 		}
 	}
 
-	// 
+	//
 	//  Page_Init
 	//
 	function Page_Init() {
@@ -451,6 +451,8 @@ class cassetmaster_delete extends cassetmaster {
 		$this->remarks->setDbValue($rs->fields('remarks'));
 		$this->officelicense->setDbValue($rs->fields('officelicense'));
 		$this->datereceived->setDbValue($rs->fields('datereceived'));
+		$this->serialcode->setDbValue($rs->fields('serialcode'));
+		$this->latestupdate->setDbValue($rs->fields('latestupdate'));
 	}
 
 	// Load DbValue from recordset
@@ -473,6 +475,8 @@ class cassetmaster_delete extends cassetmaster {
 		$this->remarks->DbValue = $row['remarks'];
 		$this->officelicense->DbValue = $row['officelicense'];
 		$this->datereceived->DbValue = $row['datereceived'];
+		$this->serialcode->DbValue = $row['serialcode'];
+		$this->latestupdate->DbValue = $row['latestupdate'];
 	}
 
 	// Render row values based on field settings
@@ -504,6 +508,8 @@ class cassetmaster_delete extends cassetmaster {
 		// remarks
 		// officelicense
 		// datereceived
+		// serialcode
+		// latestupdate
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
@@ -571,6 +577,15 @@ class cassetmaster_delete extends cassetmaster {
 		$this->datereceived->ViewValue = $this->datereceived->CurrentValue;
 		$this->datereceived->ViewValue = ew_FormatDateTime($this->datereceived->ViewValue, 7);
 		$this->datereceived->ViewCustomAttributes = "";
+
+		// serialcode
+		$this->serialcode->ViewValue = $this->serialcode->CurrentValue;
+		$this->serialcode->ViewCustomAttributes = "";
+
+		// latestupdate
+		$this->latestupdate->ViewValue = $this->latestupdate->CurrentValue;
+		$this->latestupdate->ViewValue = ew_FormatDateTime($this->latestupdate->ViewValue, 7);
+		$this->latestupdate->ViewCustomAttributes = "";
 
 			// assettag
 			$this->assettag->LinkCustomAttributes = "";
@@ -641,6 +656,16 @@ class cassetmaster_delete extends cassetmaster {
 			$this->datereceived->LinkCustomAttributes = "";
 			$this->datereceived->HrefValue = "";
 			$this->datereceived->TooltipValue = "";
+
+			// serialcode
+			$this->serialcode->LinkCustomAttributes = "";
+			$this->serialcode->HrefValue = "";
+			$this->serialcode->TooltipValue = "";
+
+			// latestupdate
+			$this->latestupdate->LinkCustomAttributes = "";
+			$this->latestupdate->HrefValue = "";
+			$this->latestupdate->TooltipValue = "";
 		}
 
 		// Call Row Rendered event
@@ -828,10 +853,10 @@ var CurrentPageID = EW_PAGE_ID = "delete";
 var CurrentForm = fassetmasterdelete = new ew_Form("fassetmasterdelete", "delete");
 
 // Form_CustomValidate event
-fassetmasterdelete.Form_CustomValidate = 
+fassetmasterdelete.Form_CustomValidate =
  function(fobj) { // DO NOT CHANGE THIS LINE!
 
- 	// Your custom validation code here, return false if invalid. 
+ 	// Your custom validation code here, return false if invalid.
  	return true;
  }
 
@@ -839,7 +864,7 @@ fassetmasterdelete.Form_CustomValidate =
 <?php if (EW_CLIENT_VALIDATE) { ?>
 fassetmasterdelete.ValidateRequired = true;
 <?php } else { ?>
-fassetmasterdelete.ValidateRequired = false; 
+fassetmasterdelete.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
@@ -931,6 +956,12 @@ $assetmaster_delete->ShowMessage();
 <?php } ?>
 <?php if ($assetmaster->datereceived->Visible) { // datereceived ?>
 		<th><span id="elh_assetmaster_datereceived" class="assetmaster_datereceived"><?php echo $assetmaster->datereceived->FldCaption() ?></span></th>
+<?php } ?>
+<?php if ($assetmaster->serialcode->Visible) { // serialcode ?>
+		<th><span id="elh_assetmaster_serialcode" class="assetmaster_serialcode"><?php echo $assetmaster->serialcode->FldCaption() ?></span></th>
+<?php } ?>
+<?php if ($assetmaster->latestupdate->Visible) { // latestupdate ?>
+		<th><span id="elh_assetmaster_latestupdate" class="assetmaster_latestupdate"><?php echo $assetmaster->latestupdate->FldCaption() ?></span></th>
 <?php } ?>
 	</tr>
 	</thead>
@@ -1062,6 +1093,22 @@ while (!$assetmaster_delete->Recordset->EOF) {
 <span id="el<?php echo $assetmaster_delete->RowCnt ?>_assetmaster_datereceived" class="assetmaster_datereceived">
 <span<?php echo $assetmaster->datereceived->ViewAttributes() ?>>
 <?php echo $assetmaster->datereceived->ListViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($assetmaster->serialcode->Visible) { // serialcode ?>
+		<td<?php echo $assetmaster->serialcode->CellAttributes() ?>>
+<span id="el<?php echo $assetmaster_delete->RowCnt ?>_assetmaster_serialcode" class="assetmaster_serialcode">
+<span<?php echo $assetmaster->serialcode->ViewAttributes() ?>>
+<?php echo $assetmaster->serialcode->ListViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($assetmaster->latestupdate->Visible) { // latestupdate ?>
+		<td<?php echo $assetmaster->latestupdate->CellAttributes() ?>>
+<span id="el<?php echo $assetmaster_delete->RowCnt ?>_assetmaster_latestupdate" class="assetmaster_latestupdate">
+<span<?php echo $assetmaster->latestupdate->ViewAttributes() ?>>
+<?php echo $assetmaster->latestupdate->ListViewValue() ?></span>
 </span>
 </td>
 <?php } ?>

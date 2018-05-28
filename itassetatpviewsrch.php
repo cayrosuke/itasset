@@ -252,7 +252,7 @@ class catpview_search extends catpview {
 		}
 	}
 
-	// 
+	//
 	//  Page_Init
 	//
 	function Page_Init() {
@@ -410,6 +410,8 @@ class catpview_search extends catpview {
 		$this->BuildSearchUrl($sSrchUrl, $this->location); // location
 		$this->BuildSearchUrl($sSrchUrl, $this->officelicense); // officelicense
 		$this->BuildSearchUrl($sSrchUrl, $this->datereceived); // datereceived
+		$this->BuildSearchUrl($sSrchUrl, $this->serialcode); // serialcode
+		$this->BuildSearchUrl($sSrchUrl, $this->latestupdate); // latestupdate
 		if ($sSrchUrl <> "") $sSrchUrl .= "&";
 		$sSrchUrl .= "cmd=search";
 		return $sSrchUrl;
@@ -522,6 +524,19 @@ class catpview_search extends catpview {
 		$this->datereceived->AdvancedSearch->SearchCondition = $objForm->GetValue("v_datereceived");
 		$this->datereceived->AdvancedSearch->SearchValue2 = ew_StripSlashes($objForm->GetValue("y_datereceived"));
 		$this->datereceived->AdvancedSearch->SearchOperator2 = $objForm->GetValue("w_datereceived");
+
+		// serialcode
+		$this->serialcode->AdvancedSearch->SearchValue = ew_StripSlashes($objForm->GetValue("x_serialcode"));
+		$this->serialcode->AdvancedSearch->SearchOperator = $objForm->GetValue("z_serialcode");
+
+		// latestupdate
+		$this->latestupdate->AdvancedSearch->SearchValue = ew_StripSlashes($objForm->GetValue("x_latestupdate"));
+		$this->latestupdate->AdvancedSearch->SearchOperator = $objForm->GetValue("z_latestupdate");
+		$this->latestupdate->AdvancedSearch->SearchCondition = $objForm->GetValue("v_latestupdate");
+		$this->latestupdate->AdvancedSearch->SearchValue2 = ew_StripSlashes($objForm->GetValue("y_latestupdate"));
+		$this->latestupdate->AdvancedSearch->SearchOperator2 = $objForm->GetValue("w_latestupdate");
+
+
 	}
 
 	// Render row values based on field settings
@@ -550,6 +565,8 @@ class catpview_search extends catpview {
 		// remarks
 		// officelicense
 		// datereceived
+		// serialcode
+		// latestupdate
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
@@ -614,6 +631,16 @@ class catpview_search extends catpview {
 		$this->datereceived->ViewValue = ew_FormatDateTime($this->datereceived->ViewValue, 7);
 		$this->datereceived->ViewCustomAttributes = "";
 
+		// serialcode
+		$this->serialcode->ViewValue = $this->serialcode->CurrentValue;
+		$this->serialcode->ViewCustomAttributes = "";
+
+		// latestupdate
+		$this->latestupdate->ViewValue = $this->latestupdate->CurrentValue;
+		$this->latestupdate->ViewValue = ew_FormatDateTime($this->latestupdate->ViewValue, 7);
+		$this->latestupdate->ViewCustomAttributes = "";
+
+
 			// assettag
 			$this->assettag->LinkCustomAttributes = "";
 			$this->assettag->HrefValue = "";
@@ -668,6 +695,16 @@ class catpview_search extends catpview {
 			$this->datereceived->LinkCustomAttributes = "";
 			$this->datereceived->HrefValue = "";
 			$this->datereceived->TooltipValue = "";
+
+			// serialcode
+			$this->serialcode->LinkCustomAttributes = "";
+			$this->serialcode->HrefValue = "";
+			$this->serialcode->TooltipValue = "";
+
+			// latestupdate
+			$this->latestupdate->LinkCustomAttributes = "";
+			$this->latestupdate->HrefValue = "";
+			$this->latestupdate->TooltipValue = "";
 		} elseif ($this->RowType == EW_ROWTYPE_SEARCH) { // Search row
 
 			// assettag
@@ -738,6 +775,23 @@ class catpview_search extends catpview {
 			$this->datereceived->EditCustomAttributes = "";
 			$this->datereceived->EditValue2 = ew_HtmlEncode(ew_FormatDateTime(ew_UnFormatDateTime($this->datereceived->AdvancedSearch->SearchValue2, 7), 7));
 			$this->datereceived->PlaceHolder = ew_RemoveHtml($this->datereceived->FldCaption());
+
+			// serialcode
+			$this->serialcode->EditAttrs["class"] = "form-control";
+			$this->serialcode->EditCustomAttributes = "";
+			$this->serialcode->EditValue = ew_HtmlEncode($this->serialcode->AdvancedSearch->SearchValue);
+			$this->serialcode->PlaceHolder = ew_RemoveHtml($this->serialcode->FldCaption());
+
+			// latestupdate
+			$this->latestupdate->EditAttrs["class"] = "form-control";
+			$this->latestupdate->EditCustomAttributes = "";
+			$this->latestupdate->EditValue = ew_HtmlEncode(ew_FormatDateTime(ew_UnFormatDateTime($this->latestupdate->AdvancedSearch->SearchValue, 7), 7));
+			$this->latestupdate->PlaceHolder = ew_RemoveHtml($this->latestupdate->FldCaption());
+			$this->latestupdate->EditAttrs["class"] = "form-control";
+			$this->latestupdate->EditCustomAttributes = "";
+			$this->latestupdate->EditValue2 = ew_HtmlEncode(ew_FormatDateTime(ew_UnFormatDateTime($this->latestupdate->AdvancedSearch->SearchValue2, 7), 7));
+			$this->latestupdate->PlaceHolder = ew_RemoveHtml($this->latestupdate->FldCaption());
+
 		}
 		if ($this->RowType == EW_ROWTYPE_ADD ||
 			$this->RowType == EW_ROWTYPE_EDIT ||
@@ -766,6 +820,9 @@ class catpview_search extends catpview {
 		if (!ew_CheckEuroDate($this->datereceived->AdvancedSearch->SearchValue2)) {
 			ew_AddMessage($gsSearchError, $this->datereceived->FldErrMsg());
 		}
+		if (!ew_CheckEuroDate($this->latestupdate->AdvancedSearch->SearchValue)) {
+			ew_AddMessage($gsSearchError, $this->latestupdate->FldErrMsg());
+		}
 
 		// Return validate result
 		$ValidateSearch = ($gsSearchError == "");
@@ -792,6 +849,8 @@ class catpview_search extends catpview {
 		$this->location->AdvancedSearch->Load();
 		$this->officelicense->AdvancedSearch->Load();
 		$this->datereceived->AdvancedSearch->Load();
+		$this->serialcode->AdvancedSearch->Load();
+			$this->latestupdate->AdvancedSearch->Load();
 	}
 
 	// Set up Breadcrumb
@@ -902,10 +961,10 @@ var CurrentForm = fatpviewsearch = new ew_Form("fatpviewsearch", "search");
 <?php } ?>
 
 // Form_CustomValidate event
-fatpviewsearch.Form_CustomValidate = 
+fatpviewsearch.Form_CustomValidate =
  function(fobj) { // DO NOT CHANGE THIS LINE!
 
- 	// Your custom validation code here, return false if invalid. 
+ 	// Your custom validation code here, return false if invalid.
  	return true;
  }
 
@@ -913,7 +972,7 @@ fatpviewsearch.Form_CustomValidate =
 <?php if (EW_CLIENT_VALIDATE) { ?>
 fatpviewsearch.ValidateRequired = true;
 <?php } else { ?>
-fatpviewsearch.ValidateRequired = false; 
+fatpviewsearch.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
@@ -931,6 +990,9 @@ fatpviewsearch.Validate = function(fobj) {
 	elm = this.GetElements("x" + infix + "_datereceived");
 	if (elm && !ew_CheckEuroDate(elm.value))
 		return this.OnError(elm, "<?php echo ew_JsEncode2($atpview->datereceived->FldErrMsg()) ?>");
+		elm = this.GetElements("x" + infix + "_latestupdate");
+		if (elm && !ew_CheckEuroDate(elm.value))
+			return this.OnError(elm, "<?php echo ew_JsEncode2($atpview->latestupdate->FldErrMsg()) ?>");
 
 	// Fire Form_CustomValidate event
 	if (!this.Form_CustomValidate(fobj))
@@ -965,7 +1027,7 @@ $atpview_search->ShowMessage();
 <div>
 <?php if ($atpview->assettag->Visible) { // assettag ?>
 	<div id="r_assettag" class="form-group">
-		<label for="x_assettag" class="<?php echo $atpview_search->SearchLabelClass ?>"><span id="elh_atpview_assettag"><?php echo $atpview->assettag->FldCaption() ?></span>	
+		<label for="x_assettag" class="<?php echo $atpview_search->SearchLabelClass ?>"><span id="elh_atpview_assettag"><?php echo $atpview->assettag->FldCaption() ?></span>
 		<p class="form-control-static ewSearchOperator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_assettag" id="z_assettag" value="="></p>
 		</label>
 		<div class="<?php echo $atpview_search->SearchRightColumnClass ?>"><div<?php echo $atpview->assettag->CellAttributes() ?>>
@@ -977,7 +1039,7 @@ $atpview_search->ShowMessage();
 <?php } ?>
 <?php if ($atpview->servicetag->Visible) { // servicetag ?>
 	<div id="r_servicetag" class="form-group">
-		<label for="x_servicetag" class="<?php echo $atpview_search->SearchLabelClass ?>"><span id="elh_atpview_servicetag"><?php echo $atpview->servicetag->FldCaption() ?></span>	
+		<label for="x_servicetag" class="<?php echo $atpview_search->SearchLabelClass ?>"><span id="elh_atpview_servicetag"><?php echo $atpview->servicetag->FldCaption() ?></span>
 		<p class="form-control-static ewSearchOperator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_servicetag" id="z_servicetag" value="="></p>
 		</label>
 		<div class="<?php echo $atpview_search->SearchRightColumnClass ?>"><div<?php echo $atpview->servicetag->CellAttributes() ?>>
@@ -989,7 +1051,7 @@ $atpview_search->ShowMessage();
 <?php } ?>
 <?php if ($atpview->ipaddress->Visible) { // ipaddress ?>
 	<div id="r_ipaddress" class="form-group">
-		<label for="x_ipaddress" class="<?php echo $atpview_search->SearchLabelClass ?>"><span id="elh_atpview_ipaddress"><?php echo $atpview->ipaddress->FldCaption() ?></span>	
+		<label for="x_ipaddress" class="<?php echo $atpview_search->SearchLabelClass ?>"><span id="elh_atpview_ipaddress"><?php echo $atpview->ipaddress->FldCaption() ?></span>
 		<p class="form-control-static ewSearchOperator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_ipaddress" id="z_ipaddress" value="="></p>
 		</label>
 		<div class="<?php echo $atpview_search->SearchRightColumnClass ?>"><div<?php echo $atpview->ipaddress->CellAttributes() ?>>
@@ -1001,7 +1063,7 @@ $atpview_search->ShowMessage();
 <?php } ?>
 <?php if ($atpview->employeeno->Visible) { // employeeno ?>
 	<div id="r_employeeno" class="form-group">
-		<label for="x_employeeno" class="<?php echo $atpview_search->SearchLabelClass ?>"><span id="elh_atpview_employeeno"><?php echo $atpview->employeeno->FldCaption() ?></span>	
+		<label for="x_employeeno" class="<?php echo $atpview_search->SearchLabelClass ?>"><span id="elh_atpview_employeeno"><?php echo $atpview->employeeno->FldCaption() ?></span>
 		<p class="form-control-static ewSearchOperator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_employeeno" id="z_employeeno" value="="></p>
 		</label>
 		<div class="<?php echo $atpview_search->SearchRightColumnClass ?>"><div<?php echo $atpview->employeeno->CellAttributes() ?>>
@@ -1013,7 +1075,7 @@ $atpview_search->ShowMessage();
 <?php } ?>
 <?php if ($atpview->employeename->Visible) { // employeename ?>
 	<div id="r_employeename" class="form-group">
-		<label for="x_employeename" class="<?php echo $atpview_search->SearchLabelClass ?>"><span id="elh_atpview_employeename"><?php echo $atpview->employeename->FldCaption() ?></span>	
+		<label for="x_employeename" class="<?php echo $atpview_search->SearchLabelClass ?>"><span id="elh_atpview_employeename"><?php echo $atpview->employeename->FldCaption() ?></span>
 		<p class="form-control-static ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_employeename" id="z_employeename" value="LIKE"></p>
 		</label>
 		<div class="<?php echo $atpview_search->SearchRightColumnClass ?>"><div<?php echo $atpview->employeename->CellAttributes() ?>>
@@ -1025,7 +1087,7 @@ $atpview_search->ShowMessage();
 <?php } ?>
 <?php if ($atpview->department->Visible) { // department ?>
 	<div id="r_department" class="form-group">
-		<label for="x_department" class="<?php echo $atpview_search->SearchLabelClass ?>"><span id="elh_atpview_department"><?php echo $atpview->department->FldCaption() ?></span>	
+		<label for="x_department" class="<?php echo $atpview_search->SearchLabelClass ?>"><span id="elh_atpview_department"><?php echo $atpview->department->FldCaption() ?></span>
 		<p class="form-control-static ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_department" id="z_department" value="LIKE"></p>
 		</label>
 		<div class="<?php echo $atpview_search->SearchRightColumnClass ?>"><div<?php echo $atpview->department->CellAttributes() ?>>
@@ -1037,7 +1099,7 @@ $atpview_search->ShowMessage();
 <?php } ?>
 <?php if ($atpview->type->Visible) { // type ?>
 	<div id="r_type" class="form-group">
-		<label for="x_type" class="<?php echo $atpview_search->SearchLabelClass ?>"><span id="elh_atpview_type"><?php echo $atpview->type->FldCaption() ?></span>	
+		<label for="x_type" class="<?php echo $atpview_search->SearchLabelClass ?>"><span id="elh_atpview_type"><?php echo $atpview->type->FldCaption() ?></span>
 		<p class="form-control-static ewSearchOperator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_type" id="z_type" value="="></p>
 		</label>
 		<div class="<?php echo $atpview_search->SearchRightColumnClass ?>"><div<?php echo $atpview->type->CellAttributes() ?>>
@@ -1050,7 +1112,7 @@ if (is_array($atpview->type->EditValue)) {
 	$emptywrk = TRUE;
 	for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
 		$selwrk = ew_SameStr($atpview->type->AdvancedSearch->SearchValue, $arwrk[$rowcntwrk][0]) ? " selected" : "";
-		if ($selwrk <> "") $emptywrk = FALSE;		
+		if ($selwrk <> "") $emptywrk = FALSE;
 ?>
 <option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
 <?php echo $atpview->type->DisplayValue($arwrk[$rowcntwrk]) ?>
@@ -1071,7 +1133,7 @@ if (is_array($atpview->type->EditValue)) {
 <?php } ?>
 <?php if ($atpview->model->Visible) { // model ?>
 	<div id="r_model" class="form-group">
-		<label for="x_model" class="<?php echo $atpview_search->SearchLabelClass ?>"><span id="elh_atpview_model"><?php echo $atpview->model->FldCaption() ?></span>	
+		<label for="x_model" class="<?php echo $atpview_search->SearchLabelClass ?>"><span id="elh_atpview_model"><?php echo $atpview->model->FldCaption() ?></span>
 		<p class="form-control-static ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_model" id="z_model" value="LIKE"></p>
 		</label>
 		<div class="<?php echo $atpview_search->SearchRightColumnClass ?>"><div<?php echo $atpview->model->CellAttributes() ?>>
@@ -1083,7 +1145,7 @@ if (is_array($atpview->type->EditValue)) {
 <?php } ?>
 <?php if ($atpview->location->Visible) { // location ?>
 	<div id="r_location" class="form-group">
-		<label for="x_location" class="<?php echo $atpview_search->SearchLabelClass ?>"><span id="elh_atpview_location"><?php echo $atpview->location->FldCaption() ?></span>	
+		<label for="x_location" class="<?php echo $atpview_search->SearchLabelClass ?>"><span id="elh_atpview_location"><?php echo $atpview->location->FldCaption() ?></span>
 		<p class="form-control-static ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_location" id="z_location" value="LIKE"></p>
 		</label>
 		<div class="<?php echo $atpview_search->SearchRightColumnClass ?>"><div<?php echo $atpview->location->CellAttributes() ?>>
@@ -1095,7 +1157,7 @@ if (is_array($atpview->type->EditValue)) {
 <?php } ?>
 <?php if ($atpview->officelicense->Visible) { // officelicense ?>
 	<div id="r_officelicense" class="form-group">
-		<label for="x_officelicense" class="<?php echo $atpview_search->SearchLabelClass ?>"><span id="elh_atpview_officelicense"><?php echo $atpview->officelicense->FldCaption() ?></span>	
+		<label for="x_officelicense" class="<?php echo $atpview_search->SearchLabelClass ?>"><span id="elh_atpview_officelicense"><?php echo $atpview->officelicense->FldCaption() ?></span>
 		<p class="form-control-static ewSearchOperator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_officelicense" id="z_officelicense" value="="></p>
 		</label>
 		<div class="<?php echo $atpview_search->SearchRightColumnClass ?>"><div<?php echo $atpview->officelicense->CellAttributes() ?>>
@@ -1107,7 +1169,7 @@ if (is_array($atpview->type->EditValue)) {
 <?php } ?>
 <?php if ($atpview->datereceived->Visible) { // datereceived ?>
 	<div id="r_datereceived" class="form-group">
-		<label for="x_datereceived" class="<?php echo $atpview_search->SearchLabelClass ?>"><span id="elh_atpview_datereceived"><?php echo $atpview->datereceived->FldCaption() ?></span>	
+		<label for="x_datereceived" class="<?php echo $atpview_search->SearchLabelClass ?>"><span id="elh_atpview_datereceived"><?php echo $atpview->datereceived->FldCaption() ?></span>
 		<p class="form-control-static ewSearchOperator"><?php echo $Language->Phrase("BETWEEN") ?><input type="hidden" name="z_datereceived" id="z_datereceived" value="BETWEEN"></p>
 		</label>
 		<div class="<?php echo $atpview_search->SearchRightColumnClass ?>"><div<?php echo $atpview->datereceived->CellAttributes() ?>>
@@ -1125,6 +1187,35 @@ ew_CreateCalendar("fatpviewsearch", "x_datereceived", "%d-%m-%Y");
 <?php if (!$atpview->datereceived->ReadOnly && !$atpview->datereceived->Disabled && !isset($atpview->datereceived->EditAttrs["readonly"]) && !isset($atpview->datereceived->EditAttrs["disabled"])) { ?>
 <script type="text/javascript">
 ew_CreateCalendar("fatpviewsearch", "y_datereceived", "%d-%m-%Y");
+</script>
+<?php } ?>
+</span>
+		</div></div>
+	</div>
+		<?php } ?>
+		<?php if ($atpview->serialcode->Visible) { // serialcode ?>
+			<div id="r_serialcode" class="form-group">
+				<label for="x_serialcode" class="<?php echo $atpview_search->SearchLabelClass ?>"><span id="elh_atpview_serialcode"><?php echo $atpview->serialcode->FldCaption() ?></span>
+				<p class="form-control-static ewSearchOperator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_serialcode" id="z_serialcode" value="="></p>
+				</label>
+				<div class="<?php echo $atpview_search->SearchRightColumnClass ?>"><div<?php echo $atpview->serialcode->CellAttributes() ?>>
+					<span id="el_atpview_serialcode">
+		<input type="text" data-table="atpview" data-field="x_serialcode" name="x_serialcode" id="x_serialcode" size="30" maxlength="60" placeholder="<?php echo ew_HtmlEncode($atpview->serialcode->getPlaceHolder()) ?>" value="<?php echo $atpview->serialcode->EditValue ?>"<?php echo $atpview->serialcode->EditAttributes() ?>>
+		</span>
+				</div></div>
+	</div>
+<?php } ?>
+<?php if ($atpview->latestupdate->Visible) { // latestupdate ?>
+	<div id="r_latestupdate" class="form-group">
+		<label for="x_latestupdate" class="<?php echo $atpview_search->SearchLabelClass ?>"><span id="elh_atpview_latestupdate"><?php echo $atpview->latestupdate->FldCaption() ?></span>
+		<p class="form-control-static ewSearchOperator"><?php echo $Language->Phrase("BETWEEN") ?><input type="hidden" name="z_latestupdate" id="z_latestupdate" value="BETWEEN"></p>
+		</label>
+		<div class="<?php echo $atpview_search->SearchRightColumnClass ?>"><div<?php echo $atpview->latestupdate->CellAttributes() ?>>
+			<span id="el_atpview_latestupdate">
+<input type="text" data-table="atpview" data-field="x_latestupdate" data-format="7" name="x_latestupdate" id="x_latestupdate" placeholder="<?php echo ew_HtmlEncode($atpview->latestupdate->getPlaceHolder()) ?>" value="<?php echo $atpview->latestupdate->EditValue ?>"<?php echo $atpview->latestupdate->EditAttributes() ?>>
+<?php if (!$atpview->latestupdate->ReadOnly && !$atpview->latestupdate->Disabled && !isset($atpview->latestupdate->EditAttrs["readonly"]) && !isset($atpview->latestupdate->EditAttrs["disabled"])) { ?>
+<script type="text/javascript">
+ew_CreateCalendar("fatpviewsearch", "x_latestupdate", "%d-%m-%Y");
 </script>
 <?php } ?>
 </span>

@@ -1,12 +1,12 @@
 <?php
 
 // Global variable for table object
-$assetmaster = NULL;
+$SMEOView = NULL;
 
 //
-// Table class for assetmaster
+// Table class for SMEOView
 //
-class cassetmaster extends cTable {
+class cSMEOView extends cTable {
 	var $no;
 	var $assettag;
 	var $servicetag;
@@ -19,9 +19,9 @@ class cassetmaster extends cTable {
 	var $model;
 	var $location;
 	var $alternateIP;
+	var $officelicense;
 	var $operatingsystem;
 	var $remarks;
-	var $officelicense;
 	var $datereceived;
 	var $serialcode;
 	var $latestupdate;
@@ -34,12 +34,12 @@ class cassetmaster extends cTable {
 
 		// Language object
 		if (!isset($Language)) $Language = new cLanguage();
-		$this->TableVar = 'assetmaster';
-		$this->TableName = 'assetmaster';
-		$this->TableType = 'TABLE';
+		$this->TableVar = 'SMEOView';
+		$this->TableName = 'SMEOView';
+		$this->TableType = 'CUSTOMVIEW';
 
 		// Update Table
-		$this->UpdateTable = "`assetmaster`";
+		$this->UpdateTable = "assetmaster";
 		$this->DBID = 'DB';
 		$this->ExportAll = TRUE;
 		$this->ExportPageBreakCount = 0; // Page break per every n record (PDF only)
@@ -57,82 +57,80 @@ class cassetmaster extends cTable {
 		$this->BasicSearch = new cBasicSearch($this->TableVar);
 
 		// no
-		$this->no = new cField('assetmaster', 'assetmaster', 'x_no', 'no', '`no`', '`no`', 3, -1, FALSE, '`no`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'NO');
+		$this->no = new cField('SMEOView', 'SMEOView', 'x_no', 'no', '`no`', '`no`', 3, -1, FALSE, '`no`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'NO');
 		$this->no->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
 		$this->fields['no'] = &$this->no;
 
 		// assettag
-		$this->assettag = new cField('assetmaster', 'assetmaster', 'x_assettag', 'assettag', '`assettag`', '`assettag`', 200, -1, FALSE, '`assettag`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->assettag = new cField('SMEOView', 'SMEOView', 'x_assettag', 'assettag', '`assettag`', '`assettag`', 200, -1, FALSE, '`assettag`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
 		$this->fields['assettag'] = &$this->assettag;
 
 		// servicetag
-		$this->servicetag = new cField('assetmaster', 'assetmaster', 'x_servicetag', 'servicetag', '`servicetag`', '`servicetag`', 200, -1, FALSE, '`servicetag`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->servicetag = new cField('SMEOView', 'SMEOView', 'x_servicetag', 'servicetag', '`servicetag`', '`servicetag`', 200, -1, FALSE, '`servicetag`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
 		$this->fields['servicetag'] = &$this->servicetag;
 
 		// ipaddress
-		$this->ipaddress = new cField('assetmaster', 'assetmaster', 'x_ipaddress', 'ipaddress', '`ipaddress`', '`ipaddress`', 200, -1, FALSE, '`ipaddress`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->ipaddress = new cField('SMEOView', 'SMEOView', 'x_ipaddress', 'ipaddress', '`ipaddress`', '`ipaddress`', 200, -1, FALSE, '`ipaddress`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
 		$this->fields['ipaddress'] = &$this->ipaddress;
 
 		// employeeno
-		$this->employeeno = new cField('assetmaster', 'assetmaster', 'x_employeeno', 'employeeno', '`employeeno`', '`employeeno`', 200, -1, FALSE, '`employeeno`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->employeeno = new cField('SMEOView', 'SMEOView', 'x_employeeno', 'employeeno', '`employeeno`', '`employeeno`', 200, -1, FALSE, '`employeeno`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
 		$this->fields['employeeno'] = &$this->employeeno;
 
 		// employeename
-		$this->employeename = new cField('assetmaster', 'assetmaster', 'x_employeename', 'employeename', '`employeename`', '`employeename`', 200, -1, FALSE, '`employeename`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->employeename = new cField('SMEOView', 'SMEOView', 'x_employeename', 'employeename', '`employeename`', '`employeename`', 200, -1, FALSE, '`employeename`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
 		$this->fields['employeename'] = &$this->employeename;
 
 		// company
-		$this->company = new cField('assetmaster', 'assetmaster', 'x_company', 'company', '`company`', '`company`', 200, -1, FALSE, '`company`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'SELECT');
+		$this->company = new cField('SMEOView', 'SMEOView', 'x_company', 'company', 'assetmaster.company', 'assetmaster.company', 200, -1, FALSE, 'assetmaster.company', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'SELECT');
 		$this->company->OptionCount = 9;
 		$this->fields['company'] = &$this->company;
 
 		// department
-		$this->department = new cField('assetmaster', 'assetmaster', 'x_department', 'department', '`department`', '`department`', 200, -1, FALSE, '`department`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->department = new cField('SMEOView', 'SMEOView', 'x_department', 'department', '`department`', '`department`', 200, -1, FALSE, '`department`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
 		$this->fields['department'] = &$this->department;
 
 		// type
-		$this->type = new cField('assetmaster', 'assetmaster', 'x_type', 'type', '`type`', '`type`', 200, -1, FALSE, '`type`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'SELECT');
-		$this->type->OptionCount = 8;
+		$this->type = new cField('SMEOView', 'SMEOView', 'x_type', 'type', '`type`', '`type`', 200, -1, FALSE, '`type`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
 		$this->fields['type'] = &$this->type;
 
 		// model
-		$this->model = new cField('assetmaster', 'assetmaster', 'x_model', 'model', '`model`', '`model`', 200, -1, FALSE, '`model`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->model = new cField('SMEOView', 'SMEOView', 'x_model', 'model', '`model`', '`model`', 200, -1, FALSE, '`model`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
 		$this->fields['model'] = &$this->model;
 
 		// location
-		$this->location = new cField('assetmaster', 'assetmaster', 'x_location', 'location', '`location`', '`location`', 200, -1, FALSE, '`location`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->location = new cField('SMEOView', 'SMEOView', 'x_location', 'location', '`location`', '`location`', 200, -1, FALSE, '`location`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
 		$this->fields['location'] = &$this->location;
 
 		// alternateIP
-		$this->alternateIP = new cField('assetmaster', 'assetmaster', 'x_alternateIP', 'alternateIP', '`alternateIP`', '`alternateIP`', 200, -1, FALSE, '`alternateIP`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->alternateIP = new cField('SMEOView', 'SMEOView', 'x_alternateIP', 'alternateIP', '`alternateIP`', '`alternateIP`', 200, -1, FALSE, '`alternateIP`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
 		$this->fields['alternateIP'] = &$this->alternateIP;
 
+		// officelicense
+		$this->officelicense = new cField('SMEOView', 'SMEOView', 'x_officelicense', 'officelicense', '`officelicense`', '`officelicense`', 200, -1, FALSE, '`officelicense`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->fields['officelicense'] = &$this->officelicense;
+
 		// operatingsystem
-		$this->operatingsystem = new cField('assetmaster', 'assetmaster', 'x_operatingsystem', 'operatingsystem', '`operatingsystem`', '`operatingsystem`', 200, -1, FALSE, '`operatingsystem`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->operatingsystem = new cField('SMEOView', 'SMEOView', 'x_operatingsystem', 'operatingsystem', '`operatingsystem`', '`operatingsystem`', 200, -1, FALSE, '`operatingsystem`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
 		$this->fields['operatingsystem'] = &$this->operatingsystem;
 
 		// remarks
-		$this->remarks = new cField('assetmaster', 'assetmaster', 'x_remarks', 'remarks', '`remarks`', '`remarks`', 201, -1, FALSE, '`remarks`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXTAREA');
+		$this->remarks = new cField('SMEOView', 'SMEOView', 'x_remarks', 'remarks', '`remarks`', '`remarks`', 201, -1, FALSE, '`remarks`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXTAREA');
 		$this->fields['remarks'] = &$this->remarks;
 
-		// officelicense
-		$this->officelicense = new cField('assetmaster', 'assetmaster', 'x_officelicense', 'officelicense', '`officelicense`', '`officelicense`', 200, -1, FALSE, '`officelicense`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
-		$this->fields['officelicense'] = &$this->officelicense;
-
 		// datereceived
-		$this->datereceived = new cField('assetmaster', 'assetmaster', 'x_datereceived', 'datereceived', '`datereceived`', 'DATE_FORMAT(`datereceived`, \'%d-%m-%Y\')', 133, 7, FALSE, '`datereceived`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->datereceived = new cField('SMEOView', 'SMEOView', 'x_datereceived', 'datereceived', '`datereceived`', 'DATE_FORMAT(`datereceived`, \'%d-%m-%Y\')', 133, 7, FALSE, '`datereceived`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
 		$this->datereceived->FldDefaultErrMsg = str_replace("%s", "-", $Language->Phrase("IncorrectDateDMY"));
 		$this->fields['datereceived'] = &$this->datereceived;
 
 		// serialcode
-		$this->serialcode = new cField('assetmaster', 'assetmaster', 'x_serialcode', 'serialcode', '`serialcode`', '`serialcode`', 200, -1, FALSE, '`serialcode`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->serialcode = new cField('nadiview', 'nadiview', 'x_serialcode', 'serialcode', '`serialcode`', '`serialcode`', 200, -1, FALSE, '`serialcode`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
 		$this->fields['serialcode'] = &$this->serialcode;
 
 		// latestupdate
-		$this->latestupdate = new cField('assetmaster', 'assetmaster', 'x_latestupdate', 'latestupdate', '`latestupdate`', 'DATE_FORMAT(`latestupdate`, \'%d-%m-%Y\')', 133, 7, FALSE, '`latestupdate`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->latestupdate = new cField('nadiview', 'nadiview', 'x_latestupdate', 'latestupdate', '`latestupdate`', 'DATE_FORMAT(`latestupdate`, \'%d-%m-%Y\')', 133, 7, FALSE, '`latestupdate`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
 		$this->latestupdate->FldDefaultErrMsg = str_replace("%s", "-", $Language->Phrase("IncorrectDateDMY"));
 		$this->fields['latestupdate'] = &$this->latestupdate;
-
 	}
 
 	// Single column sort
@@ -156,7 +154,7 @@ class cassetmaster extends cTable {
 	var $_SqlFrom = "";
 
 	function getSqlFrom() { // From
-		return ($this->_SqlFrom <> "") ? $this->_SqlFrom : "`assetmaster`";
+		return ($this->_SqlFrom <> "") ? $this->_SqlFrom : "assetmaster";
 	}
 
 	function SqlFrom() { // For backward compatibility
@@ -182,7 +180,7 @@ class cassetmaster extends cTable {
 	var $_SqlWhere = "";
 
 	function getSqlWhere() { // Where
-		$sWhere = ($this->_SqlWhere <> "") ? $this->_SqlWhere : "";
+		$sWhere = ($this->_SqlWhere <> "") ? $this->_SqlWhere : "assetmaster.company = 'SMEO'";
 		$this->TableFilter = "";
 		ew_AddFilter($sWhere, $this->TableFilter);
 		return $sWhere;
@@ -409,8 +407,6 @@ class cassetmaster extends cTable {
 		if (is_array($where))
 			$where = $this->ArrayToFilter($where);
 		if ($rs) {
-			if (array_key_exists('no', $rs))
-				ew_AddFilter($where, ew_QuotedName('no', $this->DBID) . '=' . ew_QuotedValue($rs['no'], $this->no->FldDataType, $this->DBID));
 		}
 		$filter = ($curfilter) ? $this->CurrentFilter : "";
 		ew_AddFilter($filter, $where);
@@ -429,15 +425,12 @@ class cassetmaster extends cTable {
 
 	// Key filter WHERE clause
 	function SqlKeyFilter() {
-		return "`no` = @no@";
+		return "";
 	}
 
 	// Key filter
 	function KeyFilter() {
 		$sKeyFilter = $this->SqlKeyFilter();
-		if (!is_numeric($this->no->CurrentValue))
-			$sKeyFilter = "0=1"; // Invalid key
-		$sKeyFilter = str_replace("@no@", ew_AdjustSql($this->no->CurrentValue, $this->DBID), $sKeyFilter); // Replace key value
 		return $sKeyFilter;
 	}
 
@@ -451,7 +444,7 @@ class cassetmaster extends cTable {
 		if (@$_SESSION[$name] <> "") {
 			return $_SESSION[$name];
 		} else {
-			return "itassetassetmasterlist.php";
+			return "itassetsmeoviewlist.php";
 		}
 	}
 
@@ -461,30 +454,30 @@ class cassetmaster extends cTable {
 
 	// List URL
 	function GetListUrl() {
-		return "itassetassetmasterlist.php";
+		return "itassetsmeoviewlist.php";
 	}
 
 	// View URL
 	function GetViewUrl($parm = "") {
 		if ($parm <> "")
-			$url = $this->KeyUrl("itassetassetmasterview.php", $this->UrlParm($parm));
+			$url = $this->KeyUrl("itassetsmeoviewview.php", $this->UrlParm($parm));
 		else
-			$url = $this->KeyUrl("itassetassetmasterview.php", $this->UrlParm(EW_TABLE_SHOW_DETAIL . "="));
+			$url = $this->KeyUrl("itassetsmeoviewview.php", $this->UrlParm(EW_TABLE_SHOW_DETAIL . "="));
 		return $this->AddMasterUrl($url);
 	}
 
 	// Add URL
 	function GetAddUrl($parm = "") {
 		if ($parm <> "")
-			$url = "itassetassetmasteradd.php?" . $this->UrlParm($parm);
+			$url = "itassetsmeoviewadd.php?" . $this->UrlParm($parm);
 		else
-			$url = "itassetassetmasteradd.php";
+			$url = "itassetsmeoviewadd.php";
 		return $this->AddMasterUrl($url);
 	}
 
 	// Edit URL
 	function GetEditUrl($parm = "") {
-		$url = $this->KeyUrl("itassetassetmasteredit.php", $this->UrlParm($parm));
+		$url = $this->KeyUrl("itassetsmeoviewedit.php", $this->UrlParm($parm));
 		return $this->AddMasterUrl($url);
 	}
 
@@ -496,7 +489,7 @@ class cassetmaster extends cTable {
 
 	// Copy URL
 	function GetCopyUrl($parm = "") {
-		$url = $this->KeyUrl("itassetassetmasteradd.php", $this->UrlParm($parm));
+		$url = $this->KeyUrl("itassetsmeoviewadd.php", $this->UrlParm($parm));
 		return $this->AddMasterUrl($url);
 	}
 
@@ -508,7 +501,7 @@ class cassetmaster extends cTable {
 
 	// Delete URL
 	function GetDeleteUrl() {
-		return $this->KeyUrl("itassetassetmasterdelete.php", $this->UrlParm());
+		return $this->KeyUrl("itassetsmeoviewdelete.php", $this->UrlParm());
 	}
 
 	// Add master url
@@ -518,7 +511,6 @@ class cassetmaster extends cTable {
 
 	function KeyToJson() {
 		$json = "";
-		$json .= "no:" . ew_VarToJson($this->no->CurrentValue, "number", "'");
 		return "{" . $json . "}";
 	}
 
@@ -526,11 +518,6 @@ class cassetmaster extends cTable {
 	function KeyUrl($url, $parm = "") {
 		$sUrl = $url . "?";
 		if ($parm <> "") $sUrl .= $parm . "&";
-		if (!is_null($this->no->CurrentValue)) {
-			$sUrl .= "no=" . urlencode($this->no->CurrentValue);
-		} else {
-			return "javascript:ew_Alert(ewLanguage.Phrase('InvalidRecord'));";
-		}
 		return $sUrl;
 	}
 
@@ -560,12 +547,6 @@ class cassetmaster extends cTable {
 			$cnt = count($arKeys);
 		} elseif (!empty($_GET) || !empty($_POST)) {
 			$isPost = ew_IsHttpPost();
-			if ($isPost && isset($_POST["no"]))
-				$arKeys[] = ew_StripSlashes($_POST["no"]);
-			elseif (isset($_GET["no"]))
-				$arKeys[] = ew_StripSlashes($_GET["no"]);
-			else
-				$arKeys = NULL; // Do not setup
 
 			//return $arKeys; // Do not return yet, so the values will also be checked by the following code
 		}
@@ -574,8 +555,6 @@ class cassetmaster extends cTable {
 		$ar = array();
 		if (is_array($arKeys)) {
 			foreach ($arKeys as $key) {
-				if (!is_numeric($key))
-					continue;
 				$ar[] = $key;
 			}
 		}
@@ -588,7 +567,6 @@ class cassetmaster extends cTable {
 		$sKeyFilter = "";
 		foreach ($arKeys as $key) {
 			if ($sKeyFilter <> "") $sKeyFilter .= " OR ";
-			$this->no->CurrentValue = $key;
 			$sKeyFilter .= "(" . $this->KeyFilter() . ")";
 		}
 		return $sKeyFilter;
@@ -621,9 +599,9 @@ class cassetmaster extends cTable {
 		$this->model->setDbValue($rs->fields('model'));
 		$this->location->setDbValue($rs->fields('location'));
 		$this->alternateIP->setDbValue($rs->fields('alternateIP'));
+		$this->officelicense->setDbValue($rs->fields('officelicense'));
 		$this->operatingsystem->setDbValue($rs->fields('operatingsystem'));
 		$this->remarks->setDbValue($rs->fields('remarks'));
-		$this->officelicense->setDbValue($rs->fields('officelicense'));
 		$this->datereceived->setDbValue($rs->fields('datereceived'));
 		$this->serialcode->setDbValue($rs->fields('serialcode'));
 		$this->latestupdate->setDbValue($rs->fields('latestupdate'));
@@ -638,9 +616,6 @@ class cassetmaster extends cTable {
 
    // Common render codes
 		// no
-
-		$this->no->CellCssStyle = "white-space: nowrap;";
-
 		// assettag
 		// servicetag
 		// ipaddress
@@ -652,13 +627,14 @@ class cassetmaster extends cTable {
 		// model
 		// location
 		// alternateIP
+		// officelicense
 		// operatingsystem
 		// remarks
-		// officelicense
 		// datereceived
+		// no
 		// serialcode
 		// latestupdate
-		// no
+
 
 		$this->no->ViewValue = $this->no->CurrentValue;
 		$this->no->ViewCustomAttributes = "";
@@ -696,11 +672,7 @@ class cassetmaster extends cTable {
 		$this->department->ViewCustomAttributes = "";
 
 		// type
-		if (strval($this->type->CurrentValue) <> "") {
-			$this->type->ViewValue = $this->type->OptionCaption($this->type->CurrentValue);
-		} else {
-			$this->type->ViewValue = NULL;
-		}
+		$this->type->ViewValue = $this->type->CurrentValue;
 		$this->type->ViewCustomAttributes = "";
 
 		// model
@@ -715,6 +687,10 @@ class cassetmaster extends cTable {
 		$this->alternateIP->ViewValue = $this->alternateIP->CurrentValue;
 		$this->alternateIP->ViewCustomAttributes = "";
 
+		// officelicense
+		$this->officelicense->ViewValue = $this->officelicense->CurrentValue;
+		$this->officelicense->ViewCustomAttributes = "";
+
 		// operatingsystem
 		$this->operatingsystem->ViewValue = $this->operatingsystem->CurrentValue;
 		$this->operatingsystem->ViewCustomAttributes = "";
@@ -722,10 +698,6 @@ class cassetmaster extends cTable {
 		// remarks
 		$this->remarks->ViewValue = $this->remarks->CurrentValue;
 		$this->remarks->ViewCustomAttributes = "";
-
-		// officelicense
-		$this->officelicense->ViewValue = $this->officelicense->CurrentValue;
-		$this->officelicense->ViewCustomAttributes = "";
 
 		// datereceived
 		$this->datereceived->ViewValue = $this->datereceived->CurrentValue;
@@ -801,6 +773,11 @@ class cassetmaster extends cTable {
 		$this->alternateIP->HrefValue = "";
 		$this->alternateIP->TooltipValue = "";
 
+		// officelicense
+		$this->officelicense->LinkCustomAttributes = "";
+		$this->officelicense->HrefValue = "";
+		$this->officelicense->TooltipValue = "";
+
 		// operatingsystem
 		$this->operatingsystem->LinkCustomAttributes = "";
 		$this->operatingsystem->HrefValue = "";
@@ -810,11 +787,6 @@ class cassetmaster extends cTable {
 		$this->remarks->LinkCustomAttributes = "";
 		$this->remarks->HrefValue = "";
 		$this->remarks->TooltipValue = "";
-
-		// officelicense
-		$this->officelicense->LinkCustomAttributes = "";
-		$this->officelicense->HrefValue = "";
-		$this->officelicense->TooltipValue = "";
 
 		// datereceived
 		$this->datereceived->LinkCustomAttributes = "";
@@ -846,7 +818,7 @@ class cassetmaster extends cTable {
 		$this->no->EditAttrs["class"] = "form-control";
 		$this->no->EditCustomAttributes = "";
 		$this->no->EditValue = $this->no->CurrentValue;
-		$this->no->ViewCustomAttributes = "";
+		$this->no->PlaceHolder = ew_RemoveHtml($this->no->FldCaption());
 
 		// assettag
 		$this->assettag->EditAttrs["class"] = "form-control";
@@ -892,7 +864,8 @@ class cassetmaster extends cTable {
 		// type
 		$this->type->EditAttrs["class"] = "form-control";
 		$this->type->EditCustomAttributes = "";
-		$this->type->EditValue = $this->type->Options(TRUE);
+		$this->type->EditValue = $this->type->CurrentValue;
+		$this->type->PlaceHolder = ew_RemoveHtml($this->type->FldCaption());
 
 		// model
 		$this->model->EditAttrs["class"] = "form-control";
@@ -912,6 +885,12 @@ class cassetmaster extends cTable {
 		$this->alternateIP->EditValue = $this->alternateIP->CurrentValue;
 		$this->alternateIP->PlaceHolder = ew_RemoveHtml($this->alternateIP->FldCaption());
 
+		// officelicense
+		$this->officelicense->EditAttrs["class"] = "form-control";
+		$this->officelicense->EditCustomAttributes = "";
+		$this->officelicense->EditValue = $this->officelicense->CurrentValue;
+		$this->officelicense->PlaceHolder = ew_RemoveHtml($this->officelicense->FldCaption());
+
 		// operatingsystem
 		$this->operatingsystem->EditAttrs["class"] = "form-control";
 		$this->operatingsystem->EditCustomAttributes = "";
@@ -923,12 +902,6 @@ class cassetmaster extends cTable {
 		$this->remarks->EditCustomAttributes = "";
 		$this->remarks->EditValue = $this->remarks->CurrentValue;
 		$this->remarks->PlaceHolder = ew_RemoveHtml($this->remarks->FldCaption());
-
-		// officelicense
-		$this->officelicense->EditAttrs["class"] = "form-control";
-		$this->officelicense->EditCustomAttributes = "";
-		$this->officelicense->EditValue = $this->officelicense->CurrentValue;
-		$this->officelicense->PlaceHolder = ew_RemoveHtml($this->officelicense->FldCaption());
 
 		// datereceived
 		$this->datereceived->EditAttrs["class"] = "form-control";
@@ -947,7 +920,6 @@ class cassetmaster extends cTable {
 		$this->latestupdate->EditCustomAttributes = "";
 		$this->latestupdate->EditValue = ew_FormatDateTime($this->latestupdate->CurrentValue, 7);
 		$this->latestupdate->PlaceHolder = ew_RemoveHtml($this->latestupdate->FldCaption());
-
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -976,6 +948,7 @@ class cassetmaster extends cTable {
 			if ($Doc->Horizontal) { // Horizontal format, write header
 				$Doc->BeginExportRow();
 				if ($ExportPageType == "view") {
+					if ($this->no->Exportable) $Doc->ExportCaption($this->no);
 					if ($this->assettag->Exportable) $Doc->ExportCaption($this->assettag);
 					if ($this->servicetag->Exportable) $Doc->ExportCaption($this->servicetag);
 					if ($this->ipaddress->Exportable) $Doc->ExportCaption($this->ipaddress);
@@ -987,13 +960,14 @@ class cassetmaster extends cTable {
 					if ($this->model->Exportable) $Doc->ExportCaption($this->model);
 					if ($this->location->Exportable) $Doc->ExportCaption($this->location);
 					if ($this->alternateIP->Exportable) $Doc->ExportCaption($this->alternateIP);
+					if ($this->officelicense->Exportable) $Doc->ExportCaption($this->officelicense);
 					if ($this->operatingsystem->Exportable) $Doc->ExportCaption($this->operatingsystem);
 					if ($this->remarks->Exportable) $Doc->ExportCaption($this->remarks);
-					if ($this->officelicense->Exportable) $Doc->ExportCaption($this->officelicense);
 					if ($this->datereceived->Exportable) $Doc->ExportCaption($this->datereceived);
 					if ($this->serialcode->Exportable) $Doc->ExportCaption($this->serialcode);
 					if ($this->latestupdate->Exportable) $Doc->ExportCaption($this->latestupdate);
 				} else {
+					if ($this->no->Exportable) $Doc->ExportCaption($this->no);
 					if ($this->assettag->Exportable) $Doc->ExportCaption($this->assettag);
 					if ($this->servicetag->Exportable) $Doc->ExportCaption($this->servicetag);
 					if ($this->ipaddress->Exportable) $Doc->ExportCaption($this->ipaddress);
@@ -1005,8 +979,8 @@ class cassetmaster extends cTable {
 					if ($this->model->Exportable) $Doc->ExportCaption($this->model);
 					if ($this->location->Exportable) $Doc->ExportCaption($this->location);
 					if ($this->alternateIP->Exportable) $Doc->ExportCaption($this->alternateIP);
-					if ($this->operatingsystem->Exportable) $Doc->ExportCaption($this->operatingsystem);
 					if ($this->officelicense->Exportable) $Doc->ExportCaption($this->officelicense);
+					if ($this->operatingsystem->Exportable) $Doc->ExportCaption($this->operatingsystem);
 					if ($this->datereceived->Exportable) $Doc->ExportCaption($this->datereceived);
 					if ($this->serialcode->Exportable) $Doc->ExportCaption($this->serialcode);
 					if ($this->latestupdate->Exportable) $Doc->ExportCaption($this->latestupdate);
@@ -1041,6 +1015,7 @@ class cassetmaster extends cTable {
 				if (!$Doc->ExportCustom) {
 					$Doc->BeginExportRow($RowCnt); // Allow CSS styles if enabled
 					if ($ExportPageType == "view") {
+						if ($this->no->Exportable) $Doc->ExportField($this->no);
 						if ($this->assettag->Exportable) $Doc->ExportField($this->assettag);
 						if ($this->servicetag->Exportable) $Doc->ExportField($this->servicetag);
 						if ($this->ipaddress->Exportable) $Doc->ExportField($this->ipaddress);
@@ -1052,13 +1027,14 @@ class cassetmaster extends cTable {
 						if ($this->model->Exportable) $Doc->ExportField($this->model);
 						if ($this->location->Exportable) $Doc->ExportField($this->location);
 						if ($this->alternateIP->Exportable) $Doc->ExportField($this->alternateIP);
+						if ($this->officelicense->Exportable) $Doc->ExportField($this->officelicense);
 						if ($this->operatingsystem->Exportable) $Doc->ExportField($this->operatingsystem);
 						if ($this->remarks->Exportable) $Doc->ExportField($this->remarks);
-						if ($this->officelicense->Exportable) $Doc->ExportField($this->officelicense);
 						if ($this->datereceived->Exportable) $Doc->ExportField($this->datereceived);
 						if ($this->serialcode->Exportable) $Doc->ExportField($this->serialcode);
 						if ($this->latestupdate->Exportable) $Doc->ExportField($this->latestupdate);
 					} else {
+						if ($this->no->Exportable) $Doc->ExportField($this->no);
 						if ($this->assettag->Exportable) $Doc->ExportField($this->assettag);
 						if ($this->servicetag->Exportable) $Doc->ExportField($this->servicetag);
 						if ($this->ipaddress->Exportable) $Doc->ExportField($this->ipaddress);
@@ -1070,8 +1046,8 @@ class cassetmaster extends cTable {
 						if ($this->model->Exportable) $Doc->ExportField($this->model);
 						if ($this->location->Exportable) $Doc->ExportField($this->location);
 						if ($this->alternateIP->Exportable) $Doc->ExportField($this->alternateIP);
-						if ($this->operatingsystem->Exportable) $Doc->ExportField($this->operatingsystem);
 						if ($this->officelicense->Exportable) $Doc->ExportField($this->officelicense);
+						if ($this->operatingsystem->Exportable) $Doc->ExportField($this->operatingsystem);
 						if ($this->datereceived->Exportable) $Doc->ExportField($this->datereceived);
 						if ($this->serialcode->Exportable) $Doc->ExportField($this->serialcode);
 						if ($this->latestupdate->Exportable) $Doc->ExportField($this->latestupdate);

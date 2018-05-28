@@ -199,7 +199,7 @@ class clogout {
 		}
 	}
 
-	// 
+	//
 	//  Page_Init
 	//
 	function Page_Init() {

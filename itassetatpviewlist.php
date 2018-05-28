@@ -335,7 +335,7 @@ class catpview_list extends catpview {
 		$this->ListActions = new cListActions();
 	}
 
-	// 
+	//
 	//  Page_Init
 	//
 	function Page_Init() {
@@ -526,7 +526,7 @@ class catpview_list extends catpview {
 	var $ColCnt = 0;
 	var $DbMasterFilter = ""; // Master filter
 	var $DbDetailFilter = ""; // Detail filter
-	var $MasterRecordExists;	
+	var $MasterRecordExists;
 	var $MultiSelectKey;
 	var $Command;
 	var $RestoreSearch = FALSE;
@@ -2350,7 +2350,7 @@ class catpview_list extends catpview {
 	// ListOptions Rendered event
 	function ListOptions_Rendered() {
 
-		// Example: 
+		// Example:
 		//$this->ListOptions->Items["new"]->Body = "xxx";
 
 	}
@@ -2417,10 +2417,10 @@ var CurrentForm = fatpviewlist = new ew_Form("fatpviewlist", "list");
 fatpviewlist.FormKeyCountName = '<?php echo $atpview_list->FormKeyCountName ?>';
 
 // Form_CustomValidate event
-fatpviewlist.Form_CustomValidate = 
+fatpviewlist.Form_CustomValidate =
  function(fobj) { // DO NOT CHANGE THIS LINE!
 
- 	// Your custom validation code here, return false if invalid. 
+ 	// Your custom validation code here, return false if invalid.
  	return true;
  }
 
@@ -2428,7 +2428,7 @@ fatpviewlist.Form_CustomValidate =
 <?php if (EW_CLIENT_VALIDATE) { ?>
 fatpviewlist.ValidateRequired = true;
 <?php } else { ?>
-fatpviewlist.ValidateRequired = false; 
+fatpviewlist.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
@@ -2608,7 +2608,7 @@ $atpview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $atpview->assettag->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($atpview->assettag->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($atpview->assettag->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($atpview->servicetag->Visible) { // servicetag ?>
 	<?php if ($atpview->SortUrl($atpview->servicetag) == "") { ?>
 		<th data-name="servicetag"><div id="elh_atpview_servicetag" class="atpview_servicetag"><div class="ewTableHeaderCaption"><?php echo $atpview->servicetag->FldCaption() ?></div></div></th>
@@ -2617,7 +2617,7 @@ $atpview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $atpview->servicetag->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($atpview->servicetag->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($atpview->servicetag->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($atpview->ipaddress->Visible) { // ipaddress ?>
 	<?php if ($atpview->SortUrl($atpview->ipaddress) == "") { ?>
 		<th data-name="ipaddress"><div id="elh_atpview_ipaddress" class="atpview_ipaddress"><div class="ewTableHeaderCaption"><?php echo $atpview->ipaddress->FldCaption() ?></div></div></th>
@@ -2626,7 +2626,7 @@ $atpview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $atpview->ipaddress->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($atpview->ipaddress->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($atpview->ipaddress->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($atpview->employeeno->Visible) { // employeeno ?>
 	<?php if ($atpview->SortUrl($atpview->employeeno) == "") { ?>
 		<th data-name="employeeno"><div id="elh_atpview_employeeno" class="atpview_employeeno"><div class="ewTableHeaderCaption"><?php echo $atpview->employeeno->FldCaption() ?></div></div></th>
@@ -2635,7 +2635,7 @@ $atpview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $atpview->employeeno->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($atpview->employeeno->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($atpview->employeeno->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($atpview->employeename->Visible) { // employeename ?>
 	<?php if ($atpview->SortUrl($atpview->employeename) == "") { ?>
 		<th data-name="employeename"><div id="elh_atpview_employeename" class="atpview_employeename"><div class="ewTableHeaderCaption"><?php echo $atpview->employeename->FldCaption() ?></div></div></th>
@@ -2644,7 +2644,7 @@ $atpview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $atpview->employeename->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($atpview->employeename->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($atpview->employeename->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($atpview->company->Visible) { // company ?>
 	<?php if ($atpview->SortUrl($atpview->company) == "") { ?>
 		<th data-name="company"><div id="elh_atpview_company" class="atpview_company"><div class="ewTableHeaderCaption"><?php echo $atpview->company->FldCaption() ?></div></div></th>
@@ -2653,7 +2653,7 @@ $atpview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $atpview->company->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($atpview->company->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($atpview->company->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($atpview->department->Visible) { // department ?>
 	<?php if ($atpview->SortUrl($atpview->department) == "") { ?>
 		<th data-name="department"><div id="elh_atpview_department" class="atpview_department"><div class="ewTableHeaderCaption"><?php echo $atpview->department->FldCaption() ?></div></div></th>
@@ -2662,7 +2662,7 @@ $atpview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $atpview->department->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($atpview->department->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($atpview->department->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($atpview->type->Visible) { // type ?>
 	<?php if ($atpview->SortUrl($atpview->type) == "") { ?>
 		<th data-name="type"><div id="elh_atpview_type" class="atpview_type"><div class="ewTableHeaderCaption"><?php echo $atpview->type->FldCaption() ?></div></div></th>
@@ -2671,7 +2671,7 @@ $atpview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $atpview->type->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($atpview->type->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($atpview->type->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($atpview->model->Visible) { // model ?>
 	<?php if ($atpview->SortUrl($atpview->model) == "") { ?>
 		<th data-name="model"><div id="elh_atpview_model" class="atpview_model"><div class="ewTableHeaderCaption"><?php echo $atpview->model->FldCaption() ?></div></div></th>
@@ -2680,7 +2680,7 @@ $atpview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $atpview->model->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($atpview->model->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($atpview->model->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($atpview->location->Visible) { // location ?>
 	<?php if ($atpview->SortUrl($atpview->location) == "") { ?>
 		<th data-name="location"><div id="elh_atpview_location" class="atpview_location"><div class="ewTableHeaderCaption"><?php echo $atpview->location->FldCaption() ?></div></div></th>
@@ -2689,7 +2689,7 @@ $atpview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $atpview->location->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($atpview->location->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($atpview->location->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($atpview->alternateIP->Visible) { // alternateIP ?>
 	<?php if ($atpview->SortUrl($atpview->alternateIP) == "") { ?>
 		<th data-name="alternateIP"><div id="elh_atpview_alternateIP" class="atpview_alternateIP"><div class="ewTableHeaderCaption"><?php echo $atpview->alternateIP->FldCaption() ?></div></div></th>
@@ -2698,7 +2698,7 @@ $atpview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $atpview->alternateIP->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($atpview->alternateIP->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($atpview->alternateIP->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($atpview->operatingsystem->Visible) { // operatingsystem ?>
 	<?php if ($atpview->SortUrl($atpview->operatingsystem) == "") { ?>
 		<th data-name="operatingsystem"><div id="elh_atpview_operatingsystem" class="atpview_operatingsystem"><div class="ewTableHeaderCaption"><?php echo $atpview->operatingsystem->FldCaption() ?></div></div></th>
@@ -2707,7 +2707,7 @@ $atpview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $atpview->operatingsystem->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($atpview->operatingsystem->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($atpview->operatingsystem->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($atpview->officelicense->Visible) { // officelicense ?>
 	<?php if ($atpview->SortUrl($atpview->officelicense) == "") { ?>
 		<th data-name="officelicense"><div id="elh_atpview_officelicense" class="atpview_officelicense"><div class="ewTableHeaderCaption"><?php echo $atpview->officelicense->FldCaption() ?></div></div></th>
@@ -2716,7 +2716,7 @@ $atpview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $atpview->officelicense->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($atpview->officelicense->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($atpview->officelicense->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($atpview->datereceived->Visible) { // datereceived ?>
 	<?php if ($atpview->SortUrl($atpview->datereceived) == "") { ?>
 		<th data-name="datereceived"><div id="elh_atpview_datereceived" class="atpview_datereceived"><div class="ewTableHeaderCaption"><?php echo $atpview->datereceived->FldCaption() ?></div></div></th>
@@ -2725,7 +2725,7 @@ $atpview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $atpview->datereceived->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($atpview->datereceived->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($atpview->datereceived->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php
 
 // Render list options (header, right)

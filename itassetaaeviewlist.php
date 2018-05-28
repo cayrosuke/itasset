@@ -335,7 +335,7 @@ class caaeview_list extends caaeview {
 		$this->ListActions = new cListActions();
 	}
 
-	// 
+	//
 	//  Page_Init
 	//
 	function Page_Init() {
@@ -526,7 +526,7 @@ class caaeview_list extends caaeview {
 	var $ColCnt = 0;
 	var $DbMasterFilter = ""; // Master filter
 	var $DbDetailFilter = ""; // Detail filter
-	var $MasterRecordExists;	
+	var $MasterRecordExists;
 	var $MultiSelectKey;
 	var $Command;
 	var $RestoreSearch = FALSE;
@@ -765,6 +765,8 @@ class caaeview_list extends caaeview {
 		$sFilterList = ew_Concat($sFilterList, $this->location->AdvancedSearch->ToJSON(), ","); // Field location
 		$sFilterList = ew_Concat($sFilterList, $this->officelicense->AdvancedSearch->ToJSON(), ","); // Field officelicense
 		$sFilterList = ew_Concat($sFilterList, $this->datereceived->AdvancedSearch->ToJSON(), ","); // Field datereceived
+		$sFilterList = ew_Concat($sFilterList, $this->serialcode->AdvancedSearch->ToJSON(), ","); // Field serialcode
+		$sFilterList = ew_Concat($sFilterList, $this->latestupdate->AdvancedSearch->ToJSON(), ","); // Field latestupdate
 		if ($this->BasicSearch->Keyword <> "") {
 			$sWrk = "\"" . EW_TABLE_BASIC_SEARCH . "\":\"" . ew_JsEncode2($this->BasicSearch->Keyword) . "\",\"" . EW_TABLE_BASIC_SEARCH_TYPE . "\":\"" . ew_JsEncode2($this->BasicSearch->Type) . "\"";
 			$sFilterList = ew_Concat($sFilterList, $sWrk, ",");
@@ -870,6 +872,24 @@ class caaeview_list extends caaeview {
 		$this->datereceived->AdvancedSearch->SearchValue2 = @$filter["y_datereceived"];
 		$this->datereceived->AdvancedSearch->SearchOperator2 = @$filter["w_datereceived"];
 		$this->datereceived->AdvancedSearch->Save();
+
+
+		// Field serialcode
+		$this->serialcode->AdvancedSearch->SearchValue = @$filter["x_serialcode"];
+		$this->serialcode->AdvancedSearch->SearchOperator = @$filter["z_serialcode"];
+		$this->serialcode->AdvancedSearch->SearchCondition = @$filter["v_serialcode"];
+		$this->serialcode->AdvancedSearch->SearchValue2 = @$filter["y_serialcode"];
+		$this->serialcode->AdvancedSearch->SearchOperator2 = @$filter["w_serialcode"];
+		$this->serialcode->AdvancedSearch->Save();
+
+		// Field latestupdate
+		$this->latestupdate->AdvancedSearch->SearchValue = @$filter["x_latestupdate"];
+		$this->latestupdate->AdvancedSearch->SearchOperator = @$filter["z_latestupdate"];
+		$this->latestupdate->AdvancedSearch->SearchCondition = @$filter["v_latestupdate"];
+		$this->latestupdate->AdvancedSearch->SearchValue2 = @$filter["y_latestupdate"];
+		$this->latestupdate->AdvancedSearch->SearchOperator2 = @$filter["w_latestupdate"];
+		$this->latestupdate->AdvancedSearch->Save();
+
 		$this->BasicSearch->setKeyword(@$filter[EW_TABLE_BASIC_SEARCH]);
 		$this->BasicSearch->setType(@$filter[EW_TABLE_BASIC_SEARCH_TYPE]);
 	}
@@ -890,6 +910,8 @@ class caaeview_list extends caaeview {
 		$this->BuildSearchSql($sWhere, $this->location, $Default, FALSE); // location
 		$this->BuildSearchSql($sWhere, $this->officelicense, $Default, FALSE); // officelicense
 		$this->BuildSearchSql($sWhere, $this->datereceived, $Default, FALSE); // datereceived
+		$this->BuildSearchSql($sWhere, $this->serialcode, $Default, FALSE); // serialcode
+		$this->BuildSearchSql($sWhere, $this->latestupdate, $Default, FALSE); // latestupdate
 
 		// Set up search parm
 		if (!$Default && $sWhere <> "") {
@@ -907,6 +929,8 @@ class caaeview_list extends caaeview {
 			$this->location->AdvancedSearch->Save(); // location
 			$this->officelicense->AdvancedSearch->Save(); // officelicense
 			$this->datereceived->AdvancedSearch->Save(); // datereceived
+			$this->serialcode->AdvancedSearch->Save(); // serialcode
+			$this->latestupdate->AdvancedSearch->Save(); // latestupdate
 		}
 		return $sWhere;
 	}
@@ -970,6 +994,7 @@ class caaeview_list extends caaeview {
 		$this->BuildBasicSearchSQL($sWhere, $this->employeename, $arKeywords, $type);
 		$this->BuildBasicSearchSQL($sWhere, $this->department, $arKeywords, $type);
 		$this->BuildBasicSearchSQL($sWhere, $this->officelicense, $arKeywords, $type);
+		$this->BuildBasicSearchSQL($sWhere, $this->serialcode, $arKeywords, $type);
 		return $sWhere;
 	}
 
@@ -1117,6 +1142,10 @@ class caaeview_list extends caaeview {
 			return TRUE;
 		if ($this->datereceived->AdvancedSearch->IssetSession())
 			return TRUE;
+		if ($this->serialcode->AdvancedSearch->IssetSession())
+			return TRUE;
+		if ($this->latestupdate->AdvancedSearch->IssetSession())
+			return TRUE;
 		return FALSE;
 	}
 
@@ -1157,6 +1186,8 @@ class caaeview_list extends caaeview {
 		$this->location->AdvancedSearch->UnsetSession();
 		$this->officelicense->AdvancedSearch->UnsetSession();
 		$this->datereceived->AdvancedSearch->UnsetSession();
+		$this->serialcode->AdvancedSearch->UnsetSession();
+		$this->latestupdate->AdvancedSearch->UnsetSession();
 	}
 
 	// Restore all search parameters
@@ -1178,6 +1209,8 @@ class caaeview_list extends caaeview {
 		$this->location->AdvancedSearch->Load();
 		$this->officelicense->AdvancedSearch->Load();
 		$this->datereceived->AdvancedSearch->Load();
+		$this->serialcode->AdvancedSearch->Load();
+		$this->latestupdate->AdvancedSearch->Load();
 	}
 
 	// Set up sort parameters
@@ -1201,6 +1234,8 @@ class caaeview_list extends caaeview {
 			$this->UpdateSort($this->operatingsystem); // operatingsystem
 			$this->UpdateSort($this->officelicense); // officelicense
 			$this->UpdateSort($this->datereceived); // datereceived
+			$this->UpdateSort($this->serialcode); // serialcode
+			$this->UpdateSort($this->latestupdate); // latestupdate
 			$this->setStartRecordNumber(1); // Reset start position
 		}
 	}
@@ -1247,6 +1282,8 @@ class caaeview_list extends caaeview {
 				$this->operatingsystem->setSort("");
 				$this->officelicense->setSort("");
 				$this->datereceived->setSort("");
+				$this->serialcode->setSort("");
+				$this->latestupdate->setSort("");
 			}
 
 			// Reset start position
@@ -1645,6 +1682,21 @@ class caaeview_list extends caaeview {
 		$this->datereceived->AdvancedSearch->SearchValue2 = ew_StripSlashes(@$_GET["y_datereceived"]);
 		if ($this->datereceived->AdvancedSearch->SearchValue2 <> "") $this->Command = "search";
 		$this->datereceived->AdvancedSearch->SearchOperator2 = @$_GET["w_datereceived"];
+
+		// serialcode
+		$this->serialcode->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_serialcode"]);
+		if ($this->serialcode->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->serialcode->AdvancedSearch->SearchOperator = @$_GET["z_serialcode"];
+
+		// latestupdate
+		$this->latestupdate->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_latestupdate"]);
+		if ($this->latestupdate->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->latestupdate->AdvancedSearch->SearchOperator = @$_GET["z_latestupdate"];
+		$this->latestupdate->AdvancedSearch->SearchCondition = @$_GET["v_latestupdate"];
+		$this->latestupdate->AdvancedSearch->SearchValue2 = ew_StripSlashes(@$_GET["y_latestupdate"]);
+		if ($this->latestupdate->AdvancedSearch->SearchValue2 <> "") $this->Command = "search";
+		$this->latestupdate->AdvancedSearch->SearchOperator2 = @$_GET["w_latestupdate"];
+
 	}
 
 	// Load recordset
@@ -1718,6 +1770,8 @@ class caaeview_list extends caaeview {
 		$this->remarks->setDbValue($rs->fields('remarks'));
 		$this->officelicense->setDbValue($rs->fields('officelicense'));
 		$this->datereceived->setDbValue($rs->fields('datereceived'));
+		$this->serialcode->setDbValue($rs->fields('serialcode'));
+		$this->latestupdate->setDbValue($rs->fields('latestupdate'));
 	}
 
 	// Load DbValue from recordset
@@ -1740,6 +1794,8 @@ class caaeview_list extends caaeview {
 		$this->remarks->DbValue = $row['remarks'];
 		$this->officelicense->DbValue = $row['officelicense'];
 		$this->datereceived->DbValue = $row['datereceived'];
+		$this->serialcode->DbValue = $row['serialcode'];
+		$this->latestupdate->DbValue = $row['latestupdate'];
 	}
 
 	// Load old record
@@ -1796,6 +1852,8 @@ class caaeview_list extends caaeview {
 		// remarks
 		// officelicense
 		// datereceived
+		// serialcode
+		// latestupdate
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
@@ -1859,6 +1917,16 @@ class caaeview_list extends caaeview {
 		$this->datereceived->ViewValue = $this->datereceived->CurrentValue;
 		$this->datereceived->ViewValue = ew_FormatDateTime($this->datereceived->ViewValue, 7);
 		$this->datereceived->ViewCustomAttributes = "";
+
+		// serialcode
+		$this->serialcode->ViewValue = $this->serialcode->CurrentValue;
+		$this->serialcode->ViewCustomAttributes = "";
+
+		// latestupdate
+		$this->latestupdate->ViewValue = $this->latestupdate->CurrentValue;
+		$this->latestupdate->ViewValue = ew_FormatDateTime($this->latestupdate->ViewValue, 7);
+		$this->latestupdate->ViewCustomAttributes = "";
+
 
 			// assettag
 			$this->assettag->LinkCustomAttributes = "";
@@ -1929,6 +1997,16 @@ class caaeview_list extends caaeview {
 			$this->datereceived->LinkCustomAttributes = "";
 			$this->datereceived->HrefValue = "";
 			$this->datereceived->TooltipValue = "";
+
+			// serialcode
+			$this->serialcode->LinkCustomAttributes = "";
+			$this->serialcode->HrefValue = "";
+			$this->serialcode->TooltipValue = "";
+
+			// latestupdate
+			$this->latestupdate->LinkCustomAttributes = "";
+			$this->latestupdate->HrefValue = "";
+			$this->latestupdate->TooltipValue = "";
 		}
 
 		// Call Row Rendered event
@@ -1972,6 +2050,8 @@ class caaeview_list extends caaeview {
 		$this->location->AdvancedSearch->Load();
 		$this->officelicense->AdvancedSearch->Load();
 		$this->datereceived->AdvancedSearch->Load();
+		$this->serialcode->AdvancedSearch->Load();
+		$this->latestupdate->AdvancedSearch->Load();
 	}
 
 	// Set up export options
@@ -2237,6 +2317,8 @@ class caaeview_list extends caaeview {
 		$this->AddSearchQueryString($sQry, $this->location); // location
 		$this->AddSearchQueryString($sQry, $this->officelicense); // officelicense
 		$this->AddSearchQueryString($sQry, $this->datereceived); // datereceived
+		$this->AddSearchQueryString($sQry, $this->serialcode); // serialcode
+		$this->AddSearchQueryString($sQry, $this->latestupdate); // latestupdate
 
 		// Build QueryString for pager
 		$sQry .= "&" . EW_TABLE_REC_PER_PAGE . "=" . urlencode($this->getRecordsPerPage()) . "&" . EW_TABLE_START_REC . "=" . urlencode($this->getStartRecordNumber());
@@ -2349,7 +2431,7 @@ class caaeview_list extends caaeview {
 	// ListOptions Rendered event
 	function ListOptions_Rendered() {
 
-		// Example: 
+		// Example:
 		//$this->ListOptions->Items["new"]->Body = "xxx";
 
 	}
@@ -2416,10 +2498,10 @@ var CurrentForm = faaeviewlist = new ew_Form("faaeviewlist", "list");
 faaeviewlist.FormKeyCountName = '<?php echo $aaeview_list->FormKeyCountName ?>';
 
 // Form_CustomValidate event
-faaeviewlist.Form_CustomValidate = 
+faaeviewlist.Form_CustomValidate =
  function(fobj) { // DO NOT CHANGE THIS LINE!
 
- 	// Your custom validation code here, return false if invalid. 
+ 	// Your custom validation code here, return false if invalid.
  	return true;
  }
 
@@ -2427,7 +2509,7 @@ faaeviewlist.Form_CustomValidate =
 <?php if (EW_CLIENT_VALIDATE) { ?>
 faaeviewlist.ValidateRequired = true;
 <?php } else { ?>
-faaeviewlist.ValidateRequired = false; 
+faaeviewlist.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
@@ -2607,7 +2689,7 @@ $aaeview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $aaeview->assettag->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($aaeview->assettag->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($aaeview->assettag->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($aaeview->servicetag->Visible) { // servicetag ?>
 	<?php if ($aaeview->SortUrl($aaeview->servicetag) == "") { ?>
 		<th data-name="servicetag"><div id="elh_aaeview_servicetag" class="aaeview_servicetag"><div class="ewTableHeaderCaption"><?php echo $aaeview->servicetag->FldCaption() ?></div></div></th>
@@ -2616,7 +2698,7 @@ $aaeview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $aaeview->servicetag->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($aaeview->servicetag->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($aaeview->servicetag->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($aaeview->ipaddress->Visible) { // ipaddress ?>
 	<?php if ($aaeview->SortUrl($aaeview->ipaddress) == "") { ?>
 		<th data-name="ipaddress"><div id="elh_aaeview_ipaddress" class="aaeview_ipaddress"><div class="ewTableHeaderCaption"><?php echo $aaeview->ipaddress->FldCaption() ?></div></div></th>
@@ -2625,7 +2707,7 @@ $aaeview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $aaeview->ipaddress->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($aaeview->ipaddress->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($aaeview->ipaddress->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($aaeview->employeeno->Visible) { // employeeno ?>
 	<?php if ($aaeview->SortUrl($aaeview->employeeno) == "") { ?>
 		<th data-name="employeeno"><div id="elh_aaeview_employeeno" class="aaeview_employeeno"><div class="ewTableHeaderCaption"><?php echo $aaeview->employeeno->FldCaption() ?></div></div></th>
@@ -2634,7 +2716,7 @@ $aaeview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $aaeview->employeeno->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($aaeview->employeeno->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($aaeview->employeeno->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($aaeview->employeename->Visible) { // employeename ?>
 	<?php if ($aaeview->SortUrl($aaeview->employeename) == "") { ?>
 		<th data-name="employeename"><div id="elh_aaeview_employeename" class="aaeview_employeename"><div class="ewTableHeaderCaption"><?php echo $aaeview->employeename->FldCaption() ?></div></div></th>
@@ -2643,7 +2725,7 @@ $aaeview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $aaeview->employeename->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($aaeview->employeename->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($aaeview->employeename->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($aaeview->company->Visible) { // company ?>
 	<?php if ($aaeview->SortUrl($aaeview->company) == "") { ?>
 		<th data-name="company"><div id="elh_aaeview_company" class="aaeview_company"><div class="ewTableHeaderCaption"><?php echo $aaeview->company->FldCaption() ?></div></div></th>
@@ -2652,7 +2734,7 @@ $aaeview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $aaeview->company->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($aaeview->company->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($aaeview->company->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($aaeview->department->Visible) { // department ?>
 	<?php if ($aaeview->SortUrl($aaeview->department) == "") { ?>
 		<th data-name="department"><div id="elh_aaeview_department" class="aaeview_department"><div class="ewTableHeaderCaption"><?php echo $aaeview->department->FldCaption() ?></div></div></th>
@@ -2661,7 +2743,7 @@ $aaeview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $aaeview->department->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($aaeview->department->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($aaeview->department->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($aaeview->type->Visible) { // type ?>
 	<?php if ($aaeview->SortUrl($aaeview->type) == "") { ?>
 		<th data-name="type"><div id="elh_aaeview_type" class="aaeview_type"><div class="ewTableHeaderCaption"><?php echo $aaeview->type->FldCaption() ?></div></div></th>
@@ -2670,7 +2752,7 @@ $aaeview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $aaeview->type->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($aaeview->type->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($aaeview->type->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($aaeview->model->Visible) { // model ?>
 	<?php if ($aaeview->SortUrl($aaeview->model) == "") { ?>
 		<th data-name="model"><div id="elh_aaeview_model" class="aaeview_model"><div class="ewTableHeaderCaption"><?php echo $aaeview->model->FldCaption() ?></div></div></th>
@@ -2679,7 +2761,7 @@ $aaeview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $aaeview->model->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($aaeview->model->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($aaeview->model->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($aaeview->location->Visible) { // location ?>
 	<?php if ($aaeview->SortUrl($aaeview->location) == "") { ?>
 		<th data-name="location"><div id="elh_aaeview_location" class="aaeview_location"><div class="ewTableHeaderCaption"><?php echo $aaeview->location->FldCaption() ?></div></div></th>
@@ -2688,7 +2770,7 @@ $aaeview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $aaeview->location->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($aaeview->location->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($aaeview->location->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($aaeview->alternateIP->Visible) { // alternateIP ?>
 	<?php if ($aaeview->SortUrl($aaeview->alternateIP) == "") { ?>
 		<th data-name="alternateIP"><div id="elh_aaeview_alternateIP" class="aaeview_alternateIP"><div class="ewTableHeaderCaption"><?php echo $aaeview->alternateIP->FldCaption() ?></div></div></th>
@@ -2697,7 +2779,7 @@ $aaeview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $aaeview->alternateIP->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($aaeview->alternateIP->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($aaeview->alternateIP->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($aaeview->operatingsystem->Visible) { // operatingsystem ?>
 	<?php if ($aaeview->SortUrl($aaeview->operatingsystem) == "") { ?>
 		<th data-name="operatingsystem"><div id="elh_aaeview_operatingsystem" class="aaeview_operatingsystem"><div class="ewTableHeaderCaption"><?php echo $aaeview->operatingsystem->FldCaption() ?></div></div></th>
@@ -2706,7 +2788,7 @@ $aaeview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $aaeview->operatingsystem->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($aaeview->operatingsystem->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($aaeview->operatingsystem->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($aaeview->officelicense->Visible) { // officelicense ?>
 	<?php if ($aaeview->SortUrl($aaeview->officelicense) == "") { ?>
 		<th data-name="officelicense"><div id="elh_aaeview_officelicense" class="aaeview_officelicense"><div class="ewTableHeaderCaption"><?php echo $aaeview->officelicense->FldCaption() ?></div></div></th>
@@ -2715,7 +2797,7 @@ $aaeview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $aaeview->officelicense->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($aaeview->officelicense->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($aaeview->officelicense->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($aaeview->datereceived->Visible) { // datereceived ?>
 	<?php if ($aaeview->SortUrl($aaeview->datereceived) == "") { ?>
 		<th data-name="datereceived"><div id="elh_aaeview_datereceived" class="aaeview_datereceived"><div class="ewTableHeaderCaption"><?php echo $aaeview->datereceived->FldCaption() ?></div></div></th>
@@ -2724,7 +2806,25 @@ $aaeview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $aaeview->datereceived->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($aaeview->datereceived->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($aaeview->datereceived->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
+<?php if ($aaeview->serialcode->Visible) { // serialcode ?>
+	<?php if ($aaeview->SortUrl($aaeview->serialcode) == "") { ?>
+		<th data-name="serialcode"><div id="elh_aaeview_serialcode" class="aaeview_serialcode"><div class="ewTableHeaderCaption"><?php echo $aaeview->serialcode->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="serialcode"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $aaeview->SortUrl($aaeview->serialcode) ?>',1);"><div id="elh_aaeview_serialcode" class="aaeview_serialcode">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $aaeview->serialcode->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($aaeview->serialcode->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($aaeview->serialcode->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+		     </div></div></th>
+	<?php } ?>
+<?php } ?>
+<?php if ($aaeview->latestupdate->Visible) { // latestupdate ?>
+	<?php if ($aaeview->SortUrl($aaeview->latestupdate) == "") { ?>
+		<th data-name="latestupdate"><div id="elh_aaeview_latestupdate" class="aaeview_latestupdate"><div class="ewTableHeaderCaption"><?php echo $aaeview->latestupdate->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="latestupdate"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $aaeview->SortUrl($aaeview->latestupdate) ?>',1);"><div id="elh_aaeview_latestupdate" class="aaeview_latestupdate">
+		 	<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $aaeview->latestupdate->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($aaeview->latestupdate->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($aaeview->latestupdate->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+		      </div></div></th>
+	<?php } ?>
+<?php } ?>
 <?php
 
 // Render list options (header, right)
@@ -2899,6 +2999,22 @@ $aaeview_list->ListOptions->Render("body", "left", $aaeview_list->RowCnt);
 <span id="el<?php echo $aaeview_list->RowCnt ?>_aaeview_datereceived" class="aaeview_datereceived">
 <span<?php echo $aaeview->datereceived->ViewAttributes() ?>>
 <?php echo $aaeview->datereceived->ListViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($aaeview->serialcode->Visible) { // serialcode ?>
+	<td data-name="serialcode"<?php echo $aaeview->serialcode->CellAttributes() ?>>
+<span id="el<?php echo $aaeview_list->RowCnt ?>_aaeview_serialcode" class="aaeview_serialcode">
+<span<?php echo $aaeview->serialcode->ViewAttributes() ?>>
+<?php echo $aaeview->serialcode->ListViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($aaeview->latestupdate->Visible) { // latestupdate ?>
+	<td data-name="latestupdate"<?php echo $aaeview->latestupdate->CellAttributes() ?>>
+<span id="el<?php echo $aaeview_list->RowCnt ?>_aaeview_latestupdate" class="aaeview_latestupdate">
+<span<?php echo $aaeview->latestupdate->ViewAttributes() ?>>
+<?php echo $aaeview->latestupdate->ListViewValue() ?></span>
 </span>
 </td>
 	<?php } ?>

@@ -335,7 +335,7 @@ class cnadiview_list extends cnadiview {
 		$this->ListActions = new cListActions();
 	}
 
-	// 
+	//
 	//  Page_Init
 	//
 	function Page_Init() {
@@ -527,7 +527,7 @@ class cnadiview_list extends cnadiview {
 	var $ColCnt = 0;
 	var $DbMasterFilter = ""; // Master filter
 	var $DbDetailFilter = ""; // Detail filter
-	var $MasterRecordExists;	
+	var $MasterRecordExists;
 	var $MultiSelectKey;
 	var $Command;
 	var $RestoreSearch = FALSE;
@@ -756,6 +756,8 @@ class cnadiview_list extends cnadiview {
 		$sFilterList = ew_Concat($sFilterList, $this->remarks->AdvancedSearch->ToJSON(), ","); // Field remarks
 		$sFilterList = ew_Concat($sFilterList, $this->officelicense->AdvancedSearch->ToJSON(), ","); // Field officelicense
 		$sFilterList = ew_Concat($sFilterList, $this->datereceived->AdvancedSearch->ToJSON(), ","); // Field datereceived
+		$sFilterList = ew_Concat($sFilterList, $this->serialcode->AdvancedSearch->ToJSON(), ","); // Field serialcode
+		$sFilterList = ew_Concat($sFilterList, $this->latestupdate->AdvancedSearch->ToJSON(), ","); // Field latestupdate
 		if ($this->BasicSearch->Keyword <> "") {
 			$sWrk = "\"" . EW_TABLE_BASIC_SEARCH . "\":\"" . ew_JsEncode2($this->BasicSearch->Keyword) . "\",\"" . EW_TABLE_BASIC_SEARCH_TYPE . "\":\"" . ew_JsEncode2($this->BasicSearch->Type) . "\"";
 			$sFilterList = ew_Concat($sFilterList, $sWrk, ",");
@@ -903,6 +905,24 @@ class cnadiview_list extends cnadiview {
 		$this->datereceived->AdvancedSearch->Save();
 		$this->BasicSearch->setKeyword(@$filter[EW_TABLE_BASIC_SEARCH]);
 		$this->BasicSearch->setType(@$filter[EW_TABLE_BASIC_SEARCH_TYPE]);
+
+		// Field serialcode
+		$this->serialcode->AdvancedSearch->SearchValue = @$filter["x_serialcode"];
+		$this->serialcode->AdvancedSearch->SearchOperator = @$filter["z_serialcode"];
+		$this->serialcode->AdvancedSearch->SearchCondition = @$filter["v_serialcode"];
+		$this->serialcode->AdvancedSearch->SearchValue2 = @$filter["y_serialcode"];
+		$this->serialcode->AdvancedSearch->SearchOperator2 = @$filter["w_serialcode"];
+		$this->serialcode->AdvancedSearch->Save();
+
+		// Field latestupdate
+		$this->latestupdate->AdvancedSearch->SearchValue = @$filter["x_latestupdate"];
+		$this->latestupdate->AdvancedSearch->SearchOperator = @$filter["z_latestupdate"];
+		$this->latestupdate->AdvancedSearch->SearchCondition = @$filter["v_latestupdate"];
+		$this->latestupdate->AdvancedSearch->SearchValue2 = @$filter["y_latestupdate"];
+		$this->latestupdate->AdvancedSearch->SearchOperator2 = @$filter["w_latestupdate"];
+		$this->latestupdate->AdvancedSearch->Save();
+		$this->BasicSearch->setKeyword(@$filter[EW_TABLE_BASIC_SEARCH]);
+		$this->BasicSearch->setType(@$filter[EW_TABLE_BASIC_SEARCH_TYPE]);
 	}
 
 	// Return basic search SQL
@@ -922,6 +942,7 @@ class cnadiview_list extends cnadiview {
 		$this->BuildBasicSearchSQL($sWhere, $this->operatingsystem, $arKeywords, $type);
 		$this->BuildBasicSearchSQL($sWhere, $this->remarks, $arKeywords, $type);
 		$this->BuildBasicSearchSQL($sWhere, $this->officelicense, $arKeywords, $type);
+			$this->BuildBasicSearchSQL($sWhere, $this->serialcode, $arKeywords, $type);
 		return $sWhere;
 	}
 
@@ -1101,6 +1122,8 @@ class cnadiview_list extends cnadiview {
 			$this->UpdateSort($this->operatingsystem); // operatingsystem
 			$this->UpdateSort($this->officelicense); // officelicense
 			$this->UpdateSort($this->datereceived); // datereceived
+			$this->UpdateSort($this->serialcode); // serialcode
+			$this->UpdateSort($this->latestupdate); // latestupdate
 			$this->setStartRecordNumber(1); // Reset start position
 		}
 	}
@@ -1148,6 +1171,8 @@ class cnadiview_list extends cnadiview {
 				$this->operatingsystem->setSort("");
 				$this->officelicense->setSort("");
 				$this->datereceived->setSort("");
+				$this->serialcode->setSort("");
+				$this->latestupdate->setSort("");
 			}
 
 			// Reset start position
@@ -1545,6 +1570,8 @@ class cnadiview_list extends cnadiview {
 		$this->remarks->setDbValue($rs->fields('remarks'));
 		$this->officelicense->setDbValue($rs->fields('officelicense'));
 		$this->datereceived->setDbValue($rs->fields('datereceived'));
+		$this->serialcode->setDbValue($rs->fields('serialcode'));
+		$this->latestupdate->setDbValue($rs->fields('latestupdate'));
 	}
 
 	// Load DbValue from recordset
@@ -1567,6 +1594,8 @@ class cnadiview_list extends cnadiview {
 		$this->remarks->DbValue = $row['remarks'];
 		$this->officelicense->DbValue = $row['officelicense'];
 		$this->datereceived->DbValue = $row['datereceived'];
+		$this->serialcode->DbValue = $row['serialcode'];
+		$this->latestupdate->DbValue = $row['latestupdate'];
 	}
 
 	// Load old record
@@ -1620,6 +1649,8 @@ class cnadiview_list extends cnadiview {
 		// remarks
 		// officelicense
 		// datereceived
+		// serialcode
+		// latestupdate
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
@@ -1683,6 +1714,16 @@ class cnadiview_list extends cnadiview {
 		$this->datereceived->ViewValue = $this->datereceived->CurrentValue;
 		$this->datereceived->ViewValue = ew_FormatDateTime($this->datereceived->ViewValue, 7);
 		$this->datereceived->ViewCustomAttributes = "";
+
+		// serialcode
+		$this->serialcode->ViewValue = $this->serialcode->CurrentValue;
+		$this->serialcode->ViewCustomAttributes = "";
+
+		// latestupdate
+		$this->latestupdate->ViewValue = $this->latestupdate->CurrentValue;
+		$this->latestupdate->ViewValue = ew_FormatDateTime($this->latestupdate->ViewValue, 7);
+		$this->latestupdate->ViewCustomAttributes = "";
+
 
 			// no
 			$this->no->LinkCustomAttributes = "";
@@ -1758,6 +1799,16 @@ class cnadiview_list extends cnadiview {
 			$this->datereceived->LinkCustomAttributes = "";
 			$this->datereceived->HrefValue = "";
 			$this->datereceived->TooltipValue = "";
+
+			// serialcode
+			$this->serialcode->LinkCustomAttributes = "";
+			$this->serialcode->HrefValue = "";
+			$this->serialcode->TooltipValue = "";
+
+			// latestupdate
+			$this->latestupdate->LinkCustomAttributes = "";
+			$this->latestupdate->HrefValue = "";
+			$this->latestupdate->TooltipValue = "";
 		}
 
 		// Call Row Rendered event
@@ -2129,7 +2180,7 @@ class cnadiview_list extends cnadiview {
 	// ListOptions Rendered event
 	function ListOptions_Rendered() {
 
-		// Example: 
+		// Example:
 		//$this->ListOptions->Items["new"]->Body = "xxx";
 
 	}
@@ -2196,10 +2247,10 @@ var CurrentForm = fnadiviewlist = new ew_Form("fnadiviewlist", "list");
 fnadiviewlist.FormKeyCountName = '<?php echo $nadiview_list->FormKeyCountName ?>';
 
 // Form_CustomValidate event
-fnadiviewlist.Form_CustomValidate = 
+fnadiviewlist.Form_CustomValidate =
  function(fobj) { // DO NOT CHANGE THIS LINE!
 
- 	// Your custom validation code here, return false if invalid. 
+ 	// Your custom validation code here, return false if invalid.
  	return true;
  }
 
@@ -2207,7 +2258,7 @@ fnadiviewlist.Form_CustomValidate =
 <?php if (EW_CLIENT_VALIDATE) { ?>
 fnadiviewlist.ValidateRequired = true;
 <?php } else { ?>
-fnadiviewlist.ValidateRequired = false; 
+fnadiviewlist.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
@@ -2385,7 +2436,7 @@ $nadiview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $nadiview->no->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($nadiview->no->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($nadiview->no->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($nadiview->assettag->Visible) { // assettag ?>
 	<?php if ($nadiview->SortUrl($nadiview->assettag) == "") { ?>
 		<th data-name="assettag"><div id="elh_nadiview_assettag" class="nadiview_assettag"><div class="ewTableHeaderCaption"><?php echo $nadiview->assettag->FldCaption() ?></div></div></th>
@@ -2394,7 +2445,7 @@ $nadiview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $nadiview->assettag->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($nadiview->assettag->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($nadiview->assettag->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($nadiview->servicetag->Visible) { // servicetag ?>
 	<?php if ($nadiview->SortUrl($nadiview->servicetag) == "") { ?>
 		<th data-name="servicetag"><div id="elh_nadiview_servicetag" class="nadiview_servicetag"><div class="ewTableHeaderCaption"><?php echo $nadiview->servicetag->FldCaption() ?></div></div></th>
@@ -2403,7 +2454,7 @@ $nadiview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $nadiview->servicetag->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($nadiview->servicetag->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($nadiview->servicetag->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($nadiview->ipaddress->Visible) { // ipaddress ?>
 	<?php if ($nadiview->SortUrl($nadiview->ipaddress) == "") { ?>
 		<th data-name="ipaddress"><div id="elh_nadiview_ipaddress" class="nadiview_ipaddress"><div class="ewTableHeaderCaption"><?php echo $nadiview->ipaddress->FldCaption() ?></div></div></th>
@@ -2412,7 +2463,7 @@ $nadiview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $nadiview->ipaddress->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($nadiview->ipaddress->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($nadiview->ipaddress->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($nadiview->employeeno->Visible) { // employeeno ?>
 	<?php if ($nadiview->SortUrl($nadiview->employeeno) == "") { ?>
 		<th data-name="employeeno"><div id="elh_nadiview_employeeno" class="nadiview_employeeno"><div class="ewTableHeaderCaption"><?php echo $nadiview->employeeno->FldCaption() ?></div></div></th>
@@ -2421,7 +2472,7 @@ $nadiview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $nadiview->employeeno->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($nadiview->employeeno->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($nadiview->employeeno->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($nadiview->employeename->Visible) { // employeename ?>
 	<?php if ($nadiview->SortUrl($nadiview->employeename) == "") { ?>
 		<th data-name="employeename"><div id="elh_nadiview_employeename" class="nadiview_employeename"><div class="ewTableHeaderCaption"><?php echo $nadiview->employeename->FldCaption() ?></div></div></th>
@@ -2430,7 +2481,7 @@ $nadiview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $nadiview->employeename->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($nadiview->employeename->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($nadiview->employeename->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($nadiview->company->Visible) { // company ?>
 	<?php if ($nadiview->SortUrl($nadiview->company) == "") { ?>
 		<th data-name="company"><div id="elh_nadiview_company" class="nadiview_company"><div class="ewTableHeaderCaption"><?php echo $nadiview->company->FldCaption() ?></div></div></th>
@@ -2439,7 +2490,7 @@ $nadiview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $nadiview->company->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($nadiview->company->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($nadiview->company->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($nadiview->department->Visible) { // department ?>
 	<?php if ($nadiview->SortUrl($nadiview->department) == "") { ?>
 		<th data-name="department"><div id="elh_nadiview_department" class="nadiview_department"><div class="ewTableHeaderCaption"><?php echo $nadiview->department->FldCaption() ?></div></div></th>
@@ -2448,7 +2499,7 @@ $nadiview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $nadiview->department->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($nadiview->department->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($nadiview->department->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($nadiview->type->Visible) { // type ?>
 	<?php if ($nadiview->SortUrl($nadiview->type) == "") { ?>
 		<th data-name="type"><div id="elh_nadiview_type" class="nadiview_type"><div class="ewTableHeaderCaption"><?php echo $nadiview->type->FldCaption() ?></div></div></th>
@@ -2457,7 +2508,7 @@ $nadiview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $nadiview->type->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($nadiview->type->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($nadiview->type->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($nadiview->model->Visible) { // model ?>
 	<?php if ($nadiview->SortUrl($nadiview->model) == "") { ?>
 		<th data-name="model"><div id="elh_nadiview_model" class="nadiview_model"><div class="ewTableHeaderCaption"><?php echo $nadiview->model->FldCaption() ?></div></div></th>
@@ -2466,7 +2517,7 @@ $nadiview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $nadiview->model->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($nadiview->model->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($nadiview->model->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($nadiview->location->Visible) { // location ?>
 	<?php if ($nadiview->SortUrl($nadiview->location) == "") { ?>
 		<th data-name="location"><div id="elh_nadiview_location" class="nadiview_location"><div class="ewTableHeaderCaption"><?php echo $nadiview->location->FldCaption() ?></div></div></th>
@@ -2475,7 +2526,7 @@ $nadiview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $nadiview->location->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($nadiview->location->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($nadiview->location->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($nadiview->alternateIP->Visible) { // alternateIP ?>
 	<?php if ($nadiview->SortUrl($nadiview->alternateIP) == "") { ?>
 		<th data-name="alternateIP"><div id="elh_nadiview_alternateIP" class="nadiview_alternateIP"><div class="ewTableHeaderCaption"><?php echo $nadiview->alternateIP->FldCaption() ?></div></div></th>
@@ -2484,7 +2535,7 @@ $nadiview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $nadiview->alternateIP->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($nadiview->alternateIP->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($nadiview->alternateIP->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($nadiview->operatingsystem->Visible) { // operatingsystem ?>
 	<?php if ($nadiview->SortUrl($nadiview->operatingsystem) == "") { ?>
 		<th data-name="operatingsystem"><div id="elh_nadiview_operatingsystem" class="nadiview_operatingsystem"><div class="ewTableHeaderCaption"><?php echo $nadiview->operatingsystem->FldCaption() ?></div></div></th>
@@ -2493,7 +2544,7 @@ $nadiview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $nadiview->operatingsystem->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($nadiview->operatingsystem->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($nadiview->operatingsystem->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($nadiview->officelicense->Visible) { // officelicense ?>
 	<?php if ($nadiview->SortUrl($nadiview->officelicense) == "") { ?>
 		<th data-name="officelicense"><div id="elh_nadiview_officelicense" class="nadiview_officelicense"><div class="ewTableHeaderCaption"><?php echo $nadiview->officelicense->FldCaption() ?></div></div></th>
@@ -2502,7 +2553,7 @@ $nadiview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $nadiview->officelicense->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($nadiview->officelicense->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($nadiview->officelicense->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($nadiview->datereceived->Visible) { // datereceived ?>
 	<?php if ($nadiview->SortUrl($nadiview->datereceived) == "") { ?>
 		<th data-name="datereceived"><div id="elh_nadiview_datereceived" class="nadiview_datereceived"><div class="ewTableHeaderCaption"><?php echo $nadiview->datereceived->FldCaption() ?></div></div></th>
@@ -2511,7 +2562,25 @@ $nadiview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $nadiview->datereceived->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($nadiview->datereceived->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($nadiview->datereceived->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
+<?php if ($nadiview->serialcode->Visible) { // serialcode ?>
+	<?php if ($nadiview->SortUrl($nadiview->serialcode) == "") { ?>
+		<th data-name="serialcode"><div id="elh_nadiview_serialcode" class="nadiview_serialcode"><div class="ewTableHeaderCaption"><?php echo $nadiview->serialcode->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="serialcode"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $nadiview->SortUrl($nadiview->serialcode) ?>',1);"><div id="elh_nadiview_serialcode" class="nadiview_serialcode">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $nadiview->serialcode->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($nadiview->serialcode->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($nadiview->serialcode->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+				</div></div></th>
+	<?php } ?>
+<?php } ?>
+<?php if ($nadiview->latestupdate->Visible) { // latestupdate ?>
+	<?php if ($nadiview->SortUrl($nadiview->latestupdate) == "") { ?>
+		<th data-name="latestupdate"><div id="elh_nadiview_latestupdate" class="nadiview_latestupdate"><div class="ewTableHeaderCaption"><?php echo $nadiview->latestupdate->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="latestupdate"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $nadiview->SortUrl($nadiview->latestupdate) ?>',1);"><div id="elh_nadiview_latestupdate" class="nadiview_latestupdate">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $nadiview->latestupdate->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($nadiview->latestupdate->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($nadiview->latestupdate->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+				</div></div></th>
+	<?php } ?>
+<?php } ?>
 <?php
 
 // Render list options (header, right)
@@ -2694,6 +2763,22 @@ $nadiview_list->ListOptions->Render("body", "left", $nadiview_list->RowCnt);
 <span id="el<?php echo $nadiview_list->RowCnt ?>_nadiview_datereceived" class="nadiview_datereceived">
 <span<?php echo $nadiview->datereceived->ViewAttributes() ?>>
 <?php echo $nadiview->datereceived->ListViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($nadiview->serialcode->Visible) { // serialcode ?>
+	<td data-name="serialcode"<?php echo $nadiview->serialcode->CellAttributes() ?>>
+<span id="el<?php echo $nadiview_list->RowCnt ?>_nadiview_serialcode" class="nadiview_serialcode">
+<span<?php echo $nadiview->serialcode->ViewAttributes() ?>>
+<?php echo $nadiview->serialcode->ListViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($nadiview->latestupdate->Visible) { // latestupdate ?>
+	<td data-name="latestupdate"<?php echo $nadiview->latestupdate->CellAttributes() ?>>
+<span id="el<?php echo $nadiview_list->RowCnt ?>_nadiview_latestupdate" class="nadiview_latestupdate">
+<span<?php echo $nadiview->latestupdate->ViewAttributes() ?>>
+<?php echo $nadiview->latestupdate->ListViewValue() ?></span>
 </span>
 </td>
 	<?php } ?>

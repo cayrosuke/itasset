@@ -30,6 +30,8 @@ class cNadi_Switch_Report extends cTableBase {
 	var $remarks;
 	var $officelicense;
 	var $datereceived;
+	var $serialcode;
+	var $latestupdate;
 
 	//
 	// Table class constructor
@@ -121,6 +123,15 @@ class cNadi_Switch_Report extends cTableBase {
 		$this->datereceived = new cField('Nadi_Switch_Report', 'Nadi Switch Report', 'x_datereceived', 'datereceived', '`datereceived`', 'DATE_FORMAT(`datereceived`, \'%d-%m-%Y\')', 133, 7, FALSE, '`datereceived`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
 		$this->datereceived->FldDefaultErrMsg = str_replace("%s", "-", $Language->Phrase("IncorrectDateDMY"));
 		$this->fields['datereceived'] = &$this->datereceived;
+
+		// serialcode
+		$this->serialcode = new cField('Nadi_Switch_Report', 'Nadi Switch Report', 'x_serialcode', 'serialcode', '`serialcode`', '`serialcode`', 200, -1, FALSE, '`serialcode`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->fields['serialcode'] = &$this->serialcode;
+
+		// latestupdate
+		$this->latestupdate = new cField('Nadi_Switch_Report', 'Nadi Switch Report', 'x_latestupdate', 'latestupdate', '`latestupdate`', 'DATE_FORMAT(`latestupdate`, \'%d-%m-%Y\')', 133, 7, FALSE, '`latestupdate`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->latestupdate->FldDefaultErrMsg = str_replace("%s", "-", $Language->Phrase("IncorrectDateDMY"));
+		$this->fields['latestupdate'] = &$this->latestupdate;
 	}
 
 	// Report detail level SQL
@@ -386,14 +397,14 @@ class cNadi_Switch_Report extends cTableBase {
 	// Row Rendering event
 	function Row_Rendering() {
 
-		// Enter your code here	
+		// Enter your code here
 	}
 
 	// Row Rendered event
 	function Row_Rendered() {
 
 		// To view properties of field class, use:
-		//var_dump($this-><FieldName>); 
+		//var_dump($this-><FieldName>);
 
 	}
 
@@ -683,7 +694,7 @@ class cNadi_Switch_Report_report extends cNadi_Switch_Report {
 		$this->ExportOptions->TagClassName = "ewExportOption";
 	}
 
-	// 
+	//
 	//  Page_Init
 	//
 	function Page_Init() {
@@ -848,6 +859,8 @@ class cNadi_Switch_Report_report extends cNadi_Switch_Report {
 		// remarks
 		// officelicense
 		// datereceived
+		// serialcode
+		// latestupdate
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
@@ -899,6 +912,11 @@ class cNadi_Switch_Report_report extends cNadi_Switch_Report {
 		$this->datereceived->ViewValue = $this->datereceived->CurrentValue;
 		$this->datereceived->ViewValue = ew_FormatDateTime($this->datereceived->ViewValue, 7);
 		$this->datereceived->ViewCustomAttributes = "";
+
+		// latestupdate
+		$this->latestupdate->ViewValue = $this->latestupdate->CurrentValue;
+		$this->latestupdate->ViewValue = ew_FormatDateTime($this->latestupdate->ViewValue, 7);
+		$this->latestupdate->ViewCustomAttributes = "";
 
 			// assettag
 			$this->assettag->LinkCustomAttributes = "";
@@ -954,6 +972,11 @@ class cNadi_Switch_Report_report extends cNadi_Switch_Report {
 			$this->datereceived->LinkCustomAttributes = "";
 			$this->datereceived->HrefValue = "";
 			$this->datereceived->TooltipValue = "";
+
+			// latestupdate
+			$this->latestupdate->LinkCustomAttributes = "";
+			$this->latestupdate->HrefValue = "";
+			$this->latestupdate->TooltipValue = "";
 		}
 
 		// Call Row Rendered event
@@ -1195,6 +1218,7 @@ $Nadi_Switch_Report_report->RecordExists = !$Nadi_Switch_Report_report->Recordse
 		<td class="ewGroupHeader"><?php echo $Nadi_Switch_Report->location->FldCaption() ?></td>
 		<td class="ewGroupHeader"><?php echo $Nadi_Switch_Report->remarks->FldCaption() ?></td>
 		<td class="ewGroupHeader"><?php echo $Nadi_Switch_Report->datereceived->FldCaption() ?></td>
+			<td class="ewGroupHeader"><?php echo $Nadi_Switch_Report->latestupdate->FldCaption() ?></td>
 	</tr>
 <?php
 	}
@@ -1211,6 +1235,7 @@ $Nadi_Switch_Report_report->RecordExists = !$Nadi_Switch_Report_report->Recordse
 		$Nadi_Switch_Report->location->setDbValue($Nadi_Switch_Report_report->DetailRecordset->fields('location'));
 		$Nadi_Switch_Report->remarks->setDbValue($Nadi_Switch_Report_report->DetailRecordset->fields('remarks'));
 		$Nadi_Switch_Report->datereceived->setDbValue($Nadi_Switch_Report_report->DetailRecordset->fields('datereceived'));
+			$Nadi_Switch_Report->latestupdate->setDbValue($Nadi_Switch_Report_report->DetailRecordset->fields('latestupdate'));
 
 		// Render for view
 		$Nadi_Switch_Report->RowType = EW_ROWTYPE_VIEW;
@@ -1261,6 +1286,10 @@ $Nadi_Switch_Report_report->RecordExists = !$Nadi_Switch_Report_report->Recordse
 		<td<?php echo $Nadi_Switch_Report->datereceived->CellAttributes() ?>>
 <span<?php echo $Nadi_Switch_Report->datereceived->ViewAttributes() ?>>
 <?php echo $Nadi_Switch_Report->datereceived->ViewValue ?></span>
+</td>
+		<td<?php echo $Nadi_Switch_Report->latestupdate->CellAttributes() ?>>
+<span<?php echo $Nadi_Switch_Report->latestupdate->ViewAttributes() ?>>
+<?php echo $Nadi_Switch_Report->latestupdate->ViewValue ?></span>
 </td>
 	</tr>
 <?php

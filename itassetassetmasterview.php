@@ -309,7 +309,7 @@ class cassetmaster_view extends cassetmaster {
 		$this->OtherOptions['detail']->TagClassName = "ewDetailOption";
 	}
 
-	// 
+	//
 	//  Page_Init
 	//
 	function Page_Init() {
@@ -645,6 +645,8 @@ class cassetmaster_view extends cassetmaster {
 		$this->remarks->setDbValue($rs->fields('remarks'));
 		$this->officelicense->setDbValue($rs->fields('officelicense'));
 		$this->datereceived->setDbValue($rs->fields('datereceived'));
+		$this->serialcode->setDbValue($rs->fields('serialcode'));
+		$this->latestupdate->setDbValue($rs->fields('latestupdate'));
 	}
 
 	// Load DbValue from recordset
@@ -667,6 +669,8 @@ class cassetmaster_view extends cassetmaster {
 		$this->remarks->DbValue = $row['remarks'];
 		$this->officelicense->DbValue = $row['officelicense'];
 		$this->datereceived->DbValue = $row['datereceived'];
+		$this->serialcode->DbValue = $row['serialcode'];
+		$this->latestupdate->DbValue = $row['latestupdate'];
 	}
 
 	// Render row values based on field settings
@@ -701,6 +705,8 @@ class cassetmaster_view extends cassetmaster {
 		// remarks
 		// officelicense
 		// datereceived
+		// serialcode
+		// latestupdate
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
@@ -772,6 +778,15 @@ class cassetmaster_view extends cassetmaster {
 		$this->datereceived->ViewValue = $this->datereceived->CurrentValue;
 		$this->datereceived->ViewValue = ew_FormatDateTime($this->datereceived->ViewValue, 7);
 		$this->datereceived->ViewCustomAttributes = "";
+
+		// serialcode
+		$this->serialcode->ViewValue = $this->serialcode->CurrentValue;
+		$this->serialcode->ViewCustomAttributes = "";
+
+		// latestupdate
+		$this->latestupdate->ViewValue = $this->latestupdate->CurrentValue;
+		$this->latestupdate->ViewValue = ew_FormatDateTime($this->latestupdate->ViewValue, 7);
+		$this->latestupdate->ViewCustomAttributes = "";
 
 			// assettag
 			$this->assettag->LinkCustomAttributes = "";
@@ -847,6 +862,16 @@ class cassetmaster_view extends cassetmaster {
 			$this->datereceived->LinkCustomAttributes = "";
 			$this->datereceived->HrefValue = "";
 			$this->datereceived->TooltipValue = "";
+
+			// serialcode
+			$this->serialcode->LinkCustomAttributes = "";
+			$this->serialcode->HrefValue = "";
+			$this->serialcode->TooltipValue = "";
+
+			// latestupdate
+			$this->latestupdate->LinkCustomAttributes = "";
+			$this->latestupdate->HrefValue = "";
+			$this->latestupdate->TooltipValue = "";
 		}
 
 		// Call Row Rendered event
@@ -1225,10 +1250,10 @@ var CurrentPageID = EW_PAGE_ID = "view";
 var CurrentForm = fassetmasterview = new ew_Form("fassetmasterview", "view");
 
 // Form_CustomValidate event
-fassetmasterview.Form_CustomValidate = 
+fassetmasterview.Form_CustomValidate =
  function(fobj) { // DO NOT CHANGE THIS LINE!
 
- 	// Your custom validation code here, return false if invalid. 
+ 	// Your custom validation code here, return false if invalid.
  	return true;
  }
 
@@ -1236,7 +1261,7 @@ fassetmasterview.Form_CustomValidate =
 <?php if (EW_CLIENT_VALIDATE) { ?>
 fassetmasterview.ValidateRequired = true;
 <?php } else { ?>
-fassetmasterview.ValidateRequired = false; 
+fassetmasterview.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
@@ -1442,6 +1467,29 @@ $assetmaster_view->ShowMessage();
 </span>
 </td>
 	</tr>
+<?php } ?>
+<?php if ($assetmaster->serialcode->Visible) { // serialcode ?>
+	<tr id="r_serialcode">
+		<td><span id="elh_assetmaster_serialcode"><?php echo $assetmaster->serialcode->FldCaption() ?></span></td>
+		<td data-name="serialcode"<?php echo $assetmaster->serialcode->CellAttributes() ?>>
+<span id="el_assetmaster_serialcode">
+<span<?php echo $assetmaster->serialcode->ViewAttributes() ?>>
+<?php echo $assetmaster->serialcode->ViewValue ?></span>
+</span>
+</td>
+	</tr>
+<?php } ?>
+<?php if ($assetmaster->latestupdate->Visible) { // latestupdate ?>
+	<tr id="r_latestupdate">
+		<td><span id="elh_assetmaster_latestupdate"><?php echo $assetmaster->latestupdate->FldCaption() ?></span></td>
+		<td data-name="latestupdate"<?php echo $assetmaster->latestupdate->CellAttributes() ?>>
+<span id="el_assetmaster_latestupdate">
+<span<?php echo $assetmaster->latestupdate->ViewAttributes() ?>>
+<?php echo $assetmaster->latestupdate->ViewValue ?></span>
+</span>
+</td>
+	</tr>
+
 <?php } ?>
 </table>
 </form>

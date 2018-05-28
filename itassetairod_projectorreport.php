@@ -30,6 +30,8 @@ class cAirod_Projector extends cTableBase {
 	var $remarks;
 	var $officelicense;
 	var $datereceived;
+	var $serialcode;
+	var $latestupdate;
 
 	//
 	// Table class constructor
@@ -121,6 +123,16 @@ class cAirod_Projector extends cTableBase {
 		$this->datereceived = new cField('Airod_Projector', 'Airod Projector', 'x_datereceived', 'datereceived', '`datereceived`', 'DATE_FORMAT(`datereceived`, \'%d-%m-%Y\')', 133, 7, FALSE, '`datereceived`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
 		$this->datereceived->FldDefaultErrMsg = str_replace("%s", "-", $Language->Phrase("IncorrectDateDMY"));
 		$this->fields['datereceived'] = &$this->datereceived;
+
+		// serialcode
+		$this->serialcode = new cField('Airod_Projector', 'Airod Projector', 'serialcode', 'serialcode', '`serialcode`', '`serialcode`', 200, -1, FALSE, '`serialcode`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->fields['serialcode'] = &$this->serialcode;
+
+		// latestupdate
+		$this->latestupdate = new cField('Airod_Projector', 'Airod Projector', 'x_latestupdate', 'latestupdate', '`latestupdate`', 'DATE_FORMAT(`latestupdate`, \'%d-%m-%Y\')', 133, 7, FALSE, '`latestupdate`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->latestupdate->FldDefaultErrMsg = str_replace("%s", "-", $Language->Phrase("IncorrectDateDMY"));
+		$this->fields['latestupdate'] = &$this->latestupdate;
+
 	}
 
 	// Report detail level SQL
@@ -386,14 +398,14 @@ class cAirod_Projector extends cTableBase {
 	// Row Rendering event
 	function Row_Rendering() {
 
-		// Enter your code here	
+		// Enter your code here
 	}
 
 	// Row Rendered event
 	function Row_Rendered() {
 
 		// To view properties of field class, use:
-		//var_dump($this-><FieldName>); 
+		//var_dump($this-><FieldName>);
 
 	}
 
@@ -683,7 +695,7 @@ class cAirod_Projector_report extends cAirod_Projector {
 		$this->ExportOptions->TagClassName = "ewExportOption";
 	}
 
-	// 
+	//
 	//  Page_Init
 	//
 	function Page_Init() {
@@ -848,6 +860,8 @@ class cAirod_Projector_report extends cAirod_Projector {
 		// remarks
 		// officelicense
 		// datereceived
+		// serialcode
+		// latestupdate
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
@@ -919,6 +933,15 @@ class cAirod_Projector_report extends cAirod_Projector {
 		$this->datereceived->ViewValue = $this->datereceived->CurrentValue;
 		$this->datereceived->ViewValue = ew_FormatDateTime($this->datereceived->ViewValue, 7);
 		$this->datereceived->ViewCustomAttributes = "";
+
+		// serialcode
+		$this->serialcode->ViewValue = $this->serialcode->CurrentValue;
+		$this->serialcode->ViewCustomAttributes = "";
+
+		// latestupdate
+		$this->latestupdate->ViewValue = $this->latestupdate->CurrentValue;
+		$this->latestupdate->ViewValue = ew_FormatDateTime($this->latestupdate->ViewValue, 7);
+		$this->latestupdate->ViewCustomAttributes = "";
 
 			// assettag
 			$this->assettag->LinkCustomAttributes = "";
@@ -994,6 +1017,16 @@ class cAirod_Projector_report extends cAirod_Projector {
 			$this->datereceived->LinkCustomAttributes = "";
 			$this->datereceived->HrefValue = "";
 			$this->datereceived->TooltipValue = "";
+
+			// serialcode
+			$this->serialcode->LinkCustomAttributes = "";
+			$this->serialcode->HrefValue = "";
+			$this->serialcode->TooltipValue = "";
+
+			// latestupdate
+			$this->latestupdate->LinkCustomAttributes = "";
+			$this->latestupdate->HrefValue = "";
+			$this->latestupdate->TooltipValue = "";
 		}
 
 		// Call Row Rendered event
@@ -1239,6 +1272,8 @@ $Airod_Projector_report->RecordExists = !$Airod_Projector_report->Recordset->EOF
 		<td class="ewGroupHeader"><?php echo $Airod_Projector->remarks->FldCaption() ?></td>
 		<td class="ewGroupHeader"><?php echo $Airod_Projector->officelicense->FldCaption() ?></td>
 		<td class="ewGroupHeader"><?php echo $Airod_Projector->datereceived->FldCaption() ?></td>
+		<td class="ewGroupHeader"><?php echo $Airod_Projector->serialcode->FldCaption() ?></td>
+		<td class="ewGroupHeader"><?php echo $Airod_Projector->latestupdate->FldCaption() ?></td>
 	</tr>
 <?php
 	}
@@ -1259,6 +1294,8 @@ $Airod_Projector_report->RecordExists = !$Airod_Projector_report->Recordset->EOF
 		$Airod_Projector->remarks->setDbValue($Airod_Projector_report->DetailRecordset->fields('remarks'));
 		$Airod_Projector->officelicense->setDbValue($Airod_Projector_report->DetailRecordset->fields('officelicense'));
 		$Airod_Projector->datereceived->setDbValue($Airod_Projector_report->DetailRecordset->fields('datereceived'));
+		$Airod_Projector->serialcode->setDbValue($Airod_Projector_report->DetailRecordset->fields('serialcode'));
+		$Airod_Projector->latestupdate->setDbValue($Airod_Projector_report->DetailRecordset->fields('latestupdate'));
 
 		// Render for view
 		$Airod_Projector->RowType = EW_ROWTYPE_VIEW;
@@ -1325,6 +1362,14 @@ $Airod_Projector_report->RecordExists = !$Airod_Projector_report->Recordset->EOF
 		<td<?php echo $Airod_Projector->datereceived->CellAttributes() ?>>
 <span<?php echo $Airod_Projector->datereceived->ViewAttributes() ?>>
 <?php echo $Airod_Projector->datereceived->ViewValue ?></span>
+</td>
+			<td<?php echo $Airod_Projector->serialcode->CellAttributes() ?>>
+<span<?php echo $Airod_Projector->serialcode->ViewAttributes() ?>>
+<?php echo $Airod_Projector->serialcode->ViewValue ?></span>
+</td>
+		<td<?php echo $Airod_Projector->latestupdate->CellAttributes() ?>>
+<span<?php echo $Airod_Projector->latestupdate->ViewAttributes() ?>>
+<?php echo $Airod_Projector->latestupdate->ViewValue ?></span>
 </td>
 	</tr>
 <?php

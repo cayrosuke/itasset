@@ -335,7 +335,7 @@ class cadcview_list extends cadcview {
 		$this->ListActions = new cListActions();
 	}
 
-	// 
+	//
 	//  Page_Init
 	//
 	function Page_Init() {
@@ -527,7 +527,7 @@ class cadcview_list extends cadcview {
 	var $ColCnt = 0;
 	var $DbMasterFilter = ""; // Master filter
 	var $DbDetailFilter = ""; // Detail filter
-	var $MasterRecordExists;	
+	var $MasterRecordExists;
 	var $MultiSelectKey;
 	var $Command;
 	var $RestoreSearch = FALSE;
@@ -756,6 +756,8 @@ class cadcview_list extends cadcview {
 		$sFilterList = ew_Concat($sFilterList, $this->operatingsystem->AdvancedSearch->ToJSON(), ","); // Field operatingsystem
 		$sFilterList = ew_Concat($sFilterList, $this->remarks->AdvancedSearch->ToJSON(), ","); // Field remarks
 		$sFilterList = ew_Concat($sFilterList, $this->datereceived->AdvancedSearch->ToJSON(), ","); // Field datereceived
+		$sFilterList = ew_Concat($sFilterList, $this->serialcode->AdvancedSearch->ToJSON(), ","); // Field serialcode
+		$sFilterList = ew_Concat($sFilterList, $this->latestupdate->AdvancedSearch->ToJSON(), ","); // Field latestupdate
 		if ($this->BasicSearch->Keyword <> "") {
 			$sWrk = "\"" . EW_TABLE_BASIC_SEARCH . "\":\"" . ew_JsEncode2($this->BasicSearch->Keyword) . "\",\"" . EW_TABLE_BASIC_SEARCH_TYPE . "\":\"" . ew_JsEncode2($this->BasicSearch->Type) . "\"";
 			$sFilterList = ew_Concat($sFilterList, $sWrk, ",");
@@ -901,6 +903,22 @@ class cadcview_list extends cadcview {
 		$this->datereceived->AdvancedSearch->SearchValue2 = @$filter["y_datereceived"];
 		$this->datereceived->AdvancedSearch->SearchOperator2 = @$filter["w_datereceived"];
 		$this->datereceived->AdvancedSearch->Save();
+
+		// Field serialcode
+		$this->serialcode->AdvancedSearch->SearchValue = @$filter["x_serialcode"];
+		$this->serialcode->AdvancedSearch->SearchOperator = @$filter["z_serialcode"];
+		$this->serialcode->AdvancedSearch->SearchCondition = @$filter["v_serialcode"];
+		$this->serialcode->AdvancedSearch->SearchValue2 = @$filter["y_serialcode"];
+		$this->serialcode->AdvancedSearch->SearchOperator2 = @$filter["w_serialcode"];
+		$this->serialcode->AdvancedSearch->Save();
+
+		// Field latestupdate
+		$this->latestupdate->AdvancedSearch->SearchValue = @$filter["x_latestupdate"];
+		$this->latestupdate->AdvancedSearch->SearchOperator = @$filter["z_latestupdate"];
+		$this->latestupdate->AdvancedSearch->SearchCondition = @$filter["v_latestupdate"];
+		$this->latestupdate->AdvancedSearch->SearchValue2 = @$filter["y_latestupdate"];
+		$this->latestupdate->AdvancedSearch->SearchOperator2 = @$filter["w_latestupdate"];
+		$this->latestupdate->AdvancedSearch->Save();
 		$this->BasicSearch->setKeyword(@$filter[EW_TABLE_BASIC_SEARCH]);
 		$this->BasicSearch->setType(@$filter[EW_TABLE_BASIC_SEARCH_TYPE]);
 	}
@@ -922,6 +940,7 @@ class cadcview_list extends cadcview {
 		$this->BuildBasicSearchSQL($sWhere, $this->officelicense, $arKeywords, $type);
 		$this->BuildBasicSearchSQL($sWhere, $this->operatingsystem, $arKeywords, $type);
 		$this->BuildBasicSearchSQL($sWhere, $this->remarks, $arKeywords, $type);
+		$this->BuildBasicSearchSQL($sWhere, $this->serialcode, $arKeywords, $type);
 		return $sWhere;
 	}
 
@@ -1101,6 +1120,8 @@ class cadcview_list extends cadcview {
 			$this->UpdateSort($this->officelicense); // officelicense
 			$this->UpdateSort($this->operatingsystem); // operatingsystem
 			$this->UpdateSort($this->datereceived); // datereceived
+			$this->UpdateSort($this->serialcode); // serialcode
+			$this->UpdateSort($this->latestupdate); // latestupdate
 			$this->setStartRecordNumber(1); // Reset start position
 		}
 	}
@@ -1148,6 +1169,8 @@ class cadcview_list extends cadcview {
 				$this->officelicense->setSort("");
 				$this->operatingsystem->setSort("");
 				$this->datereceived->setSort("");
+				$this->serialcode->setSort("");
+				$this->latestupdate->setSort("");
 			}
 
 			// Reset start position
@@ -1545,6 +1568,8 @@ class cadcview_list extends cadcview {
 		$this->operatingsystem->setDbValue($rs->fields('operatingsystem'));
 		$this->remarks->setDbValue($rs->fields('remarks'));
 		$this->datereceived->setDbValue($rs->fields('datereceived'));
+		$this->serialcode->setDbValue($rs->fields('serialcode'));
+		$this->latestupdate->setDbValue($rs->fields('latestupdate'));
 	}
 
 	// Load DbValue from recordset
@@ -1567,6 +1592,8 @@ class cadcview_list extends cadcview {
 		$this->operatingsystem->DbValue = $row['operatingsystem'];
 		$this->remarks->DbValue = $row['remarks'];
 		$this->datereceived->DbValue = $row['datereceived'];
+		$this->serialcode->DbValue = $row['serialcode'];
+		$this->latestupdate->DbValue = $row['latestupdate'];
 	}
 
 	// Load old record
@@ -1620,6 +1647,8 @@ class cadcview_list extends cadcview {
 		// operatingsystem
 		// remarks
 		// datereceived
+		// serialcode
+		// latestupdate
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
@@ -1687,6 +1716,15 @@ class cadcview_list extends cadcview {
 		$this->datereceived->ViewValue = $this->datereceived->CurrentValue;
 		$this->datereceived->ViewValue = ew_FormatDateTime($this->datereceived->ViewValue, 7);
 		$this->datereceived->ViewCustomAttributes = "";
+
+		// serialcode
+		$this->serialcode->ViewValue = $this->serialcode->CurrentValue;
+		$this->serialcode->ViewCustomAttributes = "";
+
+		// latestupdate
+		$this->latestupdate->ViewValue = $this->latestupdate->CurrentValue;
+		$this->latestupdate->ViewValue = ew_FormatDateTime($this->latestupdate->ViewValue, 7);
+		$this->latestupdate->ViewCustomAttributes = "";
 
 			// no
 			$this->no->LinkCustomAttributes = "";
@@ -1762,6 +1800,17 @@ class cadcview_list extends cadcview {
 			$this->datereceived->LinkCustomAttributes = "";
 			$this->datereceived->HrefValue = "";
 			$this->datereceived->TooltipValue = "";
+
+			// serialcode
+			$this->serialcode->LinkCustomAttributes = "";
+			$this->serialcode->HrefValue = "";
+			$this->serialcode->TooltipValue = "";
+
+			// latestupdate
+			$this->latestupdate->LinkCustomAttributes = "";
+			$this->latestupdate->HrefValue = "";
+			$this->latestupdate->TooltipValue = "";
+
 		}
 
 		// Call Row Rendered event
@@ -2133,7 +2182,7 @@ class cadcview_list extends cadcview {
 	// ListOptions Rendered event
 	function ListOptions_Rendered() {
 
-		// Example: 
+		// Example:
 		//$this->ListOptions->Items["new"]->Body = "xxx";
 
 	}
@@ -2200,10 +2249,10 @@ var CurrentForm = fadcviewlist = new ew_Form("fadcviewlist", "list");
 fadcviewlist.FormKeyCountName = '<?php echo $adcview_list->FormKeyCountName ?>';
 
 // Form_CustomValidate event
-fadcviewlist.Form_CustomValidate = 
+fadcviewlist.Form_CustomValidate =
  function(fobj) { // DO NOT CHANGE THIS LINE!
 
- 	// Your custom validation code here, return false if invalid. 
+ 	// Your custom validation code here, return false if invalid.
  	return true;
  }
 
@@ -2211,7 +2260,7 @@ fadcviewlist.Form_CustomValidate =
 <?php if (EW_CLIENT_VALIDATE) { ?>
 fadcviewlist.ValidateRequired = true;
 <?php } else { ?>
-fadcviewlist.ValidateRequired = false; 
+fadcviewlist.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
@@ -2391,7 +2440,7 @@ $adcview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $adcview->no->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($adcview->no->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($adcview->no->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($adcview->assettag->Visible) { // assettag ?>
 	<?php if ($adcview->SortUrl($adcview->assettag) == "") { ?>
 		<th data-name="assettag"><div id="elh_adcview_assettag" class="adcview_assettag"><div class="ewTableHeaderCaption"><?php echo $adcview->assettag->FldCaption() ?></div></div></th>
@@ -2400,7 +2449,7 @@ $adcview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $adcview->assettag->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($adcview->assettag->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($adcview->assettag->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($adcview->servicetag->Visible) { // servicetag ?>
 	<?php if ($adcview->SortUrl($adcview->servicetag) == "") { ?>
 		<th data-name="servicetag"><div id="elh_adcview_servicetag" class="adcview_servicetag"><div class="ewTableHeaderCaption"><?php echo $adcview->servicetag->FldCaption() ?></div></div></th>
@@ -2409,7 +2458,7 @@ $adcview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $adcview->servicetag->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($adcview->servicetag->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($adcview->servicetag->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($adcview->ipaddress->Visible) { // ipaddress ?>
 	<?php if ($adcview->SortUrl($adcview->ipaddress) == "") { ?>
 		<th data-name="ipaddress"><div id="elh_adcview_ipaddress" class="adcview_ipaddress"><div class="ewTableHeaderCaption"><?php echo $adcview->ipaddress->FldCaption() ?></div></div></th>
@@ -2418,7 +2467,7 @@ $adcview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $adcview->ipaddress->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($adcview->ipaddress->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($adcview->ipaddress->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($adcview->employeeno->Visible) { // employeeno ?>
 	<?php if ($adcview->SortUrl($adcview->employeeno) == "") { ?>
 		<th data-name="employeeno"><div id="elh_adcview_employeeno" class="adcview_employeeno"><div class="ewTableHeaderCaption"><?php echo $adcview->employeeno->FldCaption() ?></div></div></th>
@@ -2427,7 +2476,7 @@ $adcview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $adcview->employeeno->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($adcview->employeeno->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($adcview->employeeno->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($adcview->employeename->Visible) { // employeename ?>
 	<?php if ($adcview->SortUrl($adcview->employeename) == "") { ?>
 		<th data-name="employeename"><div id="elh_adcview_employeename" class="adcview_employeename"><div class="ewTableHeaderCaption"><?php echo $adcview->employeename->FldCaption() ?></div></div></th>
@@ -2436,7 +2485,7 @@ $adcview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $adcview->employeename->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($adcview->employeename->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($adcview->employeename->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($adcview->company->Visible) { // company ?>
 	<?php if ($adcview->SortUrl($adcview->company) == "") { ?>
 		<th data-name="company"><div id="elh_adcview_company" class="adcview_company"><div class="ewTableHeaderCaption"><?php echo $adcview->company->FldCaption() ?></div></div></th>
@@ -2445,7 +2494,7 @@ $adcview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $adcview->company->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($adcview->company->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($adcview->company->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($adcview->department->Visible) { // department ?>
 	<?php if ($adcview->SortUrl($adcview->department) == "") { ?>
 		<th data-name="department"><div id="elh_adcview_department" class="adcview_department"><div class="ewTableHeaderCaption"><?php echo $adcview->department->FldCaption() ?></div></div></th>
@@ -2454,7 +2503,7 @@ $adcview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $adcview->department->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($adcview->department->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($adcview->department->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($adcview->type->Visible) { // type ?>
 	<?php if ($adcview->SortUrl($adcview->type) == "") { ?>
 		<th data-name="type"><div id="elh_adcview_type" class="adcview_type"><div class="ewTableHeaderCaption"><?php echo $adcview->type->FldCaption() ?></div></div></th>
@@ -2463,7 +2512,7 @@ $adcview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $adcview->type->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($adcview->type->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($adcview->type->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($adcview->model->Visible) { // model ?>
 	<?php if ($adcview->SortUrl($adcview->model) == "") { ?>
 		<th data-name="model"><div id="elh_adcview_model" class="adcview_model"><div class="ewTableHeaderCaption"><?php echo $adcview->model->FldCaption() ?></div></div></th>
@@ -2472,7 +2521,7 @@ $adcview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $adcview->model->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($adcview->model->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($adcview->model->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($adcview->location->Visible) { // location ?>
 	<?php if ($adcview->SortUrl($adcview->location) == "") { ?>
 		<th data-name="location"><div id="elh_adcview_location" class="adcview_location"><div class="ewTableHeaderCaption"><?php echo $adcview->location->FldCaption() ?></div></div></th>
@@ -2481,7 +2530,7 @@ $adcview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $adcview->location->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($adcview->location->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($adcview->location->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($adcview->alternateIP->Visible) { // alternateIP ?>
 	<?php if ($adcview->SortUrl($adcview->alternateIP) == "") { ?>
 		<th data-name="alternateIP"><div id="elh_adcview_alternateIP" class="adcview_alternateIP"><div class="ewTableHeaderCaption"><?php echo $adcview->alternateIP->FldCaption() ?></div></div></th>
@@ -2490,7 +2539,7 @@ $adcview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $adcview->alternateIP->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($adcview->alternateIP->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($adcview->alternateIP->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($adcview->officelicense->Visible) { // officelicense ?>
 	<?php if ($adcview->SortUrl($adcview->officelicense) == "") { ?>
 		<th data-name="officelicense"><div id="elh_adcview_officelicense" class="adcview_officelicense"><div class="ewTableHeaderCaption"><?php echo $adcview->officelicense->FldCaption() ?></div></div></th>
@@ -2499,7 +2548,7 @@ $adcview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $adcview->officelicense->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($adcview->officelicense->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($adcview->officelicense->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($adcview->operatingsystem->Visible) { // operatingsystem ?>
 	<?php if ($adcview->SortUrl($adcview->operatingsystem) == "") { ?>
 		<th data-name="operatingsystem"><div id="elh_adcview_operatingsystem" class="adcview_operatingsystem"><div class="ewTableHeaderCaption"><?php echo $adcview->operatingsystem->FldCaption() ?></div></div></th>
@@ -2508,7 +2557,7 @@ $adcview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $adcview->operatingsystem->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($adcview->operatingsystem->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($adcview->operatingsystem->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
 <?php if ($adcview->datereceived->Visible) { // datereceived ?>
 	<?php if ($adcview->SortUrl($adcview->datereceived) == "") { ?>
 		<th data-name="datereceived"><div id="elh_adcview_datereceived" class="adcview_datereceived"><div class="ewTableHeaderCaption"><?php echo $adcview->datereceived->FldCaption() ?></div></div></th>
@@ -2517,7 +2566,25 @@ $adcview_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $adcview->datereceived->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($adcview->datereceived->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($adcview->datereceived->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
-<?php } ?>		
+<?php } ?>
+<?php if ($adcview->serialcode->Visible) { // serialcode ?>
+	<?php if ($adcview->SortUrl($adcview->serialcode) == "") { ?>
+		<th data-name="serialcode"><div id="serialcode" class="serialcode"><div class="ewTableHeaderCaption"><?php echo $adcview->serialcode->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="serialcode"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $adcview->SortUrl($adcview->serialcode) ?>',1);"><div id="serialcode" class="serialcode">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $adcview->serialcode->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($adcview->serialcode->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($adcview->serialcode->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+        </div></div></th>
+	<?php } ?>
+<?php } ?>
+<?php if ($adcview->latestupdate->Visible) { // latestupdate ?>
+	<?php if ($adcview->SortUrl($adcview->latestupdate) == "") { ?>
+		<th data-name="latestupdate"><div id="elh_adcview_latestupdate" class="adcview_latestupdate"><div class="ewTableHeaderCaption"><?php echo $adcview->latestupdate->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="latestupdate"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $adcview->SortUrl($adcview->latestupdate) ?>',1);"><div id="elh_adcview_latestupdate" class="adcview_latestupdate">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $adcview->latestupdate->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($adcview->latestupdate->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($adcview->latestupdate->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+        </div></div></th>
+	<?php } ?>
+<?php } ?>
 <?php
 
 // Render list options (header, right)
@@ -2700,6 +2767,22 @@ $adcview_list->ListOptions->Render("body", "left", $adcview_list->RowCnt);
 <span id="el<?php echo $adcview_list->RowCnt ?>_adcview_datereceived" class="adcview_datereceived">
 <span<?php echo $adcview->datereceived->ViewAttributes() ?>>
 <?php echo $adcview->datereceived->ListViewValue() ?></span>
+</span>
+</td>
+	<?php } ?>
+	<?php if ($adcview->serialcode->Visible) { // serialcode ?>
+		<td data-name="serialcode"<?php echo $adcview->serialcode->CellAttributes() ?>>
+<span id="el<?php echo $adcview_list->RowCnt ?>serialcode" class="serialcode">
+<span<?php echo $adcview->serialcode->ViewAttributes() ?>>
+<?php echo $adcview->serialcode->ListViewValue() ?></span>
+</span>
+</td>
+	<?php } ?>
+	<?php if ($adcview->latestupdate->Visible) { // latestupdate ?>
+	<td data-name="latestupdate"<?php echo $adcview->latestupdate->CellAttributes() ?>>
+<span id="el<?php echo $adcview_list->RowCnt ?>_adcview_latestupdate" class="adcview_latestupdate">
+<span<?php echo $adcview->latestupdate->ViewAttributes() ?>>
+<?php echo $adcview->latestupdate->ListViewValue() ?></span>
 </span>
 </td>
 	<?php } ?>

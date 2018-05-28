@@ -30,6 +30,8 @@ class cAirod_Desktop extends cTableBase {
 	var $remarks;
 	var $officelicense;
 	var $datereceived;
+	var $serialcode;
+	var $latestupdate;
 
 	//
 	// Table class constructor
@@ -121,6 +123,17 @@ class cAirod_Desktop extends cTableBase {
 		$this->datereceived = new cField('Airod_Desktop', 'Airod Desktop', 'x_datereceived', 'datereceived', '`datereceived`', 'DATE_FORMAT(`datereceived`, \'%d-%m-%Y\')', 133, 7, FALSE, '`datereceived`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
 		$this->datereceived->FldDefaultErrMsg = str_replace("%s", "-", $Language->Phrase("IncorrectDateDMY"));
 		$this->fields['datereceived'] = &$this->datereceived;
+
+		// serialcode
+		$this->serialcode = new cField('Airod_Desktop', 'Airod Desktop', 'serialcode', 'serialcode', '`serialcode`', '`serialcode`', 200, -1, FALSE, '`serialcode`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->fields['serialcode'] = &$this->serialcode;
+
+		// latestupdate
+		$this->latestupdate = new cField('Airod_Desktop', 'Airod Desktop', 'x_latestupdate', 'latestupdate', '`latestupdate`', 'DATE_FORMAT(`latestupdate`, \'%d-%m-%Y\')', 133, 7, FALSE, '`latestupdate`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->latestupdate->FldDefaultErrMsg = str_replace("%s", "-", $Language->Phrase("IncorrectDateDMY"));
+		$this->fields['latestupdate'] = &$this->latestupdate;
+
+
 	}
 
 	// Report detail level SQL
@@ -386,14 +399,14 @@ class cAirod_Desktop extends cTableBase {
 	// Row Rendering event
 	function Row_Rendering() {
 
-		// Enter your code here	
+		// Enter your code here
 	}
 
 	// Row Rendered event
 	function Row_Rendered() {
 
 		// To view properties of field class, use:
-		//var_dump($this-><FieldName>); 
+		//var_dump($this-><FieldName>);
 
 	}
 
@@ -683,7 +696,7 @@ class cAirod_Desktop_report extends cAirod_Desktop {
 		$this->ExportOptions->TagClassName = "ewExportOption";
 	}
 
-	// 
+	//
 	//  Page_Init
 	//
 	function Page_Init() {
@@ -848,6 +861,8 @@ class cAirod_Desktop_report extends cAirod_Desktop {
 		// remarks
 		// officelicense
 		// datereceived
+		// serialcode
+		// latestupdate
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
@@ -919,6 +934,15 @@ class cAirod_Desktop_report extends cAirod_Desktop {
 		$this->datereceived->ViewValue = $this->datereceived->CurrentValue;
 		$this->datereceived->ViewValue = ew_FormatDateTime($this->datereceived->ViewValue, 7);
 		$this->datereceived->ViewCustomAttributes = "";
+
+		// serialcode
+		$this->serialcode->ViewValue = $this->serialcode->CurrentValue;
+		$this->serialcode->ViewCustomAttributes = "";
+
+		// latestupdate
+		$this->latestupdate->ViewValue = $this->latestupdate->CurrentValue;
+		$this->latestupdate->ViewValue = ew_FormatDateTime($this->latestupdate->ViewValue, 7);
+		$this->latestupdate->ViewCustomAttributes = "";
 
 			// assettag
 			$this->assettag->LinkCustomAttributes = "";
@@ -994,6 +1018,16 @@ class cAirod_Desktop_report extends cAirod_Desktop {
 			$this->datereceived->LinkCustomAttributes = "";
 			$this->datereceived->HrefValue = "";
 			$this->datereceived->TooltipValue = "";
+
+			// serialcode
+			$this->serialcode->LinkCustomAttributes = "";
+			$this->serialcode->HrefValue = "";
+			$this->serialcode->TooltipValue = "";
+
+			// latestupdate
+			$this->latestupdate->LinkCustomAttributes = "";
+			$this->latestupdate->HrefValue = "";
+			$this->latestupdate->TooltipValue = "";
 		}
 
 		// Call Row Rendered event
@@ -1239,6 +1273,8 @@ $Airod_Desktop_report->RecordExists = !$Airod_Desktop_report->Recordset->EOF;
 		<td class="ewGroupHeader"><?php echo $Airod_Desktop->remarks->FldCaption() ?></td>
 		<td class="ewGroupHeader"><?php echo $Airod_Desktop->officelicense->FldCaption() ?></td>
 		<td class="ewGroupHeader"><?php echo $Airod_Desktop->datereceived->FldCaption() ?></td>
+		<td class="ewGroupHeader"><?php echo $Airod_Desktop->serialcode->FldCaption() ?></td>
+		<td class="ewGroupHeader"><?php echo $Airod_Desktop->latestupdate->FldCaption() ?></td>
 	</tr>
 <?php
 	}
@@ -1257,8 +1293,9 @@ $Airod_Desktop_report->RecordExists = !$Airod_Desktop_report->Recordset->EOF;
 		$Airod_Desktop->alternateIP->setDbValue($Airod_Desktop_report->DetailRecordset->fields('alternateIP'));
 		$Airod_Desktop->operatingsystem->setDbValue($Airod_Desktop_report->DetailRecordset->fields('operatingsystem'));
 		$Airod_Desktop->remarks->setDbValue($Airod_Desktop_report->DetailRecordset->fields('remarks'));
-		$Airod_Desktop->officelicense->setDbValue($Airod_Desktop_report->DetailRecordset->fields('officelicense'));
 		$Airod_Desktop->datereceived->setDbValue($Airod_Desktop_report->DetailRecordset->fields('datereceived'));
+		$Airod_Desktop->serialcode->setDbValue($Airod_Desktop_report->DetailRecordset->fields('serialcode'));
+		$Airod_Desktop->latestupdate->setDbValue($Airod_Desktop_report->DetailRecordset->fields('latestupdate'));
 
 		// Render for view
 		$Airod_Desktop->RowType = EW_ROWTYPE_VIEW;
@@ -1325,6 +1362,14 @@ $Airod_Desktop_report->RecordExists = !$Airod_Desktop_report->Recordset->EOF;
 		<td<?php echo $Airod_Desktop->datereceived->CellAttributes() ?>>
 <span<?php echo $Airod_Desktop->datereceived->ViewAttributes() ?>>
 <?php echo $Airod_Desktop->datereceived->ViewValue ?></span>
+</td>
+		<td<?php echo $Airod_Desktop->serialcode->CellAttributes() ?>>
+<span<?php echo $Airod_Desktop->serialcode->ViewAttributes() ?>>
+<?php echo $Airod_Desktop->serialcode->ViewValue ?></span>
+</td>
+		<td<?php echo $Airod_Desktop->latestupdate->CellAttributes() ?>>
+<span<?php echo $Airod_Desktop->latestupdate->ViewAttributes() ?>>
+<?php echo $Airod_Desktop->latestupdate->ViewValue ?></span>
 </td>
 	</tr>
 <?php

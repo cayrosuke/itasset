@@ -252,7 +252,7 @@ class cassetmaster_edit extends cassetmaster {
 		}
 	}
 
-	// 
+	//
 	//  Page_Init
 	//
 	function Page_Init() {
@@ -354,7 +354,7 @@ class cassetmaster_edit extends cassetmaster {
 	var $DbMasterFilter;
 	var $DbDetailFilter;
 
-	// 
+	//
 	// Page main
 	//
 	function Page_Main() {
@@ -517,6 +517,13 @@ class cassetmaster_edit extends cassetmaster {
 			$this->datereceived->setFormValue($objForm->GetValue("x_datereceived"));
 			$this->datereceived->CurrentValue = ew_UnFormatDateTime($this->datereceived->CurrentValue, 7);
 		}
+		if (!$this->serialcode->FldIsDetailKey) {
+			$this->serialcode->setFormValue($objForm->GetValue("x_serialcode"));
+		}
+		if (!$this->latestupdate->FldIsDetailKey) {
+			$this->latestupdate->setFormValue($objForm->GetValue("x_latestupdate"));
+			$this->latestupdate->CurrentValue = ew_UnFormatDateTime($this->latestupdate->CurrentValue, 7);
+		}
 		if (!$this->no->FldIsDetailKey)
 			$this->no->setFormValue($objForm->GetValue("x_no"));
 	}
@@ -542,6 +549,10 @@ class cassetmaster_edit extends cassetmaster {
 		$this->officelicense->CurrentValue = $this->officelicense->FormValue;
 		$this->datereceived->CurrentValue = $this->datereceived->FormValue;
 		$this->datereceived->CurrentValue = ew_UnFormatDateTime($this->datereceived->CurrentValue, 7);
+		$this->serialcode->CurrentValue = $this->serialcode->FormValue;
+		$this->latestupdate->CurrentValue = $this->latestupdate->FormValue;
+		$this->latestupdate->CurrentValue = ew_UnFormatDateTime($this->latestupdate->CurrentValue, 7);
+
 	}
 
 	// Load row based on key values
@@ -589,6 +600,8 @@ class cassetmaster_edit extends cassetmaster {
 		$this->remarks->setDbValue($rs->fields('remarks'));
 		$this->officelicense->setDbValue($rs->fields('officelicense'));
 		$this->datereceived->setDbValue($rs->fields('datereceived'));
+		$this->serialcode->setDbValue($rs->fields('serialcode'));
+		$this->latestupdate->setDbValue($rs->fields('latestupdate'));
 	}
 
 	// Load DbValue from recordset
@@ -611,6 +624,8 @@ class cassetmaster_edit extends cassetmaster {
 		$this->remarks->DbValue = $row['remarks'];
 		$this->officelicense->DbValue = $row['officelicense'];
 		$this->datereceived->DbValue = $row['datereceived'];
+		$this->serialcode->DbValue = $row['serialcode'];
+		$this->latestupdate->DbValue = $row['latestupdate'];
 	}
 
 	// Render row values based on field settings
@@ -639,6 +654,8 @@ class cassetmaster_edit extends cassetmaster {
 		// remarks
 		// officelicense
 		// datereceived
+		// serialcode
+		// latestupdate
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
@@ -710,6 +727,15 @@ class cassetmaster_edit extends cassetmaster {
 		$this->datereceived->ViewValue = $this->datereceived->CurrentValue;
 		$this->datereceived->ViewValue = ew_FormatDateTime($this->datereceived->ViewValue, 7);
 		$this->datereceived->ViewCustomAttributes = "";
+
+		// serialcode
+		$this->serialcode->ViewValue = $this->serialcode->CurrentValue;
+		$this->serialcode->ViewCustomAttributes = "";
+
+		// latestupdate
+		$this->latestupdate->ViewValue = $this->latestupdate->CurrentValue;
+		$this->latestupdate->ViewValue = ew_FormatDateTime($this->latestupdate->ViewValue, 7);
+		$this->latestupdate->ViewCustomAttributes = "";
 
 			// assettag
 			$this->assettag->LinkCustomAttributes = "";
@@ -785,6 +811,16 @@ class cassetmaster_edit extends cassetmaster {
 			$this->datereceived->LinkCustomAttributes = "";
 			$this->datereceived->HrefValue = "";
 			$this->datereceived->TooltipValue = "";
+
+			// serialcode
+			$this->serialcode->LinkCustomAttributes = "";
+			$this->serialcode->HrefValue = "";
+			$this->serialcode->TooltipValue = "";
+
+			// latestupdate
+			$this->latestupdate->LinkCustomAttributes = "";
+			$this->latestupdate->HrefValue = "";
+			$this->latestupdate->TooltipValue = "";
 		} elseif ($this->RowType == EW_ROWTYPE_EDIT) { // Edit row
 
 			// assettag
@@ -875,6 +911,17 @@ class cassetmaster_edit extends cassetmaster {
 			$this->datereceived->EditValue = ew_HtmlEncode(ew_FormatDateTime($this->datereceived->CurrentValue, 7));
 			$this->datereceived->PlaceHolder = ew_RemoveHtml($this->datereceived->FldCaption());
 
+			// serialcode
+			$this->serialcode->LinkCustomAttributes = "";
+			$this->serialcode->HrefValue = "";
+			$this->serialcode->TooltipValue = "";
+
+			// latestupdate
+			$this->latestupdate->EditAttrs["class"] = "form-control";
+			$this->latestupdate->EditCustomAttributes = "";
+			$this->latestupdate->EditValue = ew_HtmlEncode(ew_FormatDateTime($this->latestupdate->CurrentValue, 7));
+			$this->latestupdate->PlaceHolder = ew_RemoveHtml($this->latestupdate->FldCaption());
+
 			// Edit refer script
 			// assettag
 
@@ -936,6 +983,15 @@ class cassetmaster_edit extends cassetmaster {
 			// datereceived
 			$this->datereceived->LinkCustomAttributes = "";
 			$this->datereceived->HrefValue = "";
+
+			// serialcode
+			$this->serialcode->LinkCustomAttributes = "";
+			$this->serialcode->HrefValue = "";
+
+			// latestupdate
+			$this->latestupdate->LinkCustomAttributes = "";
+			$this->latestupdate->HrefValue = "";
+
 		}
 		if ($this->RowType == EW_ROWTYPE_ADD ||
 			$this->RowType == EW_ROWTYPE_EDIT ||
@@ -1041,6 +1097,12 @@ class cassetmaster_edit extends cassetmaster {
 
 			// datereceived
 			$this->datereceived->SetDbValueDef($rsnew, ew_UnFormatDateTime($this->datereceived->CurrentValue, 7), NULL, $this->datereceived->ReadOnly);
+
+			// serialcode
+			$this->serialcode->SetDbValueDef($rsnew, $this->serialcode->CurrentValue, NULL, $this->serialcode->ReadOnly);
+
+			// latestupdate
+			$this->latestupdate->SetDbValueDef($rsnew, ew_UnFormatDateTime($this->latestupdate->CurrentValue, 7), NULL, $this->latestupdate->ReadOnly);
 
 			// Call Row Updating event
 			$bUpdateRow = $this->Row_Updating($rsold, $rsnew);
@@ -1213,10 +1275,10 @@ fassetmasteredit.Validate = function() {
 }
 
 // Form_CustomValidate event
-fassetmasteredit.Form_CustomValidate = 
+fassetmasteredit.Form_CustomValidate =
  function(fobj) { // DO NOT CHANGE THIS LINE!
 
- 	// Your custom validation code here, return false if invalid. 
+ 	// Your custom validation code here, return false if invalid.
  	return true;
  }
 
@@ -1224,7 +1286,7 @@ fassetmasteredit.Form_CustomValidate =
 <?php if (EW_CLIENT_VALIDATE) { ?>
 fassetmasteredit.ValidateRequired = true;
 <?php } else { ?>
-fassetmasteredit.ValidateRequired = false; 
+fassetmasteredit.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
@@ -1362,7 +1424,7 @@ if (is_array($assetmaster->company->EditValue)) {
 	$emptywrk = TRUE;
 	for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
 		$selwrk = ew_SameStr($assetmaster->company->CurrentValue, $arwrk[$rowcntwrk][0]) ? " selected" : "";
-		if ($selwrk <> "") $emptywrk = FALSE;		
+		if ($selwrk <> "") $emptywrk = FALSE;
 ?>
 <option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
 <?php echo $assetmaster->company->DisplayValue($arwrk[$rowcntwrk]) ?>
@@ -1406,6 +1468,7 @@ if (is_array($assetmaster->company->EditValue)) {
 <?php echo $assetmaster->department->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
+
 <?php if ($assetmaster->type->Visible) { // type ?>
 	<div id="r_type" class="form-group">
 		<label id="elh_assetmaster_type" for="x_type" class="col-sm-2 control-label ewLabel"><?php echo $assetmaster->type->FldCaption() ?></label>
@@ -1420,7 +1483,7 @@ if (is_array($assetmaster->type->EditValue)) {
 	$emptywrk = TRUE;
 	for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
 		$selwrk = ew_SameStr($assetmaster->type->CurrentValue, $arwrk[$rowcntwrk][0]) ? " selected" : "";
-		if ($selwrk <> "") $emptywrk = FALSE;		
+		if ($selwrk <> "") $emptywrk = FALSE;
 ?>
 <option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
 <?php echo $assetmaster->type->DisplayValue($arwrk[$rowcntwrk]) ?>
@@ -1446,6 +1509,7 @@ if (is_array($assetmaster->type->EditValue)) {
 <?php echo $assetmaster->type->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
+
 <?php if ($assetmaster->model->Visible) { // model ?>
 	<div id="r_model" class="form-group">
 		<label id="elh_assetmaster_model" for="x_model" class="col-sm-2 control-label ewLabel"><?php echo $assetmaster->model->FldCaption() ?></label>
@@ -1464,6 +1528,7 @@ if (is_array($assetmaster->type->EditValue)) {
 <?php echo $assetmaster->model->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
+
 <?php if ($assetmaster->location->Visible) { // location ?>
 	<div id="r_location" class="form-group">
 		<label id="elh_assetmaster_location" for="x_location" class="col-sm-2 control-label ewLabel"><?php echo $assetmaster->location->FldCaption() ?></label>
@@ -1482,6 +1547,7 @@ if (is_array($assetmaster->type->EditValue)) {
 <?php echo $assetmaster->location->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
+
 <?php if ($assetmaster->alternateIP->Visible) { // alternateIP ?>
 	<div id="r_alternateIP" class="form-group">
 		<label id="elh_assetmaster_alternateIP" for="x_alternateIP" class="col-sm-2 control-label ewLabel"><?php echo $assetmaster->alternateIP->FldCaption() ?></label>
@@ -1500,6 +1566,7 @@ if (is_array($assetmaster->type->EditValue)) {
 <?php echo $assetmaster->alternateIP->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
+
 <?php if ($assetmaster->operatingsystem->Visible) { // operatingsystem ?>
 	<div id="r_operatingsystem" class="form-group">
 		<label id="elh_assetmaster_operatingsystem" for="x_operatingsystem" class="col-sm-2 control-label ewLabel"><?php echo $assetmaster->operatingsystem->FldCaption() ?></label>
@@ -1518,6 +1585,7 @@ if (is_array($assetmaster->type->EditValue)) {
 <?php echo $assetmaster->operatingsystem->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
+
 <?php if ($assetmaster->remarks->Visible) { // remarks ?>
 	<div id="r_remarks" class="form-group">
 		<label id="elh_assetmaster_remarks" for="x_remarks" class="col-sm-2 control-label ewLabel"><?php echo $assetmaster->remarks->FldCaption() ?></label>
@@ -1536,6 +1604,7 @@ if (is_array($assetmaster->type->EditValue)) {
 <?php echo $assetmaster->remarks->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
+
 <?php if ($assetmaster->officelicense->Visible) { // officelicense ?>
 	<div id="r_officelicense" class="form-group">
 		<label id="elh_assetmaster_officelicense" for="x_officelicense" class="col-sm-2 control-label ewLabel"><?php echo $assetmaster->officelicense->FldCaption() ?></label>
@@ -1576,6 +1645,50 @@ ew_CreateCalendar("fassetmasteredit", "x_datereceived", "%d-%m-%Y");
 <?php } ?>
 <?php echo $assetmaster->datereceived->CustomMsg ?></div></div>
 	</div>
+<?php } ?>
+
+<?php if ($assetmaster->serialcode->Visible) { // serialcode ?>
+	<div id="r_serialcode" class="form-group">
+		<label id="elh_assetmaster_serialcode" for="x_serialcode" class="col-sm-2 control-label ewLabel"><?php echo $assetmaster->serialcode->FldCaption() ?></label>
+		<div class="col-sm-10"><div<?php echo $assetmaster->serialcode->CellAttributes() ?>>
+<?php if ($assetmaster->CurrentAction <> "F") { ?>
+<span id="el_assetmaster_serialcode">
+<input type="text" data-table="assetmaster" data-field="x_serialcode" name="x_serialcode" id="x_serialcode" size="30" maxlength="60" placeholder="<?php echo ew_HtmlEncode($assetmaster->serialcode->getPlaceHolder()) ?>" value="<?php echo $assetmaster->serialcode->EditValue ?>"<?php echo $assetmaster->serialcode->EditAttributes() ?>>
+</span>
+<?php } else { ?>
+<span id="el_assetmaster_serialcode">
+<span<?php echo $assetmaster->serialcode->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $assetmaster->serialcode->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-table="assetmaster" data-field="x_serialcode" name="x_serialcode" id="x_serialcode" value="<?php echo ew_HtmlEncode($assetmaster->serialcode->FormValue) ?>">
+<?php } ?>
+<?php echo $assetmaster->serialcode->CustomMsg ?></div></div>
+	</div>
+
+<?php } ?>
+<?php if ($assetmaster->latestupdate->Visible) { // latestupdate ?>
+	<div id="r_latestupdate" class="form-group">
+		<label id="elh_assetmaster_latestupdate" for="x_latestupdate" class="col-sm-2 control-label ewLabel"><?php echo $assetmaster->latestupdate->FldCaption() ?></label>
+		<div class="col-sm-10"><div<?php echo $assetmaster->latestupdate->CellAttributes() ?>>
+<?php if ($assetmaster->CurrentAction <> "F") { ?>
+<span id="el_assetmaster_latestupdate">
+<input type="text" data-table="assetmaster" data-field="x_latestupdate" data-format="7" name="x_latestupdate" id="x_latestupdate" placeholder="<?php echo ew_HtmlEncode($assetmaster->latestupdate->getPlaceHolder()) ?>" value="<?php echo $assetmaster->latestupdate->EditValue ?>"<?php echo $assetmaster->latestupdate->EditAttributes() ?>>
+<?php if (!$assetmaster->latestupdate->ReadOnly && !$assetmaster->latestupdate->Disabled && !isset($assetmaster->latestupdate->EditAttrs["readonly"]) && !isset($assetmaster->latestupdate->EditAttrs["disabled"])) { ?>
+<script type="text/javascript">
+ew_CreateCalendar("fassetmasteredit", "x_latestupdate", "%d-%m-%Y");
+</script>
+<?php } ?>
+</span>
+<?php } else { ?>
+<span id="el_assetmaster_latestupdate">
+<span<?php echo $assetmaster->latestupdate->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $assetmaster->latestupdate->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-table="assetmaster" data-field="x_latestupdate" name="x_latestupdate" id="x_latestupdate" value="<?php echo ew_HtmlEncode($assetmaster->latestupdate->FormValue) ?>">
+<?php } ?>
+<?php echo $assetmaster->latestupdate->CustomMsg ?></div></div>
+	</div>
+
 <?php } ?>
 </div>
 <input type="hidden" data-table="assetmaster" data-field="x_no" name="x_no" id="x_no" value="<?php echo ew_HtmlEncode($assetmaster->no->CurrentValue) ?>">

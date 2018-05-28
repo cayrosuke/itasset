@@ -252,7 +252,7 @@ class caaeview_search extends caaeview {
 		}
 	}
 
-	// 
+	//
 	//  Page_Init
 	//
 	function Page_Init() {
@@ -410,6 +410,8 @@ class caaeview_search extends caaeview {
 		$this->BuildSearchUrl($sSrchUrl, $this->location); // location
 		$this->BuildSearchUrl($sSrchUrl, $this->officelicense); // officelicense
 		$this->BuildSearchUrl($sSrchUrl, $this->datereceived); // datereceived
+		$this->BuildSearchUrl($sSrchUrl, $this->serialcode); // serialcode
+		$this->BuildSearchUrl($sSrchUrl, $this->latestupdate); // latestupdate
 		if ($sSrchUrl <> "") $sSrchUrl .= "&";
 		$sSrchUrl .= "cmd=search";
 		return $sSrchUrl;
@@ -522,6 +524,18 @@ class caaeview_search extends caaeview {
 		$this->datereceived->AdvancedSearch->SearchCondition = $objForm->GetValue("v_datereceived");
 		$this->datereceived->AdvancedSearch->SearchValue2 = ew_StripSlashes($objForm->GetValue("y_datereceived"));
 		$this->datereceived->AdvancedSearch->SearchOperator2 = $objForm->GetValue("w_datereceived");
+
+		// serialcode
+		$this->serialcode->AdvancedSearch->SearchValue = ew_StripSlashes($objForm->GetValue("x_serialcode"));
+		$this->serialcode->AdvancedSearch->SearchOperator = $objForm->GetValue("z_serialcode");
+
+		// latestupdate
+		$this->latestupdate->AdvancedSearch->SearchValue = ew_StripSlashes($objForm->GetValue("x_latestupdate"));
+		$this->latestupdate->AdvancedSearch->SearchOperator = $objForm->GetValue("z_latestupdate");
+		$this->latestupdate->AdvancedSearch->SearchCondition = $objForm->GetValue("v_latestupdate");
+		$this->latestupdate->AdvancedSearch->SearchValue2 = ew_StripSlashes($objForm->GetValue("y_latestupdate"));
+		$this->latestupdate->AdvancedSearch->SearchOperator2 = $objForm->GetValue("w_latestupdate");
+
 	}
 
 	// Render row values based on field settings
@@ -550,6 +564,8 @@ class caaeview_search extends caaeview {
 		// remarks
 		// officelicense
 		// datereceived
+		// serialcode
+		// latestupdate
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
@@ -614,6 +630,15 @@ class caaeview_search extends caaeview {
 		$this->datereceived->ViewValue = ew_FormatDateTime($this->datereceived->ViewValue, 7);
 		$this->datereceived->ViewCustomAttributes = "";
 
+		// serialcode
+		$this->serialcode->ViewValue = $this->serialcode->CurrentValue;
+		$this->serialcode->ViewCustomAttributes = "";
+
+		// latestupdate
+		$this->latestupdate->ViewValue = $this->latestupdate->CurrentValue;
+		$this->latestupdate->ViewValue = ew_FormatDateTime($this->latestupdate->ViewValue, 7);
+		$this->latestupdate->ViewCustomAttributes = "";
+
 			// assettag
 			$this->assettag->LinkCustomAttributes = "";
 			$this->assettag->HrefValue = "";
@@ -668,6 +693,16 @@ class caaeview_search extends caaeview {
 			$this->datereceived->LinkCustomAttributes = "";
 			$this->datereceived->HrefValue = "";
 			$this->datereceived->TooltipValue = "";
+
+			// serialcode
+			$this->serialcode->LinkCustomAttributes = "";
+			$this->serialcode->HrefValue = "";
+			$this->serialcode->TooltipValue = "";
+
+			// latestupdate
+			$this->latestupdate->LinkCustomAttributes = "";
+			$this->latestupdate->HrefValue = "";
+			$this->latestupdate->TooltipValue = "";
 		} elseif ($this->RowType == EW_ROWTYPE_SEARCH) { // Search row
 
 			// assettag
@@ -738,6 +773,23 @@ class caaeview_search extends caaeview {
 			$this->datereceived->EditCustomAttributes = "";
 			$this->datereceived->EditValue2 = ew_HtmlEncode(ew_FormatDateTime(ew_UnFormatDateTime($this->datereceived->AdvancedSearch->SearchValue2, 7), 7));
 			$this->datereceived->PlaceHolder = ew_RemoveHtml($this->datereceived->FldCaption());
+
+			// serialcode
+			$this->serialcode->EditAttrs["class"] = "form-control";
+			$this->serialcode->EditCustomAttributes = "";
+			$this->serialcode->EditValue = ew_HtmlEncode($this->serialcode->AdvancedSearch->SearchValue);
+			$this->serialcode->PlaceHolder = ew_RemoveHtml($this->serialcode->FldCaption());
+
+			// latestupdate
+			$this->latestupdate->EditAttrs["class"] = "form-control";
+			$this->latestupdate->EditCustomAttributes = "";
+			$this->latestupdate->EditValue = ew_HtmlEncode(ew_FormatDateTime(ew_UnFormatDateTime($this->latestupdate->AdvancedSearch->SearchValue, 7), 7));
+			$this->latestupdate->PlaceHolder = ew_RemoveHtml($this->latestupdate->FldCaption());
+			$this->latestupdate->EditAttrs["class"] = "form-control";
+			$this->latestupdate->EditCustomAttributes = "";
+			$this->latestupdate->EditValue2 = ew_HtmlEncode(ew_FormatDateTime(ew_UnFormatDateTime($this->latestupdate->AdvancedSearch->SearchValue2, 7), 7));
+			$this->latestupdate->PlaceHolder = ew_RemoveHtml($this->latestupdate->FldCaption());
+
 		}
 		if ($this->RowType == EW_ROWTYPE_ADD ||
 			$this->RowType == EW_ROWTYPE_EDIT ||
@@ -792,6 +844,8 @@ class caaeview_search extends caaeview {
 		$this->location->AdvancedSearch->Load();
 		$this->officelicense->AdvancedSearch->Load();
 		$this->datereceived->AdvancedSearch->Load();
+		$this->serialcode->AdvancedSearch->Load();
+		$this->latestupdate->AdvancedSearch->Load();
 	}
 
 	// Set up Breadcrumb
@@ -902,10 +956,10 @@ var CurrentForm = faaeviewsearch = new ew_Form("faaeviewsearch", "search");
 <?php } ?>
 
 // Form_CustomValidate event
-faaeviewsearch.Form_CustomValidate = 
+faaeviewsearch.Form_CustomValidate =
  function(fobj) { // DO NOT CHANGE THIS LINE!
 
- 	// Your custom validation code here, return false if invalid. 
+ 	// Your custom validation code here, return false if invalid.
  	return true;
  }
 
@@ -913,7 +967,7 @@ faaeviewsearch.Form_CustomValidate =
 <?php if (EW_CLIENT_VALIDATE) { ?>
 faaeviewsearch.ValidateRequired = true;
 <?php } else { ?>
-faaeviewsearch.ValidateRequired = false; 
+faaeviewsearch.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
@@ -965,7 +1019,7 @@ $aaeview_search->ShowMessage();
 <div>
 <?php if ($aaeview->assettag->Visible) { // assettag ?>
 	<div id="r_assettag" class="form-group">
-		<label for="x_assettag" class="<?php echo $aaeview_search->SearchLabelClass ?>"><span id="elh_aaeview_assettag"><?php echo $aaeview->assettag->FldCaption() ?></span>	
+		<label for="x_assettag" class="<?php echo $aaeview_search->SearchLabelClass ?>"><span id="elh_aaeview_assettag"><?php echo $aaeview->assettag->FldCaption() ?></span>
 		<p class="form-control-static ewSearchOperator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_assettag" id="z_assettag" value="="></p>
 		</label>
 		<div class="<?php echo $aaeview_search->SearchRightColumnClass ?>"><div<?php echo $aaeview->assettag->CellAttributes() ?>>
@@ -977,7 +1031,7 @@ $aaeview_search->ShowMessage();
 <?php } ?>
 <?php if ($aaeview->servicetag->Visible) { // servicetag ?>
 	<div id="r_servicetag" class="form-group">
-		<label for="x_servicetag" class="<?php echo $aaeview_search->SearchLabelClass ?>"><span id="elh_aaeview_servicetag"><?php echo $aaeview->servicetag->FldCaption() ?></span>	
+		<label for="x_servicetag" class="<?php echo $aaeview_search->SearchLabelClass ?>"><span id="elh_aaeview_servicetag"><?php echo $aaeview->servicetag->FldCaption() ?></span>
 		<p class="form-control-static ewSearchOperator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_servicetag" id="z_servicetag" value="="></p>
 		</label>
 		<div class="<?php echo $aaeview_search->SearchRightColumnClass ?>"><div<?php echo $aaeview->servicetag->CellAttributes() ?>>
@@ -989,7 +1043,7 @@ $aaeview_search->ShowMessage();
 <?php } ?>
 <?php if ($aaeview->ipaddress->Visible) { // ipaddress ?>
 	<div id="r_ipaddress" class="form-group">
-		<label for="x_ipaddress" class="<?php echo $aaeview_search->SearchLabelClass ?>"><span id="elh_aaeview_ipaddress"><?php echo $aaeview->ipaddress->FldCaption() ?></span>	
+		<label for="x_ipaddress" class="<?php echo $aaeview_search->SearchLabelClass ?>"><span id="elh_aaeview_ipaddress"><?php echo $aaeview->ipaddress->FldCaption() ?></span>
 		<p class="form-control-static ewSearchOperator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_ipaddress" id="z_ipaddress" value="="></p>
 		</label>
 		<div class="<?php echo $aaeview_search->SearchRightColumnClass ?>"><div<?php echo $aaeview->ipaddress->CellAttributes() ?>>
@@ -1001,7 +1055,7 @@ $aaeview_search->ShowMessage();
 <?php } ?>
 <?php if ($aaeview->employeeno->Visible) { // employeeno ?>
 	<div id="r_employeeno" class="form-group">
-		<label for="x_employeeno" class="<?php echo $aaeview_search->SearchLabelClass ?>"><span id="elh_aaeview_employeeno"><?php echo $aaeview->employeeno->FldCaption() ?></span>	
+		<label for="x_employeeno" class="<?php echo $aaeview_search->SearchLabelClass ?>"><span id="elh_aaeview_employeeno"><?php echo $aaeview->employeeno->FldCaption() ?></span>
 		<p class="form-control-static ewSearchOperator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_employeeno" id="z_employeeno" value="="></p>
 		</label>
 		<div class="<?php echo $aaeview_search->SearchRightColumnClass ?>"><div<?php echo $aaeview->employeeno->CellAttributes() ?>>
@@ -1013,7 +1067,7 @@ $aaeview_search->ShowMessage();
 <?php } ?>
 <?php if ($aaeview->employeename->Visible) { // employeename ?>
 	<div id="r_employeename" class="form-group">
-		<label for="x_employeename" class="<?php echo $aaeview_search->SearchLabelClass ?>"><span id="elh_aaeview_employeename"><?php echo $aaeview->employeename->FldCaption() ?></span>	
+		<label for="x_employeename" class="<?php echo $aaeview_search->SearchLabelClass ?>"><span id="elh_aaeview_employeename"><?php echo $aaeview->employeename->FldCaption() ?></span>
 		<p class="form-control-static ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_employeename" id="z_employeename" value="LIKE"></p>
 		</label>
 		<div class="<?php echo $aaeview_search->SearchRightColumnClass ?>"><div<?php echo $aaeview->employeename->CellAttributes() ?>>
@@ -1025,7 +1079,7 @@ $aaeview_search->ShowMessage();
 <?php } ?>
 <?php if ($aaeview->department->Visible) { // department ?>
 	<div id="r_department" class="form-group">
-		<label for="x_department" class="<?php echo $aaeview_search->SearchLabelClass ?>"><span id="elh_aaeview_department"><?php echo $aaeview->department->FldCaption() ?></span>	
+		<label for="x_department" class="<?php echo $aaeview_search->SearchLabelClass ?>"><span id="elh_aaeview_department"><?php echo $aaeview->department->FldCaption() ?></span>
 		<p class="form-control-static ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_department" id="z_department" value="LIKE"></p>
 		</label>
 		<div class="<?php echo $aaeview_search->SearchRightColumnClass ?>"><div<?php echo $aaeview->department->CellAttributes() ?>>
@@ -1037,7 +1091,7 @@ $aaeview_search->ShowMessage();
 <?php } ?>
 <?php if ($aaeview->type->Visible) { // type ?>
 	<div id="r_type" class="form-group">
-		<label for="x_type" class="<?php echo $aaeview_search->SearchLabelClass ?>"><span id="elh_aaeview_type"><?php echo $aaeview->type->FldCaption() ?></span>	
+		<label for="x_type" class="<?php echo $aaeview_search->SearchLabelClass ?>"><span id="elh_aaeview_type"><?php echo $aaeview->type->FldCaption() ?></span>
 		<p class="form-control-static ewSearchOperator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_type" id="z_type" value="="></p>
 		</label>
 		<div class="<?php echo $aaeview_search->SearchRightColumnClass ?>"><div<?php echo $aaeview->type->CellAttributes() ?>>
@@ -1050,7 +1104,7 @@ if (is_array($aaeview->type->EditValue)) {
 	$emptywrk = TRUE;
 	for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
 		$selwrk = ew_SameStr($aaeview->type->AdvancedSearch->SearchValue, $arwrk[$rowcntwrk][0]) ? " selected" : "";
-		if ($selwrk <> "") $emptywrk = FALSE;		
+		if ($selwrk <> "") $emptywrk = FALSE;
 ?>
 <option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
 <?php echo $aaeview->type->DisplayValue($arwrk[$rowcntwrk]) ?>
@@ -1071,7 +1125,7 @@ if (is_array($aaeview->type->EditValue)) {
 <?php } ?>
 <?php if ($aaeview->model->Visible) { // model ?>
 	<div id="r_model" class="form-group">
-		<label for="x_model" class="<?php echo $aaeview_search->SearchLabelClass ?>"><span id="elh_aaeview_model"><?php echo $aaeview->model->FldCaption() ?></span>	
+		<label for="x_model" class="<?php echo $aaeview_search->SearchLabelClass ?>"><span id="elh_aaeview_model"><?php echo $aaeview->model->FldCaption() ?></span>
 		<p class="form-control-static ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_model" id="z_model" value="LIKE"></p>
 		</label>
 		<div class="<?php echo $aaeview_search->SearchRightColumnClass ?>"><div<?php echo $aaeview->model->CellAttributes() ?>>
@@ -1083,7 +1137,7 @@ if (is_array($aaeview->type->EditValue)) {
 <?php } ?>
 <?php if ($aaeview->location->Visible) { // location ?>
 	<div id="r_location" class="form-group">
-		<label for="x_location" class="<?php echo $aaeview_search->SearchLabelClass ?>"><span id="elh_aaeview_location"><?php echo $aaeview->location->FldCaption() ?></span>	
+		<label for="x_location" class="<?php echo $aaeview_search->SearchLabelClass ?>"><span id="elh_aaeview_location"><?php echo $aaeview->location->FldCaption() ?></span>
 		<p class="form-control-static ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_location" id="z_location" value="LIKE"></p>
 		</label>
 		<div class="<?php echo $aaeview_search->SearchRightColumnClass ?>"><div<?php echo $aaeview->location->CellAttributes() ?>>
@@ -1095,7 +1149,7 @@ if (is_array($aaeview->type->EditValue)) {
 <?php } ?>
 <?php if ($aaeview->officelicense->Visible) { // officelicense ?>
 	<div id="r_officelicense" class="form-group">
-		<label for="x_officelicense" class="<?php echo $aaeview_search->SearchLabelClass ?>"><span id="elh_aaeview_officelicense"><?php echo $aaeview->officelicense->FldCaption() ?></span>	
+		<label for="x_officelicense" class="<?php echo $aaeview_search->SearchLabelClass ?>"><span id="elh_aaeview_officelicense"><?php echo $aaeview->officelicense->FldCaption() ?></span>
 		<p class="form-control-static ewSearchOperator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_officelicense" id="z_officelicense" value="="></p>
 		</label>
 		<div class="<?php echo $aaeview_search->SearchRightColumnClass ?>"><div<?php echo $aaeview->officelicense->CellAttributes() ?>>
@@ -1107,7 +1161,7 @@ if (is_array($aaeview->type->EditValue)) {
 <?php } ?>
 <?php if ($aaeview->datereceived->Visible) { // datereceived ?>
 	<div id="r_datereceived" class="form-group">
-		<label for="x_datereceived" class="<?php echo $aaeview_search->SearchLabelClass ?>"><span id="elh_aaeview_datereceived"><?php echo $aaeview->datereceived->FldCaption() ?></span>	
+		<label for="x_datereceived" class="<?php echo $aaeview_search->SearchLabelClass ?>"><span id="elh_aaeview_datereceived"><?php echo $aaeview->datereceived->FldCaption() ?></span>
 		<p class="form-control-static ewSearchOperator"><?php echo $Language->Phrase("BETWEEN") ?><input type="hidden" name="z_datereceived" id="z_datereceived" value="BETWEEN"></p>
 		</label>
 		<div class="<?php echo $aaeview_search->SearchRightColumnClass ?>"><div<?php echo $aaeview->datereceived->CellAttributes() ?>>
@@ -1125,6 +1179,44 @@ ew_CreateCalendar("faaeviewsearch", "x_datereceived", "%d-%m-%Y");
 <?php if (!$aaeview->datereceived->ReadOnly && !$aaeview->datereceived->Disabled && !isset($aaeview->datereceived->EditAttrs["readonly"]) && !isset($aaeview->datereceived->EditAttrs["disabled"])) { ?>
 <script type="text/javascript">
 ew_CreateCalendar("faaeviewsearch", "y_datereceived", "%d-%m-%Y");
+</script>
+<?php } ?>
+</span>
+		</div></div>
+	</div>
+<?php } ?>
+<?php if ($aaeview->serialcode->Visible) { // serialcode ?>
+	<div id="r_serialcode" class="form-group">
+		<label for="x_serialcode" class="<?php echo $aaeview_search->SearchLabelClass ?>"><span id="elh_aaeview_serialcode"><?php echo $aaeview->serialcode->FldCaption() ?></span>
+		<p class="form-control-static ewSearchOperator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_serialcode" id="z_serialcode" value="="></p>
+		</label>
+		<div class="<?php echo $aaeview_search->SearchRightColumnClass ?>"><div<?php echo $aaeview->serialcode->CellAttributes() ?>>
+			<span id="el_aaeview_serialcode">
+<input type="text" data-table="aaeview" data-field="x_serialcode" name="x_serialcode" id="x_serialcode" size="30" maxlength="60" placeholder="<?php echo ew_HtmlEncode($aaeview->serialcode->getPlaceHolder()) ?>" value="<?php echo $aaeview->serialcode->EditValue ?>"<?php echo $aaeview->serialcode->EditAttributes() ?>>
+</span>
+		</div></div>
+	</div>
+<?php } ?>
+<?php if ($aaeview->latestupdate->Visible) { // latestupdate ?>
+	<div id="r_latestupdate" class="form-group">
+		<label for="x_latestupdate" class="<?php echo $aaeview_search->SearchLabelClass ?>"><span id="elh_aaeview_latestupdate"><?php echo $aaeview->latestupdate->FldCaption() ?></span>
+		<p class="form-control-static ewSearchOperator"><?php echo $Language->Phrase("BETWEEN") ?><input type="hidden" name="z_latestupdate" id="z_latestupdate" value="BETWEEN"></p>
+		</label>
+		<div class="<?php echo $aaeview_search->SearchRightColumnClass ?>"><div<?php echo $aaeview->latestupdate->CellAttributes() ?>>
+			<span id="el_aaeview_latestupdate">
+<input type="text" data-table="aaeview" data-field="x_latestupdate" data-format="7" name="x_latestupdate" id="x_latestupdate" placeholder="<?php echo ew_HtmlEncode($aaeview->latestupdate->getPlaceHolder()) ?>" value="<?php echo $aaeview->latestupdate->EditValue ?>"<?php echo $aaeview->latestupdate->EditAttributes() ?>>
+<?php if (!$aaeview->latestupdate->ReadOnly && !$aaeview->latestupdate->Disabled && !isset($aaeview->latestupdate->EditAttrs["readonly"]) && !isset($aaeview->latestupdate->EditAttrs["disabled"])) { ?>
+<script type="text/javascript">
+ew_CreateCalendar("faaeviewsearch", "x_latestupdate", "%d-%m-%Y");
+</script>
+<?php } ?>
+</span>
+			<span class="ewSearchCond btw1_latestupdate">&nbsp;<?php echo $Language->Phrase("AND") ?>&nbsp;</span>
+			<span id="e2_aaeview_latestupdate" class="btw1_latestupdate">
+<input type="text" data-table="aaeview" data-field="x_latestupdate" data-format="7" name="y_latestupdate" id="y_latestupdate" placeholder="<?php echo ew_HtmlEncode($aaeview->latestupdate->getPlaceHolder()) ?>" value="<?php echo $aaeview->latestupdate->EditValue2 ?>"<?php echo $aaeview->latestupdate->EditAttributes() ?>>
+<?php if (!$aaeview->latestupdate->ReadOnly && !$aaeview->latestupdate->Disabled && !isset($aaeview->latestupdate->EditAttrs["readonly"]) && !isset($aaeview->latestupdate->EditAttrs["disabled"])) { ?>
+<script type="text/javascript">
+ew_CreateCalendar("faaeviewsearch", "y_latestupdate", "%d-%m-%Y");
 </script>
 <?php } ?>
 </span>
