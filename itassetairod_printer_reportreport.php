@@ -123,7 +123,7 @@ class cAirod_Printer_Report extends cTableBase {
 		$this->fields['datereceived'] = &$this->datereceived;
 
 		// serialcode
-		$this->serialcode = new cField('Airod_Printer_Report', 'Airod Printer Report', 'serialcode', 'serialcode', '`serialcode`', '`serialcode`', 200, -1, FALSE, '`serialcode`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->serialcode = new cField('Airod_Printer_Report', 'Airod Printer Report', 'x_serialcode', 'serialcode', '`serialcode`', '`serialcode`', 200, -1, FALSE, '`serialcode`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
 		$this->fields['serialcode'] = &$this->serialcode;
 
 		// latestupdate

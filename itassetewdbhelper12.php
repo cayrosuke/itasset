@@ -21,17 +21,24 @@ if (!function_exists('DbHelper')) {
 
 class citasset_db extends cDbHelper {
 
-	// Database connection info
-	//var $Host = '128.2.17.2';
-	//var $Port = 3306;
+
+	/* un-comment this for local db
 	var $Port = 3307;
 	var $Host = 'localhost';
 	var $Username = 'root';
 	var $Password ='';
 	var $DbName = 'itasset';
+	*/
 
-	// ADODB (Access/SQL Server)
-//	var $CodePage = 65001; // Code page
+	
+	// Online database connection info
+	var $Host = '128.2.17.2';
+	var $Port = 3306;
+	var $Username = 'IT';
+	var $Password ='123456';
+	var $DbName = 'itasset';
+	ADODB (Access/SQL Server)
+	var $CodePage = 65001; // Code page
 
 	// Database
 	var $StartQuote = "`";

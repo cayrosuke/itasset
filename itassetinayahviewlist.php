@@ -2780,7 +2780,7 @@ $inayahview_list->ListOptions->Render("body", "left", $inayahview_list->RowCnt);
 </td>
 <?php } ?>
 <?php if ($inayahview->latestupdate->Visible) { // latestupdate ?>
-	<td data-name="latestupdate"<?php echo $inayahview-latestupdated->CellAttributes() ?>>
+	<td data-name="latestupdate"<?php echo $inayahview->latestupdated->CellAttributes() ?>>
 <span id="el<?php echo $inayahview_list->RowCnt ?>_inayahview_latestupdate" class="inayahview_latestupdate">
 <span<?php echo $inayahview->latestupdate->ViewAttributes() ?>>
 <?php echo $inayahview->latestupdate->ListViewValue() ?></span>

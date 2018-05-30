@@ -128,10 +128,10 @@ class cInayah_Laptop_Report extends cTableBase {
 		$this->serialcode = new cField('Inayah_Laptop_Report', 'Inayah Laptop Report', 'x_serialcode', 'serialcode', '`serialcode`', '`serialcode`', 200, -1, FALSE, '`serialcode`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
 		$this->fields['serialcode'] = &$this->serialcode;
 
-		// $latestupdate
-		$this->$latestupdate = new cField('Inayah_Laptop_Report', 'Inayah Laptop Report', 'x_$latestupdate', '$latestupdate', '`$latestupdate`', 'DATE_FORMAT(`$latestupdate`, \'%d-%m-%Y\')', 133, 7, FALSE, '`$latestupdate`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
-		$this->$latestupdate->FldDefaultErrMsg = str_replace("%s", "-", $Language->Phrase("IncorrectDateDMY"));
-		$this->fields['$latestupdate'] = &$this->$latestupdate;
+		// latestupdate
+		$this->latestupdate = new cField('Inayah_Laptop_Report', 'Inayah Laptop Report', 'x_latestupdate', 'latestupdate', '`latestupdate`', 'DATE_FORMAT(`latestupdate`, \'%d-%m-%Y\')', 133, 7, FALSE, '`latestupdate`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->latestupdate->FldDefaultErrMsg = str_replace("%s", "-", $Language->Phrase("IncorrectDateDMY"));
+		$this->fields['latestupdate'] = &$this->latestupdate;
 	}
 
 	// Report detail level SQL

@@ -123,7 +123,7 @@ class cAIROD_All_Inventory_Report extends cTableBase {
 		$this->fields['datereceived'] = &$this->datereceived;
 
 		// serialcode
-		$this->serialcode = new cField('AIROD_All_Inventory_Report', 'AIROD All Inventory Report', 'serialcode', 'serialcode', '`serialcode`', '`serialcode`', 200, -1, FALSE, '`serialcode`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->serialcode = new cField('AIROD_All_Inventory_Report', 'AIROD All Inventory Report', 'x_serialcode', 'serialcode', '`serialcode`', '`serialcode`', 200, -1, FALSE, '`serialcode`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
 		$this->fields['serialcode'] = &$this->serialcode;
 
 		// latestupdate
@@ -1487,7 +1487,7 @@ while (!$AIROD_All_Inventory_Report_report->Recordset->EOF) {
 <span<?php echo $AIROD_All_Inventory_Report->serialcode->ViewAttributes() ?>>
 <?php echo $AIROD_All_Inventory_Report->serialcode->ViewValue ?></span>
 </td>
-<td<?php echo $AIROD_All_Inventory_Report->latestupdate->CellAttributes() ?>>
+	<td<?php echo $AIROD_All_Inventory_Report->latestupdate->CellAttributes() ?>>
 <span<?php echo $AIROD_All_Inventory_Report->latestupdate->ViewAttributes() ?>>
 <?php echo $AIROD_All_Inventory_Report->latestupdate->ViewValue ?></span>
 </td>

@@ -124,9 +124,9 @@ class cInayah_Switch_Report extends cTableBase {
 		$this->datereceived->FldDefaultErrMsg = str_replace("%s", "-", $Language->Phrase("IncorrectDateDMY"));
 		$this->fields['datereceived'] = &$this->datereceived;
 
-		// $serialcode
-		$this->$serialcode = new cField('Inayah_Switch_Report', 'Inayah Switch Report', 'x_$serialcode', '$serialcode', '`$serialcode`', '`$serialcode`', 200, -1, FALSE, '`$serialcode`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
-		$this->fields['$serialcode'] = &$this->$serialcode;
+		// serialcode
+		$this->serialcode = new cField('Inayah_Switch_Report', 'Inayah Switch Report', 'x_serialcode', 'serialcode', '`serialcode`', '`serialcode`', 200, -1, FALSE, '`serialcode`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->fields['serialcode'] = &$this->serialcode;
 
 		// latestupdate
 		$this->latestupdate = new cField('Inayah_Switch_Report', 'Inayah Switch Report', 'x_latestupdate', 'latestupdate', '`latestupdate`', 'DATE_FORMAT(`latestupdate`, \'%d-%m-%Y\')', 133, 7, FALSE, '`latestupdate`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');

@@ -1338,7 +1338,7 @@ $AAE_Storage_Report_report->RecordExists = !$AAE_Storage_Report_report->Recordse
 <span<?php echo $AAE_Storage_Report->datereceived->ViewAttributes() ?>>
 <?php echo $AAE_Storage_Report->datereceived->ViewValue ?></span>
 </td>
-<		td<?php echo $AAE_Storage_Report->serialcode->CellAttributes() ?>>
+		<td<?php echo $AAE_Storage_Report->serialcode->CellAttributes() ?>>
 <span<?php echo $AAE_Storage_Report->serialcode->ViewAttributes() ?>>
 <?php echo $AAE_Storage_Report->serialcode->ViewValue ?></span>
 </td>

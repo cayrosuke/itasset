@@ -50,8 +50,10 @@ if (!defined("EW_USE_ADODB"))
 	define("EW_USE_ADODB", FALSE, TRUE); // Use ADOdb
 if (!defined("EW_USE_MYSQLI"))
 	define('EW_USE_MYSQLI', extension_loaded("mysqli"), TRUE); // Use MySQLi
-//$EW_CONN["DB"] = array("conn" => NULL, "id" => "DB", "type" => "MYSQL", "host" => "128.2.17.2", "port" => 3306, "user" => "IT", "pass" => "123456", "db" => "itasset", "qs" => "`", "qe" => "`");
+$EW_CONN["DB"] = array("conn" => NULL, "id" => "DB", "type" => "MYSQL", "host" => "128.2.17.2", "port" => 3306, "user" => "IT", "pass" => "123456", "db" => "itasset", "qs" => "`", "qe" => "`");
+/*  un-comment this for local db
 $EW_CONN["DB"] = array("conn" => NULL, "id" => "DB", "type" => "MYSQL", "host" => "localhost", "port" => 3307, "user" => "root", "pass" => "", "db" => "itasset", "qs" => "`", "qe" => "`");
+*/
 $EW_CONN[0] = &$EW_CONN["DB"];
 
 // Set up database error function

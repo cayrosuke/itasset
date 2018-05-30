@@ -135,7 +135,8 @@ class cNadi_Inventory_Report extends cTableBase {
 	// Report group level SQL
 	var $_SqlGroupSelect = "";
 
-	function getSqlGroupSelect() { // Selec$latestupdate$this->_SqlGroupSelect <> "") ? $this->_SqlGroupSelect : "SELECT DISTINCT `type` FROM assetmaster";
+	function getSqlGroupSelect() { // Select
+		return ($this->_SqlGroupSelect <> "") ? $this->_SqlGroupSelect : "SELECT DISTINCT `type` FROM assetmaster";
 	}
 
 	function SqlGroupSelect() { // For backward compatibility

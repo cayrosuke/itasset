@@ -913,6 +913,10 @@ class cNadi_Printer_Report_report extends cNadi_Printer_Report {
 		$this->datereceived->ViewValue = ew_FormatDateTime($this->datereceived->ViewValue, 7);
 		$this->datereceived->ViewCustomAttributes = "";
 
+		// serialcode
+		$this->serialcode->ViewValue = $this->serialcode->CurrentValue;
+		$this->serialcode->ViewCustomAttributes = "";
+
 		// latestupdate
 		$this->latestupdate->ViewValue = $this->latestupdate->CurrentValue;
 		$this->latestupdate->ViewValue = ew_FormatDateTime($this->latestupdate->ViewValue, 7);
@@ -972,6 +976,11 @@ class cNadi_Printer_Report_report extends cNadi_Printer_Report {
 			$this->datereceived->LinkCustomAttributes = "";
 			$this->datereceived->HrefValue = "";
 			$this->datereceived->TooltipValue = "";
+
+			// serialcode
+			$this->serialcode->LinkCustomAttributes = "";
+			$this->serialcode->HrefValue = "";
+			$this->serialcode->TooltipValue = "";
 
 			// latestupdate
 			$this->latestupdate->LinkCustomAttributes = "";
@@ -1218,6 +1227,7 @@ $Nadi_Printer_Report_report->RecordExists = !$Nadi_Printer_Report_report->Record
 		<td class="ewGroupHeader"><?php echo $Nadi_Printer_Report->location->FldCaption() ?></td>
 		<td class="ewGroupHeader"><?php echo $Nadi_Printer_Report->remarks->FldCaption() ?></td>
 		<td class="ewGroupHeader"><?php echo $Nadi_Printer_Report->datereceived->FldCaption() ?></td>
+		<td class="ewGroupHeader"><?php echo $Nadi_Printer_Report->serialcode->FldCaption() ?></td>
 		<td class="ewGroupHeader"><?php echo $Nadi_Printer_Report->latestupdate->FldCaption() ?></td>
 	</tr>
 <?php
@@ -1235,6 +1245,7 @@ $Nadi_Printer_Report_report->RecordExists = !$Nadi_Printer_Report_report->Record
 		$Nadi_Printer_Report->location->setDbValue($Nadi_Printer_Report_report->DetailRecordset->fields('location'));
 		$Nadi_Printer_Report->remarks->setDbValue($Nadi_Printer_Report_report->DetailRecordset->fields('remarks'));
 		$Nadi_Printer_Report->datereceived->setDbValue($Nadi_Printer_Report_report->DetailRecordset->fields('datereceived'));
+		$Nadi_Printer_Report->serialcode->setDbValue($Nadi_Printer_Report_report->DetailRecordset->fields('serialcode'));
 		$Nadi_Printer_Report->latestupdate->setDbValue($Nadi_Printer_Report_report->DetailRecordset->fields('latestupdate'));
 
 		// Render for view
@@ -1286,6 +1297,10 @@ $Nadi_Printer_Report_report->RecordExists = !$Nadi_Printer_Report_report->Record
 		<td<?php echo $Nadi_Printer_Report->datereceived->CellAttributes() ?>>
 <span<?php echo $Nadi_Printer_Report->datereceived->ViewAttributes() ?>>
 <?php echo $Nadi_Printer_Report->datereceived->ViewValue ?></span>
+</td>
+		<td<?php echo $Nadi_Printer_Report->serialcode->CellAttributes() ?>>
+<span<?php echo $Nadi_Printer_Report->serialcode->ViewAttributes() ?>>
+<?php echo $Nadi_Printer_Report->serialcode->ViewValue ?></span>
 </td>
 	<td<?php echo $Nadi_Printer_Report->latestupdate->CellAttributes() ?>>
 <span<?php echo $Nadi_Printer_Report->latestupdate->ViewAttributes() ?>>

@@ -401,7 +401,6 @@ class cadcview_list extends cadcview {
 
 		// Setup export options
 		$this->SetupExportOptions();
-		$this->no->Visible = !$this->IsAddOrEdit();
 
 		// Global Page Loading event (in userfn*.php)
 		Page_Loading();
@@ -589,12 +588,18 @@ class cadcview_list extends cadcview {
 
 			// Get default search criteria
 			ew_AddFilter($this->DefaultSearchWhere, $this->BasicSearchWhere(TRUE));
+			ew_AddFilter($this->DefaultSearchWhere, $this->AdvancedSearchWhere(TRUE));
 
 			// Get basic search values
 			$this->LoadBasicSearchValues();
 
+			// Get and validate search values for advanced search
+			$this->LoadSearchValues(); // Get search values
+
 			// Restore filter list
 			$this->RestoreFilterList();
+			if (!$this->ValidateSearch())
+				$this->setFailureMessage($gsSearchError);
 
 			// Restore search parms from Session if not searching / reset / export
 			if (($this->Export <> "" || $this->Command <> "search" && $this->Command <> "reset" && $this->Command <> "resetall") && $this->CheckSearchParms())
@@ -609,6 +614,10 @@ class cadcview_list extends cadcview {
 			// Get basic search criteria
 			if ($gsSearchError == "")
 				$sSrchBasic = $this->BasicSearchWhere();
+
+			// Get search criteria for advanced search
+			if ($gsSearchError == "")
+				$sSrchAdvanced = $this->AdvancedSearchWhere();
 		}
 
 		// Restore display records
@@ -628,6 +637,11 @@ class cadcview_list extends cadcview {
 			$this->BasicSearch->LoadDefault();
 			if ($this->BasicSearch->Keyword != "")
 				$sSrchBasic = $this->BasicSearchWhere();
+
+			// Load advanced search from default
+			if ($this->LoadAdvancedSearchDefault()) {
+				$sSrchAdvanced = $this->AdvancedSearchWhere();
+			}
 		}
 
 		// Build search criteria
@@ -740,21 +754,15 @@ class cadcview_list extends cadcview {
 
 		// Initialize
 		$sFilterList = "";
-		$sFilterList = ew_Concat($sFilterList, $this->no->AdvancedSearch->ToJSON(), ","); // Field no
 		$sFilterList = ew_Concat($sFilterList, $this->assettag->AdvancedSearch->ToJSON(), ","); // Field assettag
 		$sFilterList = ew_Concat($sFilterList, $this->servicetag->AdvancedSearch->ToJSON(), ","); // Field servicetag
 		$sFilterList = ew_Concat($sFilterList, $this->ipaddress->AdvancedSearch->ToJSON(), ","); // Field ipaddress
 		$sFilterList = ew_Concat($sFilterList, $this->employeeno->AdvancedSearch->ToJSON(), ","); // Field employeeno
 		$sFilterList = ew_Concat($sFilterList, $this->employeename->AdvancedSearch->ToJSON(), ","); // Field employeename
-		$sFilterList = ew_Concat($sFilterList, $this->company->AdvancedSearch->ToJSON(), ","); // Field company
-		$sFilterList = ew_Concat($sFilterList, $this->department->AdvancedSearch->ToJSON(), ","); // Field department
 		$sFilterList = ew_Concat($sFilterList, $this->type->AdvancedSearch->ToJSON(), ","); // Field type
 		$sFilterList = ew_Concat($sFilterList, $this->model->AdvancedSearch->ToJSON(), ","); // Field model
 		$sFilterList = ew_Concat($sFilterList, $this->location->AdvancedSearch->ToJSON(), ","); // Field location
-		$sFilterList = ew_Concat($sFilterList, $this->alternateIP->AdvancedSearch->ToJSON(), ","); // Field alternateIP
-		$sFilterList = ew_Concat($sFilterList, $this->officelicense->AdvancedSearch->ToJSON(), ","); // Field officelicense
-		$sFilterList = ew_Concat($sFilterList, $this->operatingsystem->AdvancedSearch->ToJSON(), ","); // Field operatingsystem
-		$sFilterList = ew_Concat($sFilterList, $this->remarks->AdvancedSearch->ToJSON(), ","); // Field remarks
+		$sFilterList = ew_Concat($sFilterList, $this->serialcode->AdvancedSearch->ToJSON(), ","); // Field officelicense
 		$sFilterList = ew_Concat($sFilterList, $this->datereceived->AdvancedSearch->ToJSON(), ","); // Field datereceived
 		$sFilterList = ew_Concat($sFilterList, $this->serialcode->AdvancedSearch->ToJSON(), ","); // Field serialcode
 		$sFilterList = ew_Concat($sFilterList, $this->latestupdate->AdvancedSearch->ToJSON(), ","); // Field latestupdate
@@ -775,14 +783,6 @@ class cadcview_list extends cadcview {
 			return FALSE;
 		$filter = json_decode(ew_StripSlashes(@$_POST["filter"]), TRUE);
 		$this->Command = "search";
-
-		// Field no
-		$this->no->AdvancedSearch->SearchValue = @$filter["x_no"];
-		$this->no->AdvancedSearch->SearchOperator = @$filter["z_no"];
-		$this->no->AdvancedSearch->SearchCondition = @$filter["v_no"];
-		$this->no->AdvancedSearch->SearchValue2 = @$filter["y_no"];
-		$this->no->AdvancedSearch->SearchOperator2 = @$filter["w_no"];
-		$this->no->AdvancedSearch->Save();
 
 		// Field assettag
 		$this->assettag->AdvancedSearch->SearchValue = @$filter["x_assettag"];
@@ -824,22 +824,6 @@ class cadcview_list extends cadcview {
 		$this->employeename->AdvancedSearch->SearchOperator2 = @$filter["w_employeename"];
 		$this->employeename->AdvancedSearch->Save();
 
-		// Field company
-		$this->company->AdvancedSearch->SearchValue = @$filter["x_company"];
-		$this->company->AdvancedSearch->SearchOperator = @$filter["z_company"];
-		$this->company->AdvancedSearch->SearchCondition = @$filter["v_company"];
-		$this->company->AdvancedSearch->SearchValue2 = @$filter["y_company"];
-		$this->company->AdvancedSearch->SearchOperator2 = @$filter["w_company"];
-		$this->company->AdvancedSearch->Save();
-
-		// Field department
-		$this->department->AdvancedSearch->SearchValue = @$filter["x_department"];
-		$this->department->AdvancedSearch->SearchOperator = @$filter["z_department"];
-		$this->department->AdvancedSearch->SearchCondition = @$filter["v_department"];
-		$this->department->AdvancedSearch->SearchValue2 = @$filter["y_department"];
-		$this->department->AdvancedSearch->SearchOperator2 = @$filter["w_department"];
-		$this->department->AdvancedSearch->Save();
-
 		// Field type
 		$this->type->AdvancedSearch->SearchValue = @$filter["x_type"];
 		$this->type->AdvancedSearch->SearchOperator = @$filter["z_type"];
@@ -864,14 +848,6 @@ class cadcview_list extends cadcview {
 		$this->location->AdvancedSearch->SearchOperator2 = @$filter["w_location"];
 		$this->location->AdvancedSearch->Save();
 
-		// Field alternateIP
-		$this->alternateIP->AdvancedSearch->SearchValue = @$filter["x_alternateIP"];
-		$this->alternateIP->AdvancedSearch->SearchOperator = @$filter["z_alternateIP"];
-		$this->alternateIP->AdvancedSearch->SearchCondition = @$filter["v_alternateIP"];
-		$this->alternateIP->AdvancedSearch->SearchValue2 = @$filter["y_alternateIP"];
-		$this->alternateIP->AdvancedSearch->SearchOperator2 = @$filter["w_alternateIP"];
-		$this->alternateIP->AdvancedSearch->Save();
-
 		// Field officelicense
 		$this->officelicense->AdvancedSearch->SearchValue = @$filter["x_officelicense"];
 		$this->officelicense->AdvancedSearch->SearchOperator = @$filter["z_officelicense"];
@@ -879,22 +855,6 @@ class cadcview_list extends cadcview {
 		$this->officelicense->AdvancedSearch->SearchValue2 = @$filter["y_officelicense"];
 		$this->officelicense->AdvancedSearch->SearchOperator2 = @$filter["w_officelicense"];
 		$this->officelicense->AdvancedSearch->Save();
-
-		// Field operatingsystem
-		$this->operatingsystem->AdvancedSearch->SearchValue = @$filter["x_operatingsystem"];
-		$this->operatingsystem->AdvancedSearch->SearchOperator = @$filter["z_operatingsystem"];
-		$this->operatingsystem->AdvancedSearch->SearchCondition = @$filter["v_operatingsystem"];
-		$this->operatingsystem->AdvancedSearch->SearchValue2 = @$filter["y_operatingsystem"];
-		$this->operatingsystem->AdvancedSearch->SearchOperator2 = @$filter["w_operatingsystem"];
-		$this->operatingsystem->AdvancedSearch->Save();
-
-		// Field remarks
-		$this->remarks->AdvancedSearch->SearchValue = @$filter["x_remarks"];
-		$this->remarks->AdvancedSearch->SearchOperator = @$filter["z_remarks"];
-		$this->remarks->AdvancedSearch->SearchCondition = @$filter["v_remarks"];
-		$this->remarks->AdvancedSearch->SearchValue2 = @$filter["y_remarks"];
-		$this->remarks->AdvancedSearch->SearchOperator2 = @$filter["w_remarks"];
-		$this->remarks->AdvancedSearch->Save();
 
 		// Field datereceived
 		$this->datereceived->AdvancedSearch->SearchValue = @$filter["x_datereceived"];
@@ -923,6 +883,94 @@ class cadcview_list extends cadcview {
 		$this->BasicSearch->setType(@$filter[EW_TABLE_BASIC_SEARCH_TYPE]);
 	}
 
+	// Advanced search WHERE clause based on QueryString
+	function AdvancedSearchWhere($Default = FALSE) {
+		global $Security;
+		$sWhere = "";
+		if (!$Security->CanSearch()) return "";
+		$this->BuildSearchSql($sWhere, $this->assettag, $Default, FALSE); // assettag
+		$this->BuildSearchSql($sWhere, $this->servicetag, $Default, FALSE); // servicetag
+		$this->BuildSearchSql($sWhere, $this->ipaddress, $Default, FALSE); // ipaddress
+		$this->BuildSearchSql($sWhere, $this->employeeno, $Default, FALSE); // employeeno
+		$this->BuildSearchSql($sWhere, $this->employeename, $Default, FALSE); // employeename
+		$this->BuildSearchSql($sWhere, $this->type, $Default, FALSE); // type
+		$this->BuildSearchSql($sWhere, $this->model, $Default, FALSE); // model
+		$this->BuildSearchSql($sWhere, $this->location, $Default, FALSE); // location
+		$this->BuildSearchSql($sWhere, $this->officelicense, $Default, FALSE); // officelicense
+		$this->BuildSearchSql($sWhere, $this->datereceived, $Default, FALSE); // datereceived
+		$this->BuildSearchSql($sWhere, $this->serialcode, $Default, FALSE); // serialcode
+		$this->BuildSearchSql($sWhere, $this->latestupdate, $Default, FALSE); // latestupdate
+
+		// Set up search parm
+		if (!$Default && $sWhere <> "") {
+			$this->Command = "search";
+		}
+		if (!$Default && $this->Command == "search") {
+			$this->assettag->AdvancedSearch->Save(); // assettag
+			$this->servicetag->AdvancedSearch->Save(); // servicetag
+			$this->ipaddress->AdvancedSearch->Save(); // ipaddress
+			$this->employeeno->AdvancedSearch->Save(); // employeeno
+			$this->employeename->AdvancedSearch->Save(); // employeename
+			$this->type->AdvancedSearch->Save(); // type
+			$this->model->AdvancedSearch->Save(); // model
+			$this->location->AdvancedSearch->Save(); // location
+			$this->officelicense->AdvancedSearch->Save(); // officelicense
+			$this->datereceived->AdvancedSearch->Save(); // datereceived
+			$this->serialcode->AdvancedSearch->Save(); // serialcode
+			$this->latestupdate->AdvancedSearch->Save(); // latestupdate
+		}
+		return $sWhere;
+	}
+
+	// Build search SQL
+	function BuildSearchSql(&$Where, &$Fld, $Default, $MultiValue) {
+		$FldParm = substr($Fld->FldVar, 2);
+		$FldVal = ($Default) ? $Fld->AdvancedSearch->SearchValueDefault : $Fld->AdvancedSearch->SearchValue; // @$_GET["x_$FldParm"]
+		$FldOpr = ($Default) ? $Fld->AdvancedSearch->SearchOperatorDefault : $Fld->AdvancedSearch->SearchOperator; // @$_GET["z_$FldParm"]
+		$FldCond = ($Default) ? $Fld->AdvancedSearch->SearchConditionDefault : $Fld->AdvancedSearch->SearchCondition; // @$_GET["v_$FldParm"]
+		$FldVal2 = ($Default) ? $Fld->AdvancedSearch->SearchValue2Default : $Fld->AdvancedSearch->SearchValue2; // @$_GET["y_$FldParm"]
+		$FldOpr2 = ($Default) ? $Fld->AdvancedSearch->SearchOperator2Default : $Fld->AdvancedSearch->SearchOperator2; // @$_GET["w_$FldParm"]
+		$sWrk = "";
+
+		//$FldVal = ew_StripSlashes($FldVal);
+		if (is_array($FldVal)) $FldVal = implode(",", $FldVal);
+
+		//$FldVal2 = ew_StripSlashes($FldVal2);
+		if (is_array($FldVal2)) $FldVal2 = implode(",", $FldVal2);
+		$FldOpr = strtoupper(trim($FldOpr));
+		if ($FldOpr == "") $FldOpr = "=";
+		$FldOpr2 = strtoupper(trim($FldOpr2));
+		if ($FldOpr2 == "") $FldOpr2 = "=";
+		if (EW_SEARCH_MULTI_VALUE_OPTION == 1 || $FldOpr <> "LIKE" ||
+			($FldOpr2 <> "LIKE" && $FldVal2 <> ""))
+			$MultiValue = FALSE;
+		if ($MultiValue) {
+			$sWrk1 = ($FldVal <> "") ? ew_GetMultiSearchSql($Fld, $FldOpr, $FldVal, $this->DBID) : ""; // Field value 1
+			$sWrk2 = ($FldVal2 <> "") ? ew_GetMultiSearchSql($Fld, $FldOpr2, $FldVal2, $this->DBID) : ""; // Field value 2
+			$sWrk = $sWrk1; // Build final SQL
+			if ($sWrk2 <> "")
+				$sWrk = ($sWrk <> "") ? "($sWrk) $FldCond ($sWrk2)" : $sWrk2;
+		} else {
+			$FldVal = $this->ConvertSearchValue($Fld, $FldVal);
+			$FldVal2 = $this->ConvertSearchValue($Fld, $FldVal2);
+			$sWrk = ew_GetSearchSql($Fld, $FldVal, $FldOpr, $FldCond, $FldVal2, $FldOpr2, $this->DBID);
+		}
+		ew_AddFilter($Where, $sWrk);
+	}
+
+	// Convert search value
+	function ConvertSearchValue(&$Fld, $FldVal) {
+		if ($FldVal == EW_NULL_VALUE || $FldVal == EW_NOT_NULL_VALUE)
+			return $FldVal;
+		$Value = $FldVal;
+		if ($Fld->FldDataType == EW_DATATYPE_BOOLEAN) {
+			if ($FldVal <> "") $Value = ($FldVal == "1" || strtolower(strval($FldVal)) == "y" || strtolower(strval($FldVal)) == "t") ? $Fld->TrueValue : $Fld->FalseValue;
+		} elseif ($Fld->FldDataType == EW_DATATYPE_DATE) {
+			if ($FldVal <> "") $Value = ew_UnFormatDateTime($FldVal, $Fld->FldDateTimeFormat);
+		}
+		return $Value;
+	}
+
 	// Return basic search SQL
 	function BasicSearchSQL($arKeywords, $type) {
 		$sWhere = "";
@@ -937,10 +985,9 @@ class cadcview_list extends cadcview {
 		$this->BuildBasicSearchSQL($sWhere, $this->model, $arKeywords, $type);
 		$this->BuildBasicSearchSQL($sWhere, $this->location, $arKeywords, $type);
 		$this->BuildBasicSearchSQL($sWhere, $this->alternateIP, $arKeywords, $type);
-		$this->BuildBasicSearchSQL($sWhere, $this->officelicense, $arKeywords, $type);
 		$this->BuildBasicSearchSQL($sWhere, $this->operatingsystem, $arKeywords, $type);
 		$this->BuildBasicSearchSQL($sWhere, $this->remarks, $arKeywords, $type);
-		$this->BuildBasicSearchSQL($sWhere, $this->serialcode, $arKeywords, $type);
+		$this->BuildBasicSearchSQL($sWhere, $this->officelicense, $arKeywords, $type);
 		return $sWhere;
 	}
 
@@ -1066,6 +1113,29 @@ class cadcview_list extends cadcview {
 		// Check basic search
 		if ($this->BasicSearch->IssetSession())
 			return TRUE;
+		if ($this->assettag->AdvancedSearch->IssetSession())
+			return TRUE;
+		if ($this->servicetag->AdvancedSearch->IssetSession())
+			return TRUE;
+		if ($this->ipaddress->AdvancedSearch->IssetSession())
+			return TRUE;
+		if ($this->employeeno->AdvancedSearch->IssetSession())
+			return TRUE;
+		if ($this->employeename->AdvancedSearch->IssetSession())
+			return TRUE;
+		if ($this->type->AdvancedSearch->IssetSession())
+			return TRUE;
+		if ($this->model->AdvancedSearch->IssetSession())
+			return TRUE;
+		if ($this->location->AdvancedSearch->IssetSession())
+			return TRUE;
+		if ($this->officelicense->AdvancedSearch->IssetSession())
+			return TRUE;
+		if ($this->datereceived->AdvancedSearch->IssetSession())
+			return TRUE;
+			if ($this->serialcode->AdvancedSearch->IssetSession())
+				return TRUE;
+			if ($this->latestupdate->AdvancedSearch->IssetSession())
 		return FALSE;
 	}
 
@@ -1078,6 +1148,9 @@ class cadcview_list extends cadcview {
 
 		// Clear basic search parameters
 		$this->ResetBasicSearchParms();
+
+		// Clear advanced search parameters
+		$this->ResetAdvancedSearchParms();
 	}
 
 	// Load advanced search default values
@@ -1090,12 +1163,42 @@ class cadcview_list extends cadcview {
 		$this->BasicSearch->UnsetSession();
 	}
 
+	// Clear all advanced search parameters
+	function ResetAdvancedSearchParms() {
+		$this->assettag->AdvancedSearch->UnsetSession();
+		$this->servicetag->AdvancedSearch->UnsetSession();
+		$this->ipaddress->AdvancedSearch->UnsetSession();
+		$this->employeeno->AdvancedSearch->UnsetSession();
+		$this->employeename->AdvancedSearch->UnsetSession();
+		$this->type->AdvancedSearch->UnsetSession();
+		$this->model->AdvancedSearch->UnsetSession();
+		$this->location->AdvancedSearch->UnsetSession();
+		$this->officelicense->AdvancedSearch->UnsetSession();
+		$this->datereceived->AdvancedSearch->UnsetSession();
+		$this->serialcode->AdvancedSearch->UnsetSession();
+		$this->latestupdate->AdvancedSearch->UnsetSession();
+	}
+
 	// Restore all search parameters
 	function RestoreSearchParms() {
 		$this->RestoreSearch = TRUE;
 
 		// Restore basic search values
 		$this->BasicSearch->Load();
+
+		// Restore advanced search values
+		$this->assettag->AdvancedSearch->Load();
+		$this->servicetag->AdvancedSearch->Load();
+		$this->ipaddress->AdvancedSearch->Load();
+		$this->employeeno->AdvancedSearch->Load();
+		$this->employeename->AdvancedSearch->Load();
+		$this->type->AdvancedSearch->Load();
+		$this->model->AdvancedSearch->Load();
+		$this->location->AdvancedSearch->Load();
+		$this->officelicense->AdvancedSearch->Load();
+		$this->datereceived->AdvancedSearch->Load();
+		$this->serialcode->AdvancedSearch->Load();
+		$this->latestupdate->AdvancedSearch->Load();
 	}
 
 	// Set up sort parameters
@@ -1105,7 +1208,6 @@ class cadcview_list extends cadcview {
 		if (@$_GET["order"] <> "") {
 			$this->CurrentOrder = ew_StripSlashes(@$_GET["order"]);
 			$this->CurrentOrderType = @$_GET["ordertype"];
-			$this->UpdateSort($this->no); // no
 			$this->UpdateSort($this->assettag); // assettag
 			$this->UpdateSort($this->servicetag); // servicetag
 			$this->UpdateSort($this->ipaddress); // ipaddress
@@ -1117,8 +1219,8 @@ class cadcview_list extends cadcview {
 			$this->UpdateSort($this->model); // model
 			$this->UpdateSort($this->location); // location
 			$this->UpdateSort($this->alternateIP); // alternateIP
-			$this->UpdateSort($this->officelicense); // officelicense
 			$this->UpdateSort($this->operatingsystem); // operatingsystem
+			$this->UpdateSort($this->officelicense); // officelicense
 			$this->UpdateSort($this->datereceived); // datereceived
 			$this->UpdateSort($this->serialcode); // serialcode
 			$this->UpdateSort($this->latestupdate); // latestupdate
@@ -1154,7 +1256,6 @@ class cadcview_list extends cadcview {
 			if ($this->Command == "resetsort") {
 				$sOrderBy = "";
 				$this->setSessionOrderBy($sOrderBy);
-				$this->no->setSort("");
 				$this->assettag->setSort("");
 				$this->servicetag->setSort("");
 				$this->ipaddress->setSort("");
@@ -1166,8 +1267,8 @@ class cadcview_list extends cadcview {
 				$this->model->setSort("");
 				$this->location->setSort("");
 				$this->alternateIP->setSort("");
-				$this->officelicense->setSort("");
 				$this->operatingsystem->setSort("");
+				$this->officelicense->setSort("");
 				$this->datereceived->setSort("");
 				$this->serialcode->setSort("");
 				$this->latestupdate->setSort("");
@@ -1425,6 +1526,14 @@ class cadcview_list extends cadcview {
 		$item->Body = "<a class=\"btn btn-default ewShowAll\" title=\"" . $Language->Phrase("ShowAll") . "\" data-caption=\"" . $Language->Phrase("ShowAll") . "\" href=\"" . $this->PageUrl() . "cmd=reset\">" . $Language->Phrase("ShowAllBtn") . "</a>";
 		$item->Visible = ($this->SearchWhere <> $this->DefaultSearchWhere && $this->SearchWhere <> "0=101");
 
+		// Advanced search button
+		$item = &$this->SearchOptions->Add("advancedsearch");
+		if (ew_IsMobile())
+			$item->Body = "<a class=\"btn btn-default ewAdvancedSearch\" title=\"" . $Language->Phrase("AdvancedSearch") . "\" data-caption=\"" . $Language->Phrase("AdvancedSearch") . "\" href=\"itassetadcviewsrch.php\">" . $Language->Phrase("AdvancedSearchBtn") . "</a>";
+		else
+			$item->Body = "<button type=\"button\" class=\"btn btn-default ewAdvancedSearch\" title=\"" . $Language->Phrase("AdvancedSearch") . "\" data-caption=\"" . $Language->Phrase("AdvancedSearch") . "\" onclick=\"ew_SearchDialogShow({lnk:this,url:'itassetadcviewsrch.php'});\">" . $Language->Phrase("AdvancedSearchBtn") . "</a>";
+		$item->Visible = TRUE;
+
 		// Button group for search
 		$this->SearchOptions->UseDropDownButton = FALSE;
 		$this->SearchOptions->UseImageAndText = TRUE;
@@ -1497,6 +1606,81 @@ class cadcview_list extends cadcview {
 		$this->BasicSearch->Type = @$_GET[EW_TABLE_BASIC_SEARCH_TYPE];
 	}
 
+	// Load search values for validation
+	function LoadSearchValues() {
+		global $objForm;
+
+		// Load search values
+		// assettag
+
+		$this->assettag->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_assettag"]);
+		if ($this->assettag->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->assettag->AdvancedSearch->SearchOperator = @$_GET["z_assettag"];
+
+		// servicetag
+		$this->servicetag->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_servicetag"]);
+		if ($this->servicetag->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->servicetag->AdvancedSearch->SearchOperator = @$_GET["z_servicetag"];
+
+		// ipaddress
+		$this->ipaddress->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_ipaddress"]);
+		if ($this->ipaddress->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->ipaddress->AdvancedSearch->SearchOperator = @$_GET["z_ipaddress"];
+
+		// employeeno
+		$this->employeeno->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_employeeno"]);
+		if ($this->employeeno->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->employeeno->AdvancedSearch->SearchOperator = @$_GET["z_employeeno"];
+
+		// employeename
+		$this->employeename->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_employeename"]);
+		if ($this->employeename->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->employeename->AdvancedSearch->SearchOperator = @$_GET["z_employeename"];
+
+		// type
+		$this->type->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_type"]);
+		if ($this->type->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->type->AdvancedSearch->SearchOperator = @$_GET["z_type"];
+
+		// model
+		$this->model->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_model"]);
+		if ($this->model->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->model->AdvancedSearch->SearchOperator = @$_GET["z_model"];
+
+		// location
+		$this->location->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_location"]);
+		if ($this->location->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->location->AdvancedSearch->SearchOperator = @$_GET["z_location"];
+
+		// officelicense
+		$this->officelicense->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_officelicense"]);
+		if ($this->officelicense->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->officelicense->AdvancedSearch->SearchOperator = @$_GET["z_officelicense"];
+
+		// datereceived
+		$this->datereceived->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_datereceived"]);
+		if ($this->datereceived->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->datereceived->AdvancedSearch->SearchOperator = @$_GET["z_datereceived"];
+		$this->datereceived->AdvancedSearch->SearchCondition = @$_GET["v_datereceived"];
+		$this->datereceived->AdvancedSearch->SearchValue2 = ew_StripSlashes(@$_GET["y_datereceived"]);
+		if ($this->datereceived->AdvancedSearch->SearchValue2 <> "") $this->Command = "search";
+		$this->datereceived->AdvancedSearch->SearchOperator2 = @$_GET["w_datereceived"];
+
+		// serialcode
+		$this->serialcode->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_serialcode"]);
+		if ($this->serialcode->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->serialcode->AdvancedSearch->SearchOperator = @$_GET["z_serialcode"];
+
+		// latestupdate
+		$this->latestupdate->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_latestupdate"]);
+		if ($this->latestupdate->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->latestupdate->AdvancedSearch->SearchOperator = @$_GET["z_latestupdate"];
+		$this->latestupdate->AdvancedSearch->SearchCondition = @$_GET["v_latestupdate"];
+		$this->latestupdate->AdvancedSearch->SearchValue2 = ew_StripSlashes(@$_GET["y_latestupdate"]);
+		if ($this->latestupdate->AdvancedSearch->SearchValue2 <> "") $this->Command = "search";
+		$this->latestupdate->AdvancedSearch->SearchOperator2 = @$_GET["w_latestupdate"];
+	}
+
 	// Load recordset
 	function LoadRecordset($offset = -1, $rowcnt = -1) {
 
@@ -1564,9 +1748,9 @@ class cadcview_list extends cadcview {
 		$this->model->setDbValue($rs->fields('model'));
 		$this->location->setDbValue($rs->fields('location'));
 		$this->alternateIP->setDbValue($rs->fields('alternateIP'));
-		$this->officelicense->setDbValue($rs->fields('officelicense'));
 		$this->operatingsystem->setDbValue($rs->fields('operatingsystem'));
 		$this->remarks->setDbValue($rs->fields('remarks'));
+		$this->officelicense->setDbValue($rs->fields('officelicense'));
 		$this->datereceived->setDbValue($rs->fields('datereceived'));
 		$this->serialcode->setDbValue($rs->fields('serialcode'));
 		$this->latestupdate->setDbValue($rs->fields('latestupdate'));
@@ -1588,9 +1772,9 @@ class cadcview_list extends cadcview {
 		$this->model->DbValue = $row['model'];
 		$this->location->DbValue = $row['location'];
 		$this->alternateIP->DbValue = $row['alternateIP'];
-		$this->officelicense->DbValue = $row['officelicense'];
 		$this->operatingsystem->DbValue = $row['operatingsystem'];
 		$this->remarks->DbValue = $row['remarks'];
+		$this->officelicense->DbValue = $row['officelicense'];
 		$this->datereceived->DbValue = $row['datereceived'];
 		$this->serialcode->DbValue = $row['serialcode'];
 		$this->latestupdate->DbValue = $row['latestupdate'];
@@ -1632,6 +1816,9 @@ class cadcview_list extends cadcview {
 
 		// Common render codes for all row types
 		// no
+
+		$this->no->CellCssStyle = "white-space: nowrap;";
+
 		// assettag
 		// servicetag
 		// ipaddress
@@ -1643,18 +1830,14 @@ class cadcview_list extends cadcview {
 		// model
 		// location
 		// alternateIP
-		// officelicense
 		// operatingsystem
 		// remarks
+		// officelicense
 		// datereceived
 		// serialcode
 		// latestupdate
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
-
-		// no
-		$this->no->ViewValue = $this->no->CurrentValue;
-		$this->no->ViewCustomAttributes = "";
 
 		// assettag
 		$this->assettag->ViewValue = $this->assettag->CurrentValue;
@@ -1677,11 +1860,7 @@ class cadcview_list extends cadcview {
 		$this->employeename->ViewCustomAttributes = "";
 
 		// company
-		if (strval($this->company->CurrentValue) <> "") {
-			$this->company->ViewValue = $this->company->OptionCaption($this->company->CurrentValue);
-		} else {
-			$this->company->ViewValue = NULL;
-		}
+		$this->company->ViewValue = $this->company->CurrentValue;
 		$this->company->ViewCustomAttributes = "";
 
 		// department
@@ -1689,7 +1868,11 @@ class cadcview_list extends cadcview {
 		$this->department->ViewCustomAttributes = "";
 
 		// type
-		$this->type->ViewValue = $this->type->CurrentValue;
+		if (strval($this->type->CurrentValue) <> "") {
+			$this->type->ViewValue = $this->type->OptionCaption($this->type->CurrentValue);
+		} else {
+			$this->type->ViewValue = NULL;
+		}
 		$this->type->ViewCustomAttributes = "";
 
 		// model
@@ -1704,13 +1887,13 @@ class cadcview_list extends cadcview {
 		$this->alternateIP->ViewValue = $this->alternateIP->CurrentValue;
 		$this->alternateIP->ViewCustomAttributes = "";
 
-		// officelicense
-		$this->officelicense->ViewValue = $this->officelicense->CurrentValue;
-		$this->officelicense->ViewCustomAttributes = "";
-
 		// operatingsystem
 		$this->operatingsystem->ViewValue = $this->operatingsystem->CurrentValue;
 		$this->operatingsystem->ViewCustomAttributes = "";
+
+		// officelicense
+		$this->officelicense->ViewValue = $this->officelicense->CurrentValue;
+		$this->officelicense->ViewCustomAttributes = "";
 
 		// datereceived
 		$this->datereceived->ViewValue = $this->datereceived->CurrentValue;
@@ -1725,11 +1908,6 @@ class cadcview_list extends cadcview {
 		$this->latestupdate->ViewValue = $this->latestupdate->CurrentValue;
 		$this->latestupdate->ViewValue = ew_FormatDateTime($this->latestupdate->ViewValue, 7);
 		$this->latestupdate->ViewCustomAttributes = "";
-
-			// no
-			$this->no->LinkCustomAttributes = "";
-			$this->no->HrefValue = "";
-			$this->no->TooltipValue = "";
 
 			// assettag
 			$this->assettag->LinkCustomAttributes = "";
@@ -1786,15 +1964,15 @@ class cadcview_list extends cadcview {
 			$this->alternateIP->HrefValue = "";
 			$this->alternateIP->TooltipValue = "";
 
-			// officelicense
-			$this->officelicense->LinkCustomAttributes = "";
-			$this->officelicense->HrefValue = "";
-			$this->officelicense->TooltipValue = "";
-
 			// operatingsystem
 			$this->operatingsystem->LinkCustomAttributes = "";
 			$this->operatingsystem->HrefValue = "";
 			$this->operatingsystem->TooltipValue = "";
+
+			// officelicense
+			$this->officelicense->LinkCustomAttributes = "";
+			$this->officelicense->HrefValue = "";
+			$this->officelicense->TooltipValue = "";
 
 			// datereceived
 			$this->datereceived->LinkCustomAttributes = "";
@@ -1810,12 +1988,50 @@ class cadcview_list extends cadcview {
 			$this->latestupdate->LinkCustomAttributes = "";
 			$this->latestupdate->HrefValue = "";
 			$this->latestupdate->TooltipValue = "";
-
 		}
 
 		// Call Row Rendered event
 		if ($this->RowType <> EW_ROWTYPE_AGGREGATEINIT)
 			$this->Row_Rendered();
+	}
+
+	// Validate search
+	function ValidateSearch() {
+		global $gsSearchError;
+
+		// Initialize
+		$gsSearchError = "";
+
+		// Check if validation required
+		if (!EW_SERVER_VALIDATE)
+			return TRUE;
+
+		// Return validate result
+		$ValidateSearch = ($gsSearchError == "");
+
+		// Call Form_CustomValidate event
+		$sFormCustomError = "";
+		$ValidateSearch = $ValidateSearch && $this->Form_CustomValidate($sFormCustomError);
+		if ($sFormCustomError <> "") {
+			ew_AddMessage($gsSearchError, $sFormCustomError);
+		}
+		return $ValidateSearch;
+	}
+
+	// Load advanced search
+	function LoadAdvancedSearch() {
+		$this->assettag->AdvancedSearch->Load();
+		$this->servicetag->AdvancedSearch->Load();
+		$this->ipaddress->AdvancedSearch->Load();
+		$this->employeeno->AdvancedSearch->Load();
+		$this->employeename->AdvancedSearch->Load();
+		$this->type->AdvancedSearch->Load();
+		$this->model->AdvancedSearch->Load();
+		$this->location->AdvancedSearch->Load();
+		$this->officelicense->AdvancedSearch->Load();
+		$this->datereceived->AdvancedSearch->Load();
+		$this->serialcode->AdvancedSearch->Load();
+		$this->latestupdate->AdvancedSearch->Load();
 	}
 
 	// Set up export options
@@ -2070,6 +2286,18 @@ class cadcview_list extends cadcview {
 		if ($this->BasicSearch->getKeyword() <> "") {
 			$sQry .= "&" . EW_TABLE_BASIC_SEARCH . "=" . urlencode($this->BasicSearch->getKeyword()) . "&" . EW_TABLE_BASIC_SEARCH_TYPE . "=" . urlencode($this->BasicSearch->getType());
 		}
+		$this->AddSearchQueryString($sQry, $this->assettag); // assettag
+		$this->AddSearchQueryString($sQry, $this->servicetag); // servicetag
+		$this->AddSearchQueryString($sQry, $this->ipaddress); // ipaddress
+		$this->AddSearchQueryString($sQry, $this->employeeno); // employeeno
+		$this->AddSearchQueryString($sQry, $this->employeename); // employeename
+		$this->AddSearchQueryString($sQry, $this->type); // type
+		$this->AddSearchQueryString($sQry, $this->model); // model
+		$this->AddSearchQueryString($sQry, $this->location); // location
+		$this->AddSearchQueryString($sQry, $this->officelicense); // officelicense
+		$this->AddSearchQueryString($sQry, $this->datereceived); // datereceived
+		$this->AddSearchQueryString($sQry, $this->serialcode); // serialcode
+		$this->AddSearchQueryString($sQry, $this->latestupdate); // latestupdate
 
 		// Build QueryString for pager
 		$sQry .= "&" . EW_TABLE_REC_PER_PAGE . "=" . urlencode($this->getRecordsPerPage()) . "&" . EW_TABLE_START_REC . "=" . urlencode($this->getStartRecordNumber());
@@ -2264,8 +2492,8 @@ fadcviewlist.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
-fadcviewlist.Lists["x_company"] = {"LinkField":"","Ajax":null,"AutoFill":false,"DisplayFields":["","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":""};
-fadcviewlist.Lists["x_company"].Options = <?php echo json_encode($adcview->company->Options()) ?>;
+fadcviewlist.Lists["x_type"] = {"LinkField":"","Ajax":null,"AutoFill":false,"DisplayFields":["","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":""};
+fadcviewlist.Lists["x_type"].Options = <?php echo json_encode($adcview->type->Options()) ?>;
 
 // Form object for search
 var CurrentSearchForm = fadcviewlistsrch = new ew_Form("fadcviewlistsrch");
@@ -2432,15 +2660,6 @@ $adcview_list->RenderListOptions();
 // Render list options (header, left)
 $adcview_list->ListOptions->Render("header", "left");
 ?>
-<?php if ($adcview->no->Visible) { // no ?>
-	<?php if ($adcview->SortUrl($adcview->no) == "") { ?>
-		<th data-name="no"><div id="elh_adcview_no" class="adcview_no"><div class="ewTableHeaderCaption"><?php echo $adcview->no->FldCaption() ?></div></div></th>
-	<?php } else { ?>
-		<th data-name="no"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $adcview->SortUrl($adcview->no) ?>',1);"><div id="elh_adcview_no" class="adcview_no">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $adcview->no->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($adcview->no->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($adcview->no->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
-        </div></div></th>
-	<?php } ?>
-<?php } ?>
 <?php if ($adcview->assettag->Visible) { // assettag ?>
 	<?php if ($adcview->SortUrl($adcview->assettag) == "") { ?>
 		<th data-name="assettag"><div id="elh_adcview_assettag" class="adcview_assettag"><div class="ewTableHeaderCaption"><?php echo $adcview->assettag->FldCaption() ?></div></div></th>
@@ -2491,7 +2710,7 @@ $adcview_list->ListOptions->Render("header", "left");
 		<th data-name="company"><div id="elh_adcview_company" class="adcview_company"><div class="ewTableHeaderCaption"><?php echo $adcview->company->FldCaption() ?></div></div></th>
 	<?php } else { ?>
 		<th data-name="company"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $adcview->SortUrl($adcview->company) ?>',1);"><div id="elh_adcview_company" class="adcview_company">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $adcview->company->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($adcview->company->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($adcview->company->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $adcview->company->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($adcview->company->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($adcview->company->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
 <?php } ?>
@@ -2509,7 +2728,7 @@ $adcview_list->ListOptions->Render("header", "left");
 		<th data-name="type"><div id="elh_adcview_type" class="adcview_type"><div class="ewTableHeaderCaption"><?php echo $adcview->type->FldCaption() ?></div></div></th>
 	<?php } else { ?>
 		<th data-name="type"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $adcview->SortUrl($adcview->type) ?>',1);"><div id="elh_adcview_type" class="adcview_type">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $adcview->type->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($adcview->type->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($adcview->type->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $adcview->type->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($adcview->type->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($adcview->type->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
 <?php } ?>
@@ -2540,21 +2759,21 @@ $adcview_list->ListOptions->Render("header", "left");
         </div></div></th>
 	<?php } ?>
 <?php } ?>
-<?php if ($adcview->officelicense->Visible) { // officelicense ?>
-	<?php if ($adcview->SortUrl($adcview->officelicense) == "") { ?>
-		<th data-name="officelicense"><div id="elh_adcview_officelicense" class="adcview_officelicense"><div class="ewTableHeaderCaption"><?php echo $adcview->officelicense->FldCaption() ?></div></div></th>
-	<?php } else { ?>
-		<th data-name="officelicense"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $adcview->SortUrl($adcview->officelicense) ?>',1);"><div id="elh_adcview_officelicense" class="adcview_officelicense">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $adcview->officelicense->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($adcview->officelicense->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($adcview->officelicense->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
-        </div></div></th>
-	<?php } ?>
-<?php } ?>
 <?php if ($adcview->operatingsystem->Visible) { // operatingsystem ?>
 	<?php if ($adcview->SortUrl($adcview->operatingsystem) == "") { ?>
 		<th data-name="operatingsystem"><div id="elh_adcview_operatingsystem" class="adcview_operatingsystem"><div class="ewTableHeaderCaption"><?php echo $adcview->operatingsystem->FldCaption() ?></div></div></th>
 	<?php } else { ?>
 		<th data-name="operatingsystem"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $adcview->SortUrl($adcview->operatingsystem) ?>',1);"><div id="elh_adcview_operatingsystem" class="adcview_operatingsystem">
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $adcview->operatingsystem->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($adcview->operatingsystem->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($adcview->operatingsystem->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+        </div></div></th>
+	<?php } ?>
+<?php } ?>
+<?php if ($adcview->officelicense->Visible) { // officelicense ?>
+	<?php if ($adcview->SortUrl($adcview->officelicense) == "") { ?>
+		<th data-name="officelicense"><div id="elh_adcview_officelicense" class="adcview_officelicense"><div class="ewTableHeaderCaption"><?php echo $adcview->officelicense->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="officelicense"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $adcview->SortUrl($adcview->officelicense) ?>',1);"><div id="elh_adcview_officelicense" class="adcview_officelicense">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $adcview->officelicense->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($adcview->officelicense->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($adcview->officelicense->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
 <?php } ?>
@@ -2565,15 +2784,15 @@ $adcview_list->ListOptions->Render("header", "left");
 		<th data-name="datereceived"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $adcview->SortUrl($adcview->datereceived) ?>',1);"><div id="elh_adcview_datereceived" class="adcview_datereceived">
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $adcview->datereceived->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($adcview->datereceived->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($adcview->datereceived->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
-	<?php } ?>
+ <?php } ?>
 <?php } ?>
 <?php if ($adcview->serialcode->Visible) { // serialcode ?>
 	<?php if ($adcview->SortUrl($adcview->serialcode) == "") { ?>
-		<th data-name="serialcode"><div id="serialcode" class="serialcode"><div class="ewTableHeaderCaption"><?php echo $adcview->serialcode->FldCaption() ?></div></div></th>
+		<th data-name="serialcode"><div id="elh_adcview_serialcode" class="adcview_serialcode"><div class="ewTableHeaderCaption"><?php echo $adcview->serialcode->FldCaption() ?></div></div></th>
 	<?php } else { ?>
-		<th data-name="serialcode"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $adcview->SortUrl($adcview->serialcode) ?>',1);"><div id="serialcode" class="serialcode">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $adcview->serialcode->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($adcview->serialcode->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($adcview->serialcode->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
-        </div></div></th>
+		<th data-name="serialcode"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $adcview->SortUrl($adcview->serialcode) ?>',1);"><div id="elh_adcview_serialcode" class="adcview_serialcode">
+				<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $adcview->serialcode->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($adcview->serialcode->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($adcview->serialcode->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+				</div></div></th>
 	<?php } ?>
 <?php } ?>
 <?php if ($adcview->latestupdate->Visible) { // latestupdate ?>
@@ -2582,7 +2801,7 @@ $adcview_list->ListOptions->Render("header", "left");
 	<?php } else { ?>
 		<th data-name="latestupdate"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $adcview->SortUrl($adcview->latestupdate) ?>',1);"><div id="elh_adcview_latestupdate" class="adcview_latestupdate">
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $adcview->latestupdate->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($adcview->latestupdate->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($adcview->latestupdate->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
-        </div></div></th>
+				</div></div></th>
 	<?php } ?>
 <?php } ?>
 <?php
@@ -2650,21 +2869,13 @@ while ($adcview_list->RecCnt < $adcview_list->StopRec) {
 // Render list options (body, left)
 $adcview_list->ListOptions->Render("body", "left", $adcview_list->RowCnt);
 ?>
-	<?php if ($adcview->no->Visible) { // no ?>
-		<td data-name="no"<?php echo $adcview->no->CellAttributes() ?>>
-<span id="el<?php echo $adcview_list->RowCnt ?>_adcview_no" class="adcview_no">
-<span<?php echo $adcview->no->ViewAttributes() ?>>
-<?php echo $adcview->no->ListViewValue() ?></span>
-</span>
-<a id="<?php echo $adcview_list->PageObjName . "_row_" . $adcview_list->RowCnt ?>"></a></td>
-	<?php } ?>
 	<?php if ($adcview->assettag->Visible) { // assettag ?>
 		<td data-name="assettag"<?php echo $adcview->assettag->CellAttributes() ?>>
 <span id="el<?php echo $adcview_list->RowCnt ?>_adcview_assettag" class="adcview_assettag">
 <span<?php echo $adcview->assettag->ViewAttributes() ?>>
 <?php echo $adcview->assettag->ListViewValue() ?></span>
 </span>
-</td>
+<a id="<?php echo $adcview_list->PageObjName . "_row_" . $adcview_list->RowCnt ?>"></a></td>
 	<?php } ?>
 	<?php if ($adcview->servicetag->Visible) { // servicetag ?>
 		<td data-name="servicetag"<?php echo $adcview->servicetag->CellAttributes() ?>>
@@ -2746,19 +2957,19 @@ $adcview_list->ListOptions->Render("body", "left", $adcview_list->RowCnt);
 </span>
 </td>
 	<?php } ?>
-	<?php if ($adcview->officelicense->Visible) { // officelicense ?>
-		<td data-name="officelicense"<?php echo $adcview->officelicense->CellAttributes() ?>>
-<span id="el<?php echo $adcview_list->RowCnt ?>_adcview_officelicense" class="adcview_officelicense">
-<span<?php echo $adcview->officelicense->ViewAttributes() ?>>
-<?php echo $adcview->officelicense->ListViewValue() ?></span>
-</span>
-</td>
-	<?php } ?>
 	<?php if ($adcview->operatingsystem->Visible) { // operatingsystem ?>
 		<td data-name="operatingsystem"<?php echo $adcview->operatingsystem->CellAttributes() ?>>
 <span id="el<?php echo $adcview_list->RowCnt ?>_adcview_operatingsystem" class="adcview_operatingsystem">
 <span<?php echo $adcview->operatingsystem->ViewAttributes() ?>>
 <?php echo $adcview->operatingsystem->ListViewValue() ?></span>
+</span>
+</td>
+	<?php } ?>
+	<?php if ($adcview->officelicense->Visible) { // officelicense ?>
+		<td data-name="officelicense"<?php echo $adcview->officelicense->CellAttributes() ?>>
+<span id="el<?php echo $adcview_list->RowCnt ?>_adcview_officelicense" class="adcview_officelicense">
+<span<?php echo $adcview->officelicense->ViewAttributes() ?>>
+<?php echo $adcview->officelicense->ListViewValue() ?></span>
 </span>
 </td>
 	<?php } ?>
@@ -2769,16 +2980,16 @@ $adcview_list->ListOptions->Render("body", "left", $adcview_list->RowCnt);
 <?php echo $adcview->datereceived->ListViewValue() ?></span>
 </span>
 </td>
-	<?php } ?>
-	<?php if ($adcview->serialcode->Visible) { // serialcode ?>
-		<td data-name="serialcode"<?php echo $adcview->serialcode->CellAttributes() ?>>
-<span id="el<?php echo $adcview_list->RowCnt ?>serialcode" class="serialcode">
+<?php } ?>
+<?php if ($adcview->serialcode->Visible) { // serialcode ?>
+	<td data-name="serialcode"<?php echo $adcview->serialcode->CellAttributes() ?>>
+<span id="el<?php echo $adcview_list->RowCnt ?>_adcview_serialcode" class="adcview_serialcode">
 <span<?php echo $adcview->serialcode->ViewAttributes() ?>>
 <?php echo $adcview->serialcode->ListViewValue() ?></span>
 </span>
 </td>
-	<?php } ?>
-	<?php if ($adcview->latestupdate->Visible) { // latestupdate ?>
+<?php } ?>
+<?php if ($adcview->latestupdate->Visible) { // latestupdate ?>
 	<td data-name="latestupdate"<?php echo $adcview->latestupdate->CellAttributes() ?>>
 <span id="el<?php echo $adcview_list->RowCnt ?>_adcview_latestupdate" class="adcview_latestupdate">
 <span<?php echo $adcview->latestupdate->ViewAttributes() ?>>

@@ -128,9 +128,9 @@ class cInayah_Inventory_Report extends cTableBase {
 		$this->fields['serialcode'] = &$this->serialcode;
 
 		// $latestupdate
-		$this->$latestupdate = new cField('Inayah_Inventory_Report', 'Inayah Inventory Report', 'x_$latestupdate', '$latestupdate', '`$latestupdate`', 'DATE_FORMAT(`$latestupdate`, \'%d-%m-%Y\')', 133, 7, FALSE, '`$latestupdate`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
-		$this->$latestupdate->FldDefaultErrMsg = str_replace("%s", "-", $Language->Phrase("IncorrectDateDMY"));
-		$this->fields['$latestupdate'] = &$this->$latestupdate;
+		$this->latestupdate = new cField('Inayah_Inventory_Report', 'Inayah Inventory Report', 'x_latestupdate', 'latestupdate', '`latestupdate`', 'DATE_FORMAT(`latestupdate`, \'%d-%m-%Y\')', 133, 7, FALSE, '`latestupdate`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->latestupdate->FldDefaultErrMsg = str_replace("%s", "-", $Language->Phrase("IncorrectDateDMY"));
+		$this->fields['latestupdate'] = &$this->latestupdate;
 
 	}
 

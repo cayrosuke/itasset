@@ -765,6 +765,8 @@ class catpview_list extends catpview {
 		$sFilterList = ew_Concat($sFilterList, $this->location->AdvancedSearch->ToJSON(), ","); // Field location
 		$sFilterList = ew_Concat($sFilterList, $this->officelicense->AdvancedSearch->ToJSON(), ","); // Field officelicense
 		$sFilterList = ew_Concat($sFilterList, $this->datereceived->AdvancedSearch->ToJSON(), ","); // Field datereceived
+		$sFilterList = ew_Concat($sFilterList, $this->serialcode->AdvancedSearch->ToJSON(), ","); // Field serialcode
+		$sFilterList = ew_Concat($sFilterList, $this->latestupdate->AdvancedSearch->ToJSON(), ","); // Field latestupdate
 		if ($this->BasicSearch->Keyword <> "") {
 			$sWrk = "\"" . EW_TABLE_BASIC_SEARCH . "\":\"" . ew_JsEncode2($this->BasicSearch->Keyword) . "\",\"" . EW_TABLE_BASIC_SEARCH_TYPE . "\":\"" . ew_JsEncode2($this->BasicSearch->Type) . "\"";
 			$sFilterList = ew_Concat($sFilterList, $sWrk, ",");
@@ -872,6 +874,24 @@ class catpview_list extends catpview {
 		$this->datereceived->AdvancedSearch->Save();
 		$this->BasicSearch->setKeyword(@$filter[EW_TABLE_BASIC_SEARCH]);
 		$this->BasicSearch->setType(@$filter[EW_TABLE_BASIC_SEARCH_TYPE]);
+
+		// Field serialcode
+		$this->serialcode->AdvancedSearch->SearchValue = @$filter["x_serialcode"];
+		$this->serialcode->AdvancedSearch->SearchOperator = @$filter["z_serialcode"];
+		$this->serialcode->AdvancedSearch->SearchCondition = @$filter["v_serialcode"];
+		$this->serialcode->AdvancedSearch->SearchValue2 = @$filter["y_serialcode"];
+		$this->serialcode->AdvancedSearch->SearchOperator2 = @$filter["w_serialcode"];
+		$this->serialcode->AdvancedSearch->Save();
+
+		// Field latestupdate
+		$this->latestupdate->AdvancedSearch->SearchValue = @$filter["x_latestupdate"];
+		$this->latestupdate->AdvancedSearch->SearchOperator = @$filter["z_latestupdate"];
+		$this->latestupdate->AdvancedSearch->SearchCondition = @$filter["v_latestupdate"];
+		$this->latestupdate->AdvancedSearch->SearchValue2 = @$filter["y_latestupdate"];
+		$this->latestupdate->AdvancedSearch->SearchOperator2 = @$filter["w_latestupdate"];
+		$this->latestupdate->AdvancedSearch->Save();
+		$this->BasicSearch->setKeyword(@$filter[EW_TABLE_BASIC_SEARCH]);
+		$this->BasicSearch->setType(@$filter[EW_TABLE_BASIC_SEARCH_TYPE]);
 	}
 
 	// Advanced search WHERE clause based on QueryString
@@ -890,6 +910,9 @@ class catpview_list extends catpview {
 		$this->BuildSearchSql($sWhere, $this->location, $Default, FALSE); // location
 		$this->BuildSearchSql($sWhere, $this->officelicense, $Default, FALSE); // officelicense
 		$this->BuildSearchSql($sWhere, $this->datereceived, $Default, FALSE); // datereceived
+		$this->BuildSearchSql($sWhere, $this->serialcode, $Default, FALSE); // serialcode
+		$this->BuildSearchSql($sWhere, $this->latestupdate, $Default, FALSE); // latestupdate
+
 
 		// Set up search parm
 		if (!$Default && $sWhere <> "") {
@@ -907,6 +930,8 @@ class catpview_list extends catpview {
 			$this->location->AdvancedSearch->Save(); // location
 			$this->officelicense->AdvancedSearch->Save(); // officelicense
 			$this->datereceived->AdvancedSearch->Save(); // datereceived
+			$this->serialcode->AdvancedSearch->Save(); // serialcode
+			$this->latestupdate->AdvancedSearch->Save(); // latestupdate
 		}
 		return $sWhere;
 	}
@@ -971,6 +996,7 @@ class catpview_list extends catpview {
 		$this->BuildBasicSearchSQL($sWhere, $this->type, $arKeywords, $type);
 		$this->BuildBasicSearchSQL($sWhere, $this->model, $arKeywords, $type);
 		$this->BuildBasicSearchSQL($sWhere, $this->officelicense, $arKeywords, $type);
+		$this->BuildBasicSearchSQL($sWhere, $this->serialcode, $arKeywords, $type);
 		return $sWhere;
 	}
 
@@ -1118,6 +1144,10 @@ class catpview_list extends catpview {
 			return TRUE;
 		if ($this->datereceived->AdvancedSearch->IssetSession())
 			return TRUE;
+			if ($this->serialcode->AdvancedSearch->IssetSession())
+				return TRUE;
+			if ($this->latestupdate->AdvancedSearch->IssetSession())
+				return TRUE;
 		return FALSE;
 	}
 
@@ -1158,6 +1188,8 @@ class catpview_list extends catpview {
 		$this->location->AdvancedSearch->UnsetSession();
 		$this->officelicense->AdvancedSearch->UnsetSession();
 		$this->datereceived->AdvancedSearch->UnsetSession();
+		$this->serialcode->AdvancedSearch->UnsetSession();
+		$this->latestupdate->AdvancedSearch->UnsetSession();
 	}
 
 	// Restore all search parameters
@@ -1179,6 +1211,8 @@ class catpview_list extends catpview {
 		$this->location->AdvancedSearch->Load();
 		$this->officelicense->AdvancedSearch->Load();
 		$this->datereceived->AdvancedSearch->Load();
+		$this->serialcode->AdvancedSearch->Load();
+		$this->latestupdate->AdvancedSearch->Load();
 	}
 
 	// Set up sort parameters
@@ -1202,6 +1236,8 @@ class catpview_list extends catpview {
 			$this->UpdateSort($this->operatingsystem); // operatingsystem
 			$this->UpdateSort($this->officelicense); // officelicense
 			$this->UpdateSort($this->datereceived); // datereceived
+			$this->UpdateSort($this->serialcode); // serialcode
+			$this->UpdateSort($this->latestupdate); // latestupdate
 			$this->setStartRecordNumber(1); // Reset start position
 		}
 	}
@@ -1248,6 +1284,8 @@ class catpview_list extends catpview {
 				$this->operatingsystem->setSort("");
 				$this->officelicense->setSort("");
 				$this->datereceived->setSort("");
+				$this->serialcode->setSort("");
+				$this->latestupdate->setSort("");
 			}
 
 			// Reset start position
@@ -1646,6 +1684,20 @@ class catpview_list extends catpview {
 		$this->datereceived->AdvancedSearch->SearchValue2 = ew_StripSlashes(@$_GET["y_datereceived"]);
 		if ($this->datereceived->AdvancedSearch->SearchValue2 <> "") $this->Command = "search";
 		$this->datereceived->AdvancedSearch->SearchOperator2 = @$_GET["w_datereceived"];
+
+		// serialcode
+		$this->serialcode->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_serialcode"]);
+		if ($this->serialcode->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->serialcode->AdvancedSearch->SearchOperator = @$_GET["z_serialcode"];
+
+		// latestupdate
+		$this->latestupdate->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_latestupdate"]);
+		if ($this->latestupdate->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->latestupdate->AdvancedSearch->SearchOperator = @$_GET["z_latestupdate"];
+		$this->latestupdate->AdvancedSearch->SearchCondition = @$_GET["v_latestupdate"];
+		$this->latestupdate->AdvancedSearch->SearchValue2 = ew_StripSlashes(@$_GET["y_latestupdate"]);
+		if ($this->latestupdate->AdvancedSearch->SearchValue2 <> "") $this->Command = "search";
+		$this->latestupdate->AdvancedSearch->SearchOperator2 = @$_GET["w_latestupdate"];
 	}
 
 	// Load recordset
@@ -1719,6 +1771,8 @@ class catpview_list extends catpview {
 		$this->remarks->setDbValue($rs->fields('remarks'));
 		$this->officelicense->setDbValue($rs->fields('officelicense'));
 		$this->datereceived->setDbValue($rs->fields('datereceived'));
+		$this->serialcode->setDbValue($rs->fields('serialcode'));
+		$this->latestupdate->setDbValue($rs->fields('latestupdate'));
 	}
 
 	// Load DbValue from recordset
@@ -1741,6 +1795,8 @@ class catpview_list extends catpview {
 		$this->remarks->DbValue = $row['remarks'];
 		$this->officelicense->DbValue = $row['officelicense'];
 		$this->datereceived->DbValue = $row['datereceived'];
+		$this->serialcode->DbValue = $row['serialcode'];
+		$this->latestupdate->DbValue = $row['latestupdate'];
 	}
 
 	// Load old record
@@ -1797,6 +1853,8 @@ class catpview_list extends catpview {
 		// remarks
 		// officelicense
 		// datereceived
+		// serialcode
+		// latestupdate
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
@@ -1860,6 +1918,15 @@ class catpview_list extends catpview {
 		$this->datereceived->ViewValue = $this->datereceived->CurrentValue;
 		$this->datereceived->ViewValue = ew_FormatDateTime($this->datereceived->ViewValue, 7);
 		$this->datereceived->ViewCustomAttributes = "";
+
+		// serialcode
+		$this->serialcode->ViewValue = $this->serialcode->CurrentValue;
+		$this->serialcode->ViewCustomAttributes = "";
+
+		// latestupdate
+		$this->latestupdate->ViewValue = $this->latestupdate->CurrentValue;
+		$this->latestupdate->ViewValue = ew_FormatDateTime($this->latestupdate->ViewValue, 7);
+		$this->latestupdate->ViewCustomAttributes = "";
 
 			// assettag
 			$this->assettag->LinkCustomAttributes = "";
@@ -1930,6 +1997,16 @@ class catpview_list extends catpview {
 			$this->datereceived->LinkCustomAttributes = "";
 			$this->datereceived->HrefValue = "";
 			$this->datereceived->TooltipValue = "";
+
+			// serialcode
+			$this->serialcode->LinkCustomAttributes = "";
+			$this->serialcode->HrefValue = "";
+			$this->serialcode->TooltipValue = "";
+
+			// latestupdate
+			$this->latestupdate->LinkCustomAttributes = "";
+			$this->latestupdate->HrefValue = "";
+			$this->latestupdate->TooltipValue = "";
 		}
 
 		// Call Row Rendered event
@@ -1973,6 +2050,8 @@ class catpview_list extends catpview {
 		$this->location->AdvancedSearch->Load();
 		$this->officelicense->AdvancedSearch->Load();
 		$this->datereceived->AdvancedSearch->Load();
+		$this->serialcode->AdvancedSearch->Load();
+		$this->latestupdate->AdvancedSearch->Load();
 	}
 
 	// Set up export options
@@ -2238,6 +2317,8 @@ class catpview_list extends catpview {
 		$this->AddSearchQueryString($sQry, $this->location); // location
 		$this->AddSearchQueryString($sQry, $this->officelicense); // officelicense
 		$this->AddSearchQueryString($sQry, $this->datereceived); // datereceived
+		$this->AddSearchQueryString($sQry, $this->serialcode); // serialcode
+		$this->AddSearchQueryString($sQry, $this->latestupdate); // latestupdate
 
 		// Build QueryString for pager
 		$sQry .= "&" . EW_TABLE_REC_PER_PAGE . "=" . urlencode($this->getRecordsPerPage()) . "&" . EW_TABLE_START_REC . "=" . urlencode($this->getStartRecordNumber());
@@ -2726,6 +2807,24 @@ $atpview_list->ListOptions->Render("header", "left");
         </div></div></th>
 	<?php } ?>
 <?php } ?>
+<?php if ($atpview->serialcode->Visible) { // serialcode ?>
+	<?php if ($atpview->SortUrl($atpview->serialcode) == "") { ?>
+		<th data-name="serialcode"><div id="elh_atpview_serialcode" class="atpview_serialcode"><div class="ewTableHeaderCaption"><?php echo $atpview->serialcode->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="serialcode"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $atpview->SortUrl($atpview->serialcode) ?>',1);"><div id="elh_atpview_serialcode" class="atpview_serialcode">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $atpview->serialcode->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($atpview->serialcode->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($atpview->serialcode->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+				</div></div></th>
+	<?php } ?>
+<?php } ?>
+<?php if ($atpview->latestupdate->Visible) { // datereceived ?>
+	<?php if ($atpview->SortUrl($atpview->latestupdate) == "") { ?>
+		<th data-name="latestupdate"><div id="elh_atpview_latestupdate" class="atpview_latestupdate"><div class="ewTableHeaderCaption"><?php echo $atpview->latestupdate->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="latestupdate"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $atpview->SortUrl($atpview->latestupdate) ?>',1);"><div id="elh_atpview_latestupdate" class="atpview_latestupdate">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $atpview->latestupdate->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($atpview->latestupdate->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($atpview->latestupdate->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+				</div></div></th>
+	<?php } ?>
+<?php } ?>
 <?php
 
 // Render list options (header, right)
@@ -2900,6 +2999,22 @@ $atpview_list->ListOptions->Render("body", "left", $atpview_list->RowCnt);
 <span id="el<?php echo $atpview_list->RowCnt ?>_atpview_datereceived" class="atpview_datereceived">
 <span<?php echo $atpview->datereceived->ViewAttributes() ?>>
 <?php echo $atpview->datereceived->ListViewValue() ?></span>
+</span>
+</td>
+	<?php } ?>
+	<?php if ($atpview->serialcode->Visible) { // serialcode ?>
+	<td data-name="serialcode"<?php echo $atpview->serialcode->CellAttributes() ?>>
+<span id="el<?php echo $atpview_list->RowCnt ?>_atpview_serialcode" class="atpview_serialcode">
+<span<?php echo $atpview->serialcode->ViewAttributes() ?>>
+<?php echo $atpview->serialcode->ListViewValue() ?></span>
+</span>
+</td>
+	<?php } ?>
+	<?php if ($atpview->latestupdate->Visible) { // datereceived ?>
+	<td data-name="latestupdate"<?php echo $atpview->latestupdate->CellAttributes() ?>>
+<span id="el<?php echo $atpview_list->RowCnt ?>_atpview_latestupdate" class="atpview_latestupdate">
+<span<?php echo $atpview->latestupdate->ViewAttributes() ?>>
+<?php echo $atpview->latestupdate->ListViewValue() ?></span>
 </span>
 </td>
 	<?php } ?>
